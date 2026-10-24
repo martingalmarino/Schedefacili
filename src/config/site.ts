@@ -61,8 +61,10 @@ export function risolviSiteUrl(): string {
 
 export const SITE_URL = risolviSiteUrl();
 
+const VERIFICA_GOOGLE = 'kV19ZVlEIXIDmRPxdbW4rUPeXgDsXah2-gLAHXC5GHI';
+
 export function metaVerifica(): { google?: string; bing?: string } {
-  const google = leggiVariabile('GOOGLE_SITE_VERIFICATION');
+  const google = leggiVariabile('GOOGLE_SITE_VERIFICATION') ?? VERIFICA_GOOGLE;
   const bing = leggiVariabile('BING_SITE_VERIFICATION');
   return { google, bing };
 }

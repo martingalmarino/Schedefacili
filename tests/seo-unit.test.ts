@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { SITE_URL } from '../src/config/site';
+import { metaVerifica, SITE_URL } from '../src/config/site';
 import { inclusaNellaSitemap } from '../src/lib/noindex';
 import { corpoRobots } from '../src/lib/robots';
 import { faqPage, jsonLd } from '../src/lib/schema';
@@ -35,6 +35,12 @@ describe('buildSeo', () => {
         schema: { '@context': 'https://schema.org', '@type': 'Event', name: 'Festa' },
       }),
     ).toThrow(/Event/);
+  });
+});
+
+describe('verifica Google', () => {
+  it('pubblica il meta google-site-verification', () => {
+    expect(metaVerifica().google).toBe('kV19ZVlEIXIDmRPxdbW4rUPeXgDsXah2-gLAHXC5GHI');
   });
 });
 
