@@ -11,6 +11,7 @@ import { dataAggiornamentoIso, testoAggiornato } from '../../lib/aggiornamento';
 import { learningResource, urlAssoluto, webPage } from '../../lib/schema';
 import { buildSeo } from '../../lib/seo';
 import { SEO_TAVOLA, testoClasseTavola } from '../../lib/testi-schede';
+import { problemiDalleTabelline } from '../../lib/testi-problemi';
 import Base from '../../layouts/Base.astro';
 
 const path = '/tabelline/tavola-pitagorica/';
@@ -87,6 +88,8 @@ const seo = buildSeo({
       <a href="/tabelline/" class="hover:text-terracotta">Tutte le tabelline</a>
       <span aria-hidden="true"> · </span>
       <a href="/generatori/tabelline/" class="hover:text-terracotta">Generatore di tabelline</a>
+      <span aria-hidden="true"> · </span>
+      <a href={problemiDalleTabelline(10)} class="hover:text-terracotta">Prova i problemi con le tabelline</a>
     </p>
     <TestoClasse testo={testoClasseTavola()}>
       <h2 class="mt-10 text-[28px]">Domande</h2>

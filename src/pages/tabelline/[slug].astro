@@ -21,6 +21,7 @@ import {
   tabella,
   titoloTabellina,
 } from '../../lib/tabelline';
+import { problemiDalleTabelline } from '../../lib/testi-problemi';
 import { inBreveTabellina, testoClasseTabellina } from '../../lib/testi-schede';
 import Base from '../../layouts/Base.astro';
 
@@ -164,6 +165,7 @@ const seo = buildSeo({
       {successiva && <a href={percorsoTabellina(successiva)} class="hover:text-terracotta">{nomeTabellina(successiva)}</a>}
       <a href="/tabelline/tavola-pitagorica/" class="hover:text-terracotta">Tavola pitagorica</a>
       <a href="/generatori/tabelline/" class="hover:text-terracotta">Generatore di tabelline</a>
+      <a href={problemiDalleTabelline(n)} class="hover:text-terracotta">Prova i problemi con le tabelline</a>
     </nav>
     <TestoClasse testo={testoClasseTabellina(n)}>
       <h2 class="mt-10 text-[28px]">Domande</h2>

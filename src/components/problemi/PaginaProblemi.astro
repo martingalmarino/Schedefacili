@@ -1,0 +1,143 @@
+---
+import Breadcrumbs from '../Breadcrumbs.astro';
+import Faq from '../Faq.astro';
+import InBreve from '../InBreve.astro';
+import GeneratoreProblemi from './GeneratoreProblemi';
+import Scheda from './Scheda.astro';
+import AttivaDsa from '../schede/AttivaDsa.astro';
+import VersioneDsa from '../schede/VersioneDsa';
+import { testoAggiornato } from '../../lib/aggiornamento';
+import { lastmodPagina } from '../../lib/lastmod';
+import { generaScheda, opzioniBase } from '../../lib/problemi/genera';
+import type { Classe } from '../../lib/problemi/types';
+import { learningResource, urlAssoluta, webApplication, webPage } from '../../lib/schema';
+import { buildSeo } from '../../lib/seo';
+import {
+  collegamentiProblemi,
+  FAQ_HUB_PROBLEMI,
+  HUB_PROBLEMI,
+  PAGINE_PROBLEMI,
+  paginaProblemi,
+  SEO_HUB_PROBLEMI,
+} from '../../lib/testi-problemi';
+import Base from '../../layouts/Base.astro';
+
+interface Props {
+  classe?: Classe;
+}
+
+const { classe } = Astro.props;
+const pagina = classe ? paginaProblemi(classe) : undefined;
+const path = pagina?.href ?? HUB_PROBLEMI;
+const titolo = pagina?.title ?? SEO_HUB_PROBLEMI.title;
+const descrizione = pagina?.description ?? SEO_HUB_PROBLEMI.description;
+const h1 = pagina?.h1 ?? SEO_HUB_PROBLEMI.h1;
+const inBreve = pagina?.inBreve ?? SEO_HUB_PROBLEMI.inBreve;
+const domande = pagina?.domande ?? FAQ_HUB_PROBLEMI;
+const keywords = pagina?.keywords ?? SEO_HUB_PROBLEMI.keywords;
+const livello = pagina ? `Scuola primaria – classe ${pagina.nome.replace('Classe ', '')}` : 'Scuola primaria';
+const opzioni = opzioniBase(pagina?.classe ?? 3, pagina?.seed ?? 3303);
+const problemi = generaScheda(opzioni);
+const aggiornato = testoAggiornato();
+const briciole = pagina
+  ? [
+      { nome: 'Home', href: '/' },
+      { nome: 'Problemi di matematica', href: HUB_PROBLEMI },
+      { nome: pagina.nome, href: path },
+    ]
+  : [
+      { nome: 'Home', href: '/' },
+      { nome: 'Problemi di matematica', href: path },
+    ];
+const seo = buildSeo({
+  title: titolo,
+  description: descrizione,
+  path,
+  h1,
+  keywords: [...keywords],
+  image: '/og/generatori.png',
+  schema: [
+    webPage({ path, name: h1, description: descrizione, dateModified: lastmodPagina(path) }),
+    learningResource({
+      nome: h1,
+      descrizione,
+      url: urlAssoluta(path),
+      educationalLevel: livello,
+      learningResourceType: 'Scheda didattica',
+    }),
+    webApplication({ nome: h1, descrizione, url: urlAssoluta(path) }),
+  ],
+});
+const collegamenti = collegamentiProblemi(classe);
+const chip = 'inline-flex min-h-11 min-w-11 items-center justify-center rounded-full border-[1.5px] border-solid px-4 text-[15px] font-bold';
+---
+
+<Base seo={seo} stampaProblemi>
+  <div class="no-stampa">
+    <Breadcrumbs items={briciole} />
+  </div>
+  <main id="scheda" class="mx-auto max-w-[1120px] px-6 pb-16">
+    <AttivaDsa id="scheda" />
+    <div class="no-stampa">
+      <h1 class="mt-2 mb-4 font-display text-[34px] leading-tight font-semibold min-[601px]:text-[40px]">{h1}</h1>
+      <InBreve aggiornato={aggiornato}>{inBreve}</InBreve>
+      <div class="comandi-scheda my-4 flex max-w-xl flex-wrap items-center gap-3">
+        <VersioneDsa client:load targetId="scheda" />
+      </div>
+      {
+        !pagina && (
+          <ul class="mt-6 grid gap-3 min-[601px]:grid-cols-2">
+            {PAGINE_PROBLEMI.map((voce) => (
+              <li>
+                <a href={voce.href} class="block h-full rounded-xl bg-white px-4 py-3 hover:text-terracotta">
+                  <span class="block font-bold">{voce.nome}</span>
+                  <span class="mt-1 block text-inchiostro">{voce.scheda}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+    <div class="griglia-problemi-pagina mt-6 grid items-start gap-6 min-[901px]:grid-cols-[minmax(0,1fr)_330px]">
+      <div class="min-w-0 overflow-x-auto">
+        <Scheda problemi={problemi} opzioni={opzioni} />
+      </div>
+      <aside class="rounded-xl bg-white p-4">
+        {
+          pagina && (
+            <div class="mb-3">
+              <p class="mb-2 text-[14px] font-bold text-salvia">Classe</p>
+              <nav class="flex flex-wrap gap-2" aria-label="Classe">
+                {PAGINE_PROBLEMI.map((voce) => (
+                  <a
+                    href={voce.href}
+                    aria-current={voce.classe === pagina.classe ? 'page' : undefined}
+                    class:list={[chip, voce.classe === pagina.classe ? 'border-salvia bg-salvia text-white' : 'border-pill bg-white text-inchiostro']}
+                  >
+                    <span class="n">{voce.classe}</span>ª
+                  </a>
+                ))}
+              </nav>
+            </div>
+          )
+        }
+        <GeneratoreProblemi client:load path={path} iniziale={opzioni} cambiaClasse={!pagina} />
+      </aside>
+    </div>
+    <div class="no-stampa">
+      <h2 class="mt-10 text-[28px]">Domande</h2>
+      <Faq domande={domande} path={path} />
+      <h2 class="mt-10 text-[28px]">Schede collegate</h2>
+      <nav class="mt-3 flex flex-col font-bold" aria-label="Schede collegate">
+        {
+          collegamenti.map((voce) => (
+            <a href={voce.href} class="inline-flex min-h-11 items-center hover:text-terracotta">
+              {voce.etichetta}
+            </a>
+          ))
+        }
+      </nav>
+    </div>
+  </main>
+</Base>

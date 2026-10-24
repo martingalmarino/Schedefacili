@@ -1,0 +1,20 @@
+---
+import PaginaProblemi from '../../components/problemi/PaginaProblemi.astro';
+import type { Classe } from '../../lib/problemi/types';
+import { PAGINE_PROBLEMI } from '../../lib/testi-problemi';
+
+export function getStaticPaths() {
+  return PAGINE_PROBLEMI.map((pagina) => ({
+    params: { classe: pagina.slug },
+    props: { numero: pagina.classe },
+  }));
+}
+
+interface Props {
+  numero: Classe;
+}
+
+const { numero } = Astro.props;
+---
+
+<PaginaProblemi classe={numero} />

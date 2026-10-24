@@ -6,6 +6,7 @@ import { dataAggiornamentoIso, testoAggiornato } from '../../lib/aggiornamento';
 import { webPage } from '../../lib/schema';
 import { buildSeo } from '../../lib/seo';
 import { h1Tabellina, NUMERI_TABELLINE, percorsoTabellina } from '../../lib/tabelline';
+import { problemiDalleTabelline } from '../../lib/testi-problemi';
 import { SEO_HUB_TABELLINE } from '../../lib/testi-schede';
 import Base from '../../layouts/Base.astro';
 
@@ -71,6 +72,7 @@ const seo = buildSeo({
     <p class="mt-6 flex flex-wrap gap-4 font-bold">
       <a href="/tabelline/tavola-pitagorica/" class="hover:text-terracotta">Tavola pitagorica</a>
       <a href="/generatori/tabelline/" class="hover:text-terracotta">Generatore di tabelline</a>
+      <a href={problemiDalleTabelline(2)} class="hover:text-terracotta">Prova i problemi con le tabelline</a>
     </p>
     <h2 class="mt-10 text-[28px]">Domande</h2>
     <Faq domande={domande} path={path} />

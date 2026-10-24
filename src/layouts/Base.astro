@@ -14,13 +14,14 @@ interface Props {
   stampaFoglio?: boolean;
   stampaDoppia?: boolean;
   stampaLinea?: boolean;
+  stampaProblemi?: boolean;
 }
 
-const { seo, striscia = false, stampaFoglio = false, stampaDoppia = false, stampaLinea = false } = Astro.props;
+const { seo, striscia = false, stampaFoglio = false, stampaDoppia = false, stampaLinea = false, stampaProblemi = false } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="it" class:list={[stampaFoglio && 'stampa-foglio', stampaDoppia && 'stampa-doppia', stampaLinea && 'stampa-linea']}>
+<html lang="it" class:list={[stampaFoglio && 'stampa-foglio', stampaDoppia && 'stampa-doppia', stampaLinea && 'stampa-linea', stampaProblemi && 'stampa-problemi']}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />

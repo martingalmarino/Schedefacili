@@ -1,0 +1,14 @@
+---
+import { htmlScheda } from '../../lib/problemi/render';
+import type { Istanza, OpzioniScheda } from '../../lib/problemi/types';
+
+interface Props {
+  problemi: Istanza[];
+  opzioni: OpzioniScheda;
+}
+
+const { problemi, opzioni } = Astro.props;
+---
+
+<div id="scheda-problemi" class="anteprima-problemi" set:html={htmlScheda(problemi, opzioni, false)} />
+<div id="soluzioni-problemi" class="anteprima-problemi soluzioni anteprima-soluzioni mt-6" set:html={htmlScheda(problemi, opzioni, true)} />

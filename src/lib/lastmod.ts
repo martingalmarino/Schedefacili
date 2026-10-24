@@ -25,6 +25,27 @@ const FONTI: { prefisso: string; file: string[] }[] = [
   },
 ];
 
+const PROBLEMI_COMUNI = [
+  'src/lib/problemi/genera.ts',
+  'src/lib/problemi/render.ts',
+  'src/lib/testi-problemi.ts',
+];
+
+const PROBLEMI_CLASSE: Record<string, string> = {
+  '/problemi-matematica/classe-prima/': 'src/lib/problemi/template/classe-1.ts',
+  '/problemi-matematica/classe-seconda/': 'src/lib/problemi/template/classe-2.ts',
+  '/problemi-matematica/classe-terza/': 'src/lib/problemi/template/classe-3.ts',
+  '/problemi-matematica/classe-quarta/': 'src/lib/problemi/template/classe-4.ts',
+  '/problemi-matematica/classe-quinta/': 'src/lib/problemi/template/classe-5.ts',
+};
+
+function fontiProblemi(pathname: string): string[] {
+  if (!pathname.startsWith('/problemi-matematica/')) return [];
+  const propria = PROBLEMI_CLASSE[pathname];
+  if (propria) return [...PROBLEMI_COMUNI, propria];
+  return [...PROBLEMI_COMUNI, ...Object.values(PROBLEMI_CLASSE)];
+}
+
 function repoConStoria(): boolean {
   if (gitCompleto !== undefined) return gitCompleto;
   const esito = spawnSync('git', ['rev-parse', '--is-shallow-repository'], {
@@ -69,7 +90,7 @@ function fileDellaPagina(pathname: string): string | undefined {
   const pezzi = base.split('/').filter(Boolean);
   if (pezzi.length < 2) return undefined;
   const padre = pezzi.slice(0, -1).join('/');
-  for (const nome of ['[slug]', '[regione]', '[tema]']) {
+  for (const nome of ['[slug]', '[regione]', '[tema]', '[classe]']) {
     const file = `src/pages/${padre}/${nome}.astro`;
     if (existsSync(file)) return file;
   }
@@ -79,7 +100,7 @@ function fileDellaPagina(pathname: string): string | undefined {
 export function fontiPagina(pathname: string): string[] {
   const pagina = fileDellaPagina(pathname);
   const extra = FONTI.filter((voce) => pathname.startsWith(voce.prefisso)).flatMap((voce) => voce.file);
-  return [...new Set([...(pagina ? [pagina] : []), ...extra])];
+  return [...new Set([...(pagina ? [pagina] : []), ...extra, ...fontiProblemi(pathname)])];
 }
 
 function piuRecente(date: string[]): string | undefined {

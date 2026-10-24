@@ -2,7 +2,7 @@ import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { describe, expect, it } from 'vitest';
-import { URL_LINEA, URL_NUOVE } from '../src/lib/schede-utili';
+import { URL_LINEA, URL_NUOVE, URL_PROBLEMI } from '../src/lib/schede-utili';
 
 function fileHtml(dir: string): string[] {
   return readdirSync(dir).flatMap((nome) => {
@@ -24,10 +24,10 @@ describe('HTML generato', () => {
   const dist = join(process.cwd(), 'dist', 'client');
   const pagine = fileHtml(dist);
 
-  it('genera 87 pagine HTML statiche; orologio e schede orologio sono on demand', () => {
+  it('genera 93 pagine HTML statiche; orologio e schede orologio sono on demand', () => {
     const indice = pagine.filter((file) => file.endsWith('/index.html') || file.endsWith('\\index.html'));
-    expect(indice).toHaveLength(87);
-    expect(pagine).toHaveLength(87);
+    expect(indice).toHaveLength(93);
+    expect(pagine).toHaveLength(93);
   });
 
   it('rispetta title, description, H1, canonical, lingua e In breve', () => {
@@ -122,6 +122,48 @@ describe('calendari', () => {
       const visibile = testoVisibile(readFileSync(file, 'utf8'));
       for (const parola of VIETATE) {
         expect(visibile.includes(parola), `${file} contiene «${parola}»`).toBe(false);
+      }
+    }
+  });
+});
+
+describe('problemi di matematica', () => {
+  const dist = join(process.cwd(), 'dist', 'client');
+  const noti = new Set(['/orologio-da-stampare/', '/generatori/schede-orologio/']);
+
+  function esiste(percorso: string): boolean {
+    if (noti.has(percorso)) return true;
+    const relativo = percorso.replace(/^\/+/, '');
+    const file = percorso.endsWith('/') ? join(dist, relativo, 'index.html') : join(dist, relativo);
+    return existsSync(file);
+  }
+
+  it('rispetta SEO, schema, lessico e i link delle 6 URL', () => {
+    const vietate = ['TODO', 'segnaposto', 'lorem', 'undefined', 'NaN', 'il 8', 'il 11'];
+    for (const percorso of URL_PROBLEMI) {
+      const html = readFileSync(join(dist, percorso, 'index.html'), 'utf8');
+      controllaPaginaNuova(html, percorso);
+      const tipi = [...html.matchAll(/"@type":"([^"]+)"/g)].map((trovato) => trovato[1]);
+      expect(tipi, percorso).toContain('LearningResource');
+      expect(tipi, percorso).toContain('WebApplication');
+      expect(tipi, percorso).not.toContain('Event');
+      const visibile = testoVisibile(html);
+      for (const parola of vietate) expect(visibile.includes(parola), `${percorso} contiene «${parola}»`).toBe(false);
+      const date = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)]
+        .map((blocco) => JSON.parse(blocco[1]) as { '@type'?: string; dateModified?: string })
+        .filter((dato) => dato['@type'] === 'WebPage')
+        .map((dato) => Date.parse(dato.dateModified ?? ''));
+      expect(date.length, percorso).toBeGreaterThan(0);
+      for (const quando of date) {
+        expect(Number.isNaN(quando), percorso).toBe(false);
+        expect(Date.now() - quando, percorso).toBeGreaterThan(60_000);
+      }
+      for (const trovato of html.matchAll(/\shref="([^"]+)"/g)) {
+        const href = trovato[1] ?? '';
+        if (!href.startsWith('/') || href.startsWith('//')) continue;
+        const path = href.split('?')[0]?.split('#')[0] ?? href;
+        const normalizzato = path.endsWith('/') || /\.[a-z0-9]+$/i.test(path) ? path : `${path}/`;
+        expect(esiste(normalizzato), `${percorso} → ${href}`).toBe(true);
       }
     }
   });

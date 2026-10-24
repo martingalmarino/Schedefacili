@@ -53,3 +53,13 @@ html.stampa-foglio {
 html.stampa-linea {
   page: linea-tempo;
 }
+
+@page problemi {
+  size: A4 portrait;
+  margin: 10mm;
+}
+
+html.stampa-problemi,
+.foglio-problemi {
+  page: problemi;
+}

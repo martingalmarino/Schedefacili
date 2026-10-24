@@ -8,13 +8,21 @@ import { chromium } from 'playwright';
 import lighthouse from 'lighthouse';
 import * as chromeLauncher from 'chrome-launcher';
 import { URL_LINEA } from '../src/lib/schede-utili';
+import { HUB_PROBLEMI, PAGINE_PROBLEMI } from '../src/lib/testi-problemi';
 
 process.env.NODE_ENV = 'production';
 process.env.VERCEL_ENV = 'production';
 delete process.env.SITE_URL;
 
 const DIST = join(process.cwd(), 'dist', 'client');
-const HUB = ['/fogli-da-stampare/', '/orologio-da-stampare/', '/numeri-romani/', ...URL_LINEA];
+const HUB = [
+  '/fogli-da-stampare/',
+  '/orologio-da-stampare/',
+  '/numeri-romani/',
+  ...URL_LINEA,
+  HUB_PROBLEMI,
+  PAGINE_PROBLEMI.find((pagina) => pagina.classe === 3)?.href ?? '/problemi-matematica/classe-terza/',
+];
 
 function tipoContenuto(file: string): string {
   if (file.endsWith('.html')) return 'text/html; charset=utf-8';

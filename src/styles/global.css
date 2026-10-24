@@ -140,7 +140,8 @@ h2,
 h3,
 .font-display,
 .scheda-numeri,
-.cifre {
+.cifre,
+.n {
   font-family: Fraunces, serif;
   font-optical-sizing: none;
   font-variant-numeric: lining-nums;
@@ -181,7 +182,7 @@ h3,
   min-height: 1.8em;
 }
 
-.dsa :where(h1, h2, h3, .font-display, .scheda-numeri, .cifre) {
+.dsa :where(h1, h2, h3, .font-display, .scheda-numeri, .cifre, .n) {
   font-family: OpenDyslexic, sans-serif;
   font-variant-numeric: normal;
   font-variation-settings: normal;
@@ -371,6 +372,87 @@ h3,
   html.stampa-solo .schede-anni .anteprima-soluzioni {
     display: none !important;
   }
+
+  html.stampa-problemi main {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: none !important;
+  }
+
+  html.stampa-problemi .griglia-problemi-pagina {
+    display: block !important;
+    margin: 0 !important;
+    overflow: visible !important;
+  }
+
+  html.stampa-problemi .anteprima-problemi,
+  html.stampa-problemi .anteprima-soluzioni {
+    margin: 0 !important;
+    overflow: visible !important;
+  }
+
+  .foglio-problemi {
+    width: 190mm !important;
+    max-width: none !important;
+    margin: 0 !important;
+  }
+
+  .foglio-problemi .numero,
+  .foglio-problemi .n {
+    color: #c2522d !important;
+  }
+
+  .foglio-problemi .etichetta {
+    color: #3f6b4e !important;
+  }
+
+  html.stampa-problemi .soluzioni-foglio .testata-problemi {
+    margin-bottom: 2mm !important;
+  }
+
+  html.stampa-problemi .soluzioni-foglio .titolo-problemi {
+    margin-bottom: 1mm !important;
+    font-size: 13pt !important;
+  }
+
+  html.stampa-problemi .soluzioni-foglio .consegna-problemi {
+    margin-bottom: 1.5mm !important;
+  }
+
+  html.stampa-problemi .soluzioni-foglio .elenco-problemi {
+    gap: 1.2mm !important;
+  }
+
+  html.stampa-problemi .soluzioni-foglio .problema {
+    padding: 1mm 1.4mm !important;
+  }
+
+  html.stampa-problemi .soluzioni-foglio .testo-problema {
+    margin-bottom: 0.8mm !important;
+    font-size: 8pt !important;
+    line-height: 1.2 !important;
+  }
+
+  html.stampa-problemi #scheda.dsa .foglio-problemi:not(.soluzioni-foglio) .riquadro {
+    min-height: calc(var(--alto) - 4mm) !important;
+  }
+
+  html.stampa-problemi #scheda.dsa .foglio-problemi:not(.soluzioni-foglio) .elenco-problemi {
+    gap: 1.2mm !important;
+  }
+
+  html.stampa-problemi #scheda.dsa .foglio-problemi:not(.soluzioni-foglio) .problema {
+    padding: 1mm 1.4mm !important;
+  }
+
+  html.stampa-problemi #scheda.dsa .foglio-problemi:not(.soluzioni-foglio) .testo-problema {
+    margin-bottom: 0.8mm !important;
+  }
+
+  html.stampa-problemi #scheda.dsa .foglio-problemi:not(.soluzioni-foglio) .testata-problemi,
+  html.stampa-problemi #scheda.dsa .foglio-problemi:not(.soluzioni-foglio) .consegna-problemi {
+    margin-bottom: 2mm !important;
+  }
 }
 
 .anteprima-foglio {
@@ -453,4 +535,139 @@ h3,
   font-variant-numeric: lining-nums;
   font-variation-settings: "opsz" 18, "SOFT" 0, "WONK" 0;
   letter-spacing: 0;
+}
+
+.foglio-problemi {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 190mm;
+  margin: 0;
+  background: #fff;
+  color: #1f2a44;
+  font-family: "Atkinson Hyperlegible", sans-serif;
+}
+
+.testata-problemi {
+  display: flex;
+  justify-content: space-between;
+  gap: 8mm;
+  margin: 0 0 4mm;
+  font-size: 11pt;
+}
+
+.testata-problemi p {
+  display: flex;
+  flex: 1;
+  align-items: flex-end;
+  gap: 2mm;
+  margin: 0;
+}
+
+.tratto {
+  flex: 1;
+  border-bottom: 0.3mm solid #1f2a44;
+  min-width: 24mm;
+}
+
+.titolo-problemi {
+  margin: 0 0 1.5mm;
+  font-size: 16pt;
+  line-height: 1.15;
+}
+
+.consegna-problemi {
+  margin: 0 0 3mm;
+  font-size: 10pt;
+}
+
+.elenco-problemi {
+  display: flex;
+  flex-direction: column;
+  gap: 2mm;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.problema {
+  break-inside: avoid;
+  margin: 0;
+  padding: 1.6mm 2mm 1.4mm;
+  border: 0.3mm solid #eadfcd;
+  border-radius: 2mm;
+}
+
+.testo-problema {
+  margin: 0 0 1.4mm;
+  font-size: 11pt;
+  line-height: 1.3;
+}
+
+.foglio-problemi.soluzioni-foglio .testo-problema {
+  font-size: 9pt;
+}
+
+.numero {
+  margin-right: 1.5mm;
+  color: #c2522d;
+  font-size: 13pt;
+  font-weight: 600;
+}
+
+.griglia-problema {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr) minmax(0, 1.4fr);
+  gap: 1.6mm;
+}
+
+.griglia-problema.solo-risposta {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.riquadro {
+  box-sizing: border-box;
+  min-height: var(--alto);
+  padding: 1mm 1.4mm;
+  border: 0.3mm solid #eadfcd;
+  border-radius: 1.4mm;
+}
+
+.etichetta {
+  display: block;
+  margin: 0 0 0.6mm;
+  color: #3f6b4e;
+  font-size: 8pt;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.corpo-riquadro {
+  margin: 0;
+  font-size: 9pt;
+  line-height: 1.25;
+}
+
+.pie-problemi {
+  margin: 3mm 0 0;
+  font-size: 8pt;
+  text-align: right;
+}
+
+#scheda.dsa .foglio-problemi,
+#scheda.dsa .foglio-problemi .testo-problema,
+#scheda.dsa .foglio-problemi.soluzioni-foglio .testo-problema,
+#scheda.dsa .foglio-problemi .consegna-problemi {
+  font-family: OpenDyslexic, sans-serif;
+  font-size: 13pt;
+  line-height: 1.6;
+  letter-spacing: 0.04em;
+}
+
+#scheda.dsa .foglio-problemi .numero {
+  font-size: 18pt;
+  line-height: 1;
+}
+
+#scheda.dsa .foglio-problemi:not(.soluzioni-foglio) .riquadro {
+  min-height: calc(var(--alto) + 6mm) !important;
 }

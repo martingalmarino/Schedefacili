@@ -1,0 +1,11 @@
+export { creaRng } from './rng';
+export type { Rng } from './rng';
+export { art, altri, CONTENITORI, eAndato, ne, nomeCasuale, NOMI, NOMI_F, NOMI_M, oggetto, OGGETTI, plur, prezzo, pronome, quanti, quantita, trovaOggetto } from './lessico';
+export type { Genere, Oggetto, Persona } from './lessico';
+export { equazione, formattaEuro, formattaNumero, marcaNumeri } from './formato';
+export { motiviVincoli, rispettaVincoli } from './vincoli';
+export { generaScheda, opzioniBase, opzioniDaQuery, queryProblemi, semeNuovo } from './genera';
+export { altezzaRiquadro, htmlScheda } from './render';
+export { TEMPLATES } from './template';
+export { CLASSE_IN_LETTERE, MASSIMO_CLASSE, OPERAZIONI_CLASSE } from './types';
+export type { Classe, Dato, Istanza, OpzioniScheda, Segno, Spazi, Tag, Template } from './types';
