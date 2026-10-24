@@ -1,4 +1,6 @@
 ---
+import { existsSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import Faq from '../../components/Faq.astro';
 import InBreve from '../../components/InBreve.astro';
@@ -10,6 +12,7 @@ import { regioniCartina, SEO_HUB_CARTINE, urlCartinaRegione } from '../../lib/ca
 import Base from '../../layouts/Base.astro';
 
 const path = '/cartine-mute/';
+const lineaDelTempo = existsSync(fileURLToPath(new URL('../linea-del-tempo/index.astro', import.meta.url)));
 const aggiornato = testoAggiornato();
 const regioni = regioniCartina();
 const domande = [
@@ -57,6 +60,13 @@ const seo = buildSeo({
     <InBreve aggiornato={aggiornato}>
       <span set:html={marcaAnni('Ventidue cartine mute da stampare: l’Italia e le 20 regioni. I confini sono quelli ISTAT al 1° gennaio 2026. I nomi non sono scritti: li aggiunge l’alunno.')} />
     </InBreve>
+    {
+      lineaDelTempo && (
+        <p class="mt-4 max-w-[640px]">
+          Per mettere in ordine i fatti c’è la <a href="/linea-del-tempo/" class="font-bold hover:text-terracotta">linea del tempo</a>.
+        </p>
+      )
+    }
     <ul class="mt-6 grid gap-3 min-[601px]:grid-cols-2">
       <li>
         <a href="/cartine-mute/italia/" class="block rounded-xl bg-white px-4 py-3 font-bold hover:text-terracotta">Italia</a>

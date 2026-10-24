@@ -1,0 +1,144 @@
+---
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Faq from '../../components/Faq.astro';
+import InBreve from '../../components/InBreve.astro';
+import TastoStampa from '../../components/calendario/TastoStampa.astro';
+import GeneratoreAnni from '../../components/linea/GeneratoreAnni';
+import AttivaDsa from '../../components/schede/AttivaDsa.astro';
+import VersioneDsa from '../../components/schede/VersioneDsa';
+import { testoAggiornato } from '../../lib/aggiornamento';
+import { svgLineaCristo } from '../../lib/linea-cristo';
+import { lastmodPagina } from '../../lib/lastmod';
+import { learningResource, urlAssoluta, webApplication, webPage } from '../../lib/schema';
+import { generaScheda, opzioniAnniDaQuery, svgSchedaAnni } from '../../lib/schede-anni';
+import { buildSeo } from '../../lib/seo';
+import { COLLEGAMENTI_CRISTO, ESEMPI_CRISTO, FAQ_CRISTO, IN_BREVE_CRISTO, NOTA_ROMA, SEO_CRISTO } from '../../lib/testi-cristo';
+import { NOTA_STAMPA } from '../../lib/testi-linea';
+import Base from '../../layouts/Base.astro';
+
+const path = '/linea-del-tempo/avanti-e-dopo-cristo/';
+const opzioni = opzioniAnniDaQuery(new URLSearchParams());
+const scheda = generaScheda(opzioni);
+const aggiornato = testoAggiornato();
+
+function conCifre(testo: string): string {
+  return testo
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/\d+/g, (numero) => `<span class="cifre">${numero}</span>`);
+}
+const briciole = [
+  { nome: 'Home', href: '/' },
+  { nome: 'Schede utili', href: '/#schede-utili' },
+  { nome: 'Linea del tempo', href: '/linea-del-tempo/' },
+  { nome: 'Avanti e dopo Cristo', href: path },
+];
+const seo = buildSeo({
+  title: SEO_CRISTO.title,
+  description: SEO_CRISTO.description,
+  path,
+  h1: SEO_CRISTO.h1,
+  keywords: [...SEO_CRISTO.keywords],
+  image: '/og/home.png',
+  schema: [
+    webPage({
+      path,
+      name: SEO_CRISTO.h1,
+      description: SEO_CRISTO.description,
+      dateModified: lastmodPagina(path),
+    }),
+    learningResource({
+      nome: SEO_CRISTO.h1,
+      descrizione: SEO_CRISTO.description,
+      url: urlAssoluta(path),
+      educationalLevel: 'Scuola primaria',
+      learningResourceType: 'Scheda didattica',
+    }),
+    webApplication({
+      nome: SEO_CRISTO.h1,
+      descrizione: SEO_CRISTO.description,
+      url: urlAssoluta(path),
+    }),
+  ],
+});
+---
+
+<Base seo={seo} stampaLinea>
+  <div class="no-stampa">
+    <Breadcrumbs items={briciole} />
+  </div>
+  <main id="scheda" class="scheda-linea mx-auto max-w-[1120px] px-6 pb-16">
+    <AttivaDsa id="scheda" />
+    <div class="no-stampa">
+      <h1 class="mt-2 mb-4 font-display text-[34px] leading-tight font-semibold min-[601px]:text-[40px]">{SEO_CRISTO.h1}</h1>
+      <InBreve aggiornato={aggiornato}>{IN_BREVE_CRISTO}</InBreve>
+      <div class="comandi-scheda my-4 flex max-w-xl flex-wrap items-center gap-3">
+        <VersioneDsa client:load targetId="scheda" />
+      </div>
+    </div>
+    <div class="griglia-linea mt-2 grid items-start gap-6 min-[901px]:grid-cols-[minmax(0,2fr)_minmax(220px,1fr)]">
+      <div class="min-w-0">
+        <div class="anteprima-linea linea-spiegazione rounded-lg border border-solid border-bordo bg-white">
+          <div set:html={svgLineaCristo()} />
+        </div>
+        <h2 class="no-stampa mt-8 text-[28px]">Come si conta</h2>
+        <ul class="no-stampa mt-3 max-w-[720px] list-disc pl-5">
+          {ESEMPI_CRISTO.map((esempio) => <li class="mt-2" set:html={conCifre(esempio)} />)}
+        </ul>
+        <p class="no-stampa mt-3 max-w-[720px]" set:html={conCifre(NOTA_ROMA)} />
+      </div>
+      <aside class="rounded-xl bg-white p-4">
+        <TastoStampa etichetta="Stampa (PDF A4)" />
+        <p class="m-0 mb-4 text-[15px]">{NOTA_STAMPA}</p>
+        <h2 class="mb-2 text-[22px]">Schede collegate</h2>
+        <nav class="flex flex-col font-bold" aria-label="Schede collegate">
+          {
+            COLLEGAMENTI_CRISTO.map((voce) => (
+              <a href={voce.href} class="inline-flex min-h-11 items-center hover:text-terracotta">
+                {voce.etichetta}
+              </a>
+            ))
+          }
+        </nav>
+      </aside>
+    </div>
+    <section class="no-stampa mt-10">
+      <h2 class="text-[28px]">Esercizi</h2>
+      <div class="mt-4 flex max-w-xl flex-wrap gap-3">
+        <button type="button" class="stampa-anni inline-flex min-h-11 items-center justify-center rounded-[10px] border-[1.5px] border-solid border-terracotta bg-white px-4 font-bold text-terracotta" data-soluzioni="0">
+          Solo scheda
+        </button>
+        <button type="button" class="stampa-anni inline-flex min-h-11 items-center justify-center rounded-[10px] border-0 bg-terracotta px-4 font-bold text-white" data-soluzioni="1">
+          Scheda + soluzioni
+        </button>
+      </div>
+      <GeneratoreAnni client:visible path={path} iniziale={opzioni} />
+    </section>
+    <div class="schede-anni mt-4">
+      <div id="scheda-anni" class="anteprima-linea rounded-lg border border-solid border-bordo bg-white" set:html={svgSchedaAnni(scheda, false)} />
+      <div id="soluzioni-anni" class="anteprima-linea soluzioni anteprima-soluzioni mt-6 rounded-lg border border-solid border-bordo bg-white" set:html={svgSchedaAnni(scheda, true)} />
+    </div>
+    <div class="no-stampa">
+      <h2 class="mt-10 text-[28px]">Domande</h2>
+      <Faq domande={FAQ_CRISTO} path={path} />
+    </div>
+  </main>
+  <script>
+    document.querySelector('.stampa-calendario')?.addEventListener(
+      'click',
+      () => {
+        document.documentElement.classList.remove('stampa-esercizi', 'stampa-solo');
+      },
+      true,
+    );
+    document.querySelectorAll('.stampa-anni').forEach((bottone) => {
+      bottone.addEventListener('click', () => {
+        const conSoluzioni = bottone.getAttribute('data-soluzioni') === '1';
+        document.documentElement.classList.add('stampa-esercizi');
+        document.documentElement.classList.toggle('stampa-solo', !conSoluzioni);
+        window.print();
+      });
+    });
+  </script>
+</Base>

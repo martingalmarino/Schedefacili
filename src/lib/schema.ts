@@ -114,6 +114,7 @@ export function learningResource(input: {
   descrizione: string;
   url: string;
   educationalLevel?: string;
+  learningResourceType?: string;
 }) {
   return {
     '@context': 'https://schema.org',
@@ -124,6 +125,7 @@ export function learningResource(input: {
     educationalLevel: input.educationalLevel,
     inLanguage: 'it-IT',
     isAccessibleForFree: true,
+    ...(input.learningResourceType ? { learningResourceType: input.learningResourceType } : {}),
   };
 }
 

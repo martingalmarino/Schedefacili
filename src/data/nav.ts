@@ -16,6 +16,7 @@ export const NAV: VoceNav[] = [
       { href: '/fogli-da-stampare/', label: 'Fogli da stampare' },
       { href: '/orologio-da-stampare/', label: 'Orologio' },
       { href: '/numeri-romani/', label: 'Numeri romani' },
+      { href: '/linea-del-tempo/', label: 'Linea del tempo' },
     ],
   },
 ];

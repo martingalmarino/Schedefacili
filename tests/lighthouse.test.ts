@@ -2,17 +2,19 @@ import { createServer, type Server } from 'node:http';
 import { existsSync, readFileSync, statSync } from 'node:fs';
 import { join, normalize } from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { gzipSync } from 'node:zlib';
 import { describe, expect, it } from 'vitest';
 import { chromium } from 'playwright';
 import lighthouse from 'lighthouse';
 import * as chromeLauncher from 'chrome-launcher';
+import { URL_LINEA } from '../src/lib/schede-utili';
 
 process.env.NODE_ENV = 'production';
 process.env.VERCEL_ENV = 'production';
 delete process.env.SITE_URL;
 
 const DIST = join(process.cwd(), 'dist', 'client');
-const HUB = ['/fogli-da-stampare/', '/orologio-da-stampare/', '/numeri-romani/'];
+const HUB = ['/fogli-da-stampare/', '/orologio-da-stampare/', '/numeri-romani/', ...URL_LINEA];
 
 function tipoContenuto(file: string): string {
   if (file.endsWith('.html')) return 'text/html; charset=utf-8';
@@ -46,8 +48,16 @@ function avvia(): Promise<{ url: string; close: () => Promise<void> }> {
         res.end('no');
         return;
       }
-      res.writeHead(200, { 'content-type': tipoContenuto(file) });
-      res.end(readFileSync(file));
+      const corpo = readFileSync(file);
+      const tipo = tipoContenuto(file);
+      const testo = tipo.startsWith('text/') || tipo.includes('javascript') || tipo.includes('svg') || tipo.includes('json');
+      if (testo && (req.headers['accept-encoding'] ?? '').includes('gzip')) {
+        res.writeHead(200, { 'content-type': tipo, 'content-encoding': 'gzip', vary: 'Accept-Encoding' });
+        res.end(gzipSync(corpo));
+        return;
+      }
+      res.writeHead(200, { 'content-type': tipo });
+      res.end(corpo);
     })().catch(() => {
       res.writeHead(500);
       res.end('errore');
@@ -65,7 +75,7 @@ function avvia(): Promise<{ url: string; close: () => Promise<void> }> {
   });
 }
 
-describe('Lighthouse mobile sui 3 hub', () => {
+describe('Lighthouse mobile sui hub e sulla linea del tempo', () => {
   it('ha Performance ≥ 90, Accessibilità ≥ 95 e SEO 100', async () => {
     const sito = await avvia();
     const chrome = await chromeLauncher.launch({
@@ -88,6 +98,7 @@ describe('Lighthouse mobile sui 3 hub', () => {
           seo: Math.round((categorie?.seo?.score ?? 0) * 100),
         };
         const etichetta = `${percorso} ${JSON.stringify(punteggi)}`;
+        console.log(etichetta);
         expect(punteggi.performance, etichetta).toBeGreaterThanOrEqual(90);
         expect(punteggi.accessibility, etichetta).toBeGreaterThanOrEqual(95);
         expect(punteggi.seo, etichetta).toBe(100);
@@ -96,5 +107,5 @@ describe('Lighthouse mobile sui 3 hub', () => {
       await chrome.kill();
       await sito.close();
     }
-  }, 240000);
+  }, 360000);
 });

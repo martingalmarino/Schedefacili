@@ -1,0 +1,114 @@
+---
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Faq from '../../components/Faq.astro';
+import InBreve from '../../components/InBreve.astro';
+import VersionePreistoria from '../../components/linea/VersionePreistoria';
+import TastoStampa from '../../components/calendario/TastoStampa.astro';
+import AttivaDsa from '../../components/schede/AttivaDsa.astro';
+import VersioneDsa from '../../components/schede/VersioneDsa';
+import { testoAggiornato } from '../../lib/aggiornamento';
+import { lastmodPagina } from '../../lib/lastmod';
+import { svgCompleta, svgDaCompletare, svgDsa } from '../../lib/linea-preistoria';
+import { howTo, learningResource, urlAssoluta, webPage } from '../../lib/schema';
+import { buildSeo } from '../../lib/seo';
+import {
+  COLLEGAMENTI_PREISTORIA,
+  COME_COSTRUIRE,
+  FAQ_PREISTORIA,
+  IN_BREVE_PREISTORIA,
+  NOTA_STAMPA,
+  SEO_PREISTORIA,
+} from '../../lib/testi-linea';
+import Base from '../../layouts/Base.astro';
+
+const path = '/linea-del-tempo/preistoria/';
+const aggiornato = testoAggiornato();
+const [vuota, tessere] = svgDaCompletare();
+const briciole = [
+  { nome: 'Home', href: '/' },
+  { nome: 'Schede utili', href: '/#schede-utili' },
+  { nome: 'Linea del tempo', href: '/linea-del-tempo/' },
+  { nome: 'Preistoria', href: path },
+];
+const seo = buildSeo({
+  title: SEO_PREISTORIA.title,
+  description: SEO_PREISTORIA.description,
+  path,
+  h1: SEO_PREISTORIA.h1,
+  keywords: [...SEO_PREISTORIA.keywords],
+  image: '/og/home.png',
+  schema: [
+    webPage({
+      path,
+      name: SEO_PREISTORIA.h1,
+      description: SEO_PREISTORIA.description,
+      dateModified: lastmodPagina(path),
+    }),
+    learningResource({
+      nome: SEO_PREISTORIA.h1,
+      descrizione: SEO_PREISTORIA.description,
+      url: urlAssoluta(path),
+      educationalLevel: 'Scuola primaria',
+      learningResourceType: 'Scheda didattica',
+    }),
+    howTo({ path, nome: COME_COSTRUIRE.nome, passi: COME_COSTRUIRE.passi }),
+  ],
+});
+---
+
+<Base seo={seo} stampaLinea>
+  <div class="no-stampa">
+    <Breadcrumbs items={briciole} />
+  </div>
+  <main id="scheda" class="scheda-linea mx-auto max-w-[1120px] px-6 pb-16">
+    <AttivaDsa id="scheda" />
+    <div class="no-stampa">
+      <h1 class="mt-2 mb-4 font-display text-[34px] leading-tight font-semibold min-[601px]:text-[40px]">{SEO_PREISTORIA.h1}</h1>
+      <InBreve aggiornato={aggiornato}>{IN_BREVE_PREISTORIA}</InBreve>
+      <div class="comandi-scheda my-4 flex max-w-xl flex-wrap items-center gap-3">
+        <VersioneDsa client:load targetId="scheda" />
+      </div>
+    </div>
+    <div class="griglia-linea mt-2 grid items-start gap-6 min-[901px]:grid-cols-[minmax(0,2fr)_minmax(220px,1fr)]">
+      <div class="min-w-0">
+        <VersionePreistoria client:load />
+        <div class="anteprima-linea rounded-lg border border-solid border-bordo bg-white">
+          <div class="foglio-completa" set:html={svgCompleta()} />
+          <div class="foglio-vuota">
+            <div set:html={vuota} />
+            <div class="interruzione-foglio" set:html={tessere} />
+          </div>
+          <div class="foglio-dsa" set:html={svgDsa()} />
+        </div>
+      </div>
+      <aside class="rounded-xl bg-white p-4">
+        <TastoStampa etichetta="Stampa (PDF A4)" />
+        <p class="m-0 mb-4 text-[15px]">{NOTA_STAMPA}</p>
+        <h2 class="mb-2 text-[22px]">Schede collegate</h2>
+        <nav class="flex flex-col font-bold" aria-label="Schede collegate">
+          {
+            COLLEGAMENTI_PREISTORIA.map((voce) => (
+              <a href={voce.href} class="inline-flex min-h-11 items-center hover:text-terracotta">
+                {voce.etichetta}
+              </a>
+            ))
+          }
+        </nav>
+      </aside>
+    </div>
+    <div class="no-stampa">
+      <h2 class="mt-10 text-[28px]">{COME_COSTRUIRE.nome}</h2>
+      <ol class="mt-3 max-w-[720px] list-decimal pl-5">
+        {
+          COME_COSTRUIRE.passi.map((passo) => (
+            <li class="mt-2">
+              <b>{passo.nome}.</b> {passo.testo}
+            </li>
+          ))
+        }
+      </ol>
+      <h2 class="mt-10 text-[28px]">Domande</h2>
+      <Faq domande={FAQ_PREISTORIA} path={path} />
+    </div>
+  </main>
+</Base>

@@ -1,0 +1,77 @@
+---
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Faq from '../../components/Faq.astro';
+import InBreve from '../../components/InBreve.astro';
+import AttivaDsa from '../../components/schede/AttivaDsa.astro';
+import VersioneDsa from '../../components/schede/VersioneDsa';
+import { testoAggiornato } from '../../lib/aggiornamento';
+import { lastmodPagina } from '../../lib/lastmod';
+import { itemList, learningResource, urlAssoluta, webPage } from '../../lib/schema';
+import { buildSeo } from '../../lib/seo';
+import { FAQ_HUB_LINEA, IN_BREVE_HUB_LINEA, PAGINE_LINEA, SEO_HUB_LINEA } from '../../lib/testi-linea';
+import Base from '../../layouts/Base.astro';
+
+const path = '/linea-del-tempo/';
+const aggiornato = testoAggiornato();
+const briciole = [
+  { nome: 'Home', href: '/' },
+  { nome: 'Schede utili', href: '/#schede-utili' },
+  { nome: 'Linea del tempo', href: path },
+];
+const seo = buildSeo({
+  title: SEO_HUB_LINEA.title,
+  description: SEO_HUB_LINEA.description,
+  path,
+  h1: SEO_HUB_LINEA.h1,
+  keywords: [...SEO_HUB_LINEA.keywords],
+  image: '/og/home.png',
+  schema: [
+    webPage({
+      path,
+      name: SEO_HUB_LINEA.h1,
+      description: SEO_HUB_LINEA.description,
+      dateModified: lastmodPagina(path),
+    }),
+    itemList({
+      path,
+      nome: 'Linea del tempo',
+      elementi: PAGINE_LINEA.map((pagina) => ({ nome: pagina.nome, url: pagina.href })),
+    }),
+    learningResource({
+      nome: SEO_HUB_LINEA.h1,
+      descrizione: SEO_HUB_LINEA.description,
+      url: urlAssoluta(path),
+      educationalLevel: 'Scuola primaria',
+      learningResourceType: 'Scheda didattica',
+    }),
+  ],
+});
+---
+
+<Base seo={seo}>
+  <div class="no-stampa">
+    <Breadcrumbs items={briciole} />
+  </div>
+  <main id="scheda" class="mx-auto max-w-[1120px] px-6 pb-16">
+    <AttivaDsa id="scheda" />
+    <h1 class="mt-2 mb-4 font-display text-[34px] leading-tight font-semibold min-[601px]:text-[40px]">{SEO_HUB_LINEA.h1}</h1>
+    <InBreve aggiornato={aggiornato}>{IN_BREVE_HUB_LINEA}</InBreve>
+    <div class="comandi-scheda my-4 flex max-w-xl flex-wrap items-center gap-3">
+      <VersioneDsa client:load targetId="scheda" />
+    </div>
+    <ul class="mt-6 grid list-none gap-4 p-0 min-[601px]:grid-cols-2">
+      {
+        PAGINE_LINEA.map((pagina) => (
+          <li>
+            <a href={pagina.href} class="block h-full rounded-xl bg-white px-4 py-3 hover:text-terracotta">
+              <span class="block text-[20px] font-bold">{pagina.nome}</span>
+              <span class="mt-1 block font-normal text-inchiostro">{pagina.testo}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+    <h2 class="mt-10 text-[28px]">Domande</h2>
+    <Faq domande={FAQ_HUB_LINEA} path={path} />
+  </main>
+</Base>

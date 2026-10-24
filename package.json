@@ -6,7 +6,7 @@
     "node": ">=22.23.4"
   },
   "scripts": {
-    "prebuild": "node scripts/validate-data.ts",
+    "prebuild": "node scripts/lastmod.mjs && node scripts/validate-data.ts",
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",

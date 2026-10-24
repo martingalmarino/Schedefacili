@@ -1,3 +1,4 @@
+import { PAGINE_LINEA } from './testi-linea';
 import { PAGINE_FOGLI } from './testi-fogli';
 import { PAGINE_ROMANI } from './testi-romani';
 import urlNuove from '../data/url-nuove.json';
@@ -28,4 +29,12 @@ export const CARD_SCHEDE_UTILI = [
     testo: 'Tabelle, convertitore e schede da stampare.',
     conteggio: PAGINE_ROMANI.length,
   },
+  {
+    href: '/linea-del-tempo/',
+    nome: 'Linea del tempo',
+    testo: 'Preistoria e anni avanti e dopo Cristo.',
+    conteggio: PAGINE_LINEA.length,
+  },
 ] as const;
+
+export const URL_LINEA = ['/linea-del-tempo/', ...PAGINE_LINEA.map((pagina) => pagina.href)] as const;

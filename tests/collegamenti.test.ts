@@ -68,7 +68,7 @@ describe('collegamenti delle pagine nuove', () => {
     expect(rotti).toEqual([]);
   });
 
-  it('raggiunge le 10 URL dalla home in al massimo due clic e ciascuna ha almeno due link', async () => {
+  it('raggiunge le URL nuove dalla home in al massimo due clic e ciascuna ha almeno due link', async () => {
     const pagine = await htmlDelDist();
     const grafo = new Map(pagine.map((pagina) => [pagina.percorso, pagina.html]));
     const linkDi = (html: string) =>

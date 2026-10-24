@@ -3,7 +3,8 @@ import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import { risolviSiteUrl } from '../src/config/site';
 import { corpoRobots } from '../src/lib/robots';
-import { URL_NUOVE } from '../src/lib/schede-utili';
+import { lastmodPagina } from '../src/lib/lastmod';
+import { URL_LINEA, URL_NUOVE } from '../src/lib/schede-utili';
 
 const CHIAVI = ['SITE_URL', 'NODE_ENV', 'VERCEL_ENV', 'ALLOW_INDEXING'] as const;
 const prima = Object.fromEntries(CHIAVI.map((chiave) => [chiave, process.env[chiave]]));
@@ -127,19 +128,35 @@ describe('dist di produzione', () => {
     const corpo = xml.map((file) => readFileSync(file, 'utf8')).join('\n');
     const loc = [...corpo.matchAll(/<loc>([^<]+)<\/loc>/g)].map((trovato) => trovato[1]);
     const schede = loc.filter((url) => !url.endsWith('.xml'));
-    expect(schede).toHaveLength(86);
+    expect(schede).toHaveLength(89);
     for (const url of schede) {
       expect(url.startsWith('https://www.schedefacili.com/')).toBe(true);
       expect(url.endsWith('/')).toBe(true);
     }
     const conData = [...corpo.matchAll(/<url>[\s\S]*?<lastmod>([^<]+)<\/lastmod>[\s\S]*?<\/url>/g)];
-    expect(conData).toHaveLength(86);
+    expect(conData).toHaveLength(89);
     for (const url of schede) expect(url.includes('?'), url).toBe(false);
     for (const percorso of URL_NUOVE) {
       expect(schede, percorso).toContain(`https://www.schedefacili.com${percorso}`);
     }
     for (const data of conData) {
       expect(Number.isNaN(Date.parse(data[1] ?? '')), data[1]).toBe(false);
+    }
+    for (const percorso of URL_NUOVE) {
+      const atteso = Date.parse(lastmodPagina(percorso));
+      const trovato = corpo.match(new RegExp(`<loc>https://www\\.schedefacili\\.com${percorso}</loc>\\s*<lastmod>([^<]+)</lastmod>`));
+      expect(trovato, percorso).toBeTruthy();
+      expect(Date.parse(trovato?.[1] ?? ''), percorso).toBe(atteso);
+      expect(Date.now() - atteso, percorso).toBeGreaterThan(60_000);
+    }
+    for (const data of conData) {
+      const quando = Date.parse(data[1] ?? '');
+      expect(Date.now() - quando, data[1]).toBeGreaterThan(60_000);
+    }
+    for (const percorso of URL_LINEA) {
+      const trovato = corpo.match(new RegExp(`<loc>https://www\\.schedefacili\\.com${percorso}</loc>\\s*<lastmod>([^<]+)</lastmod>`));
+      const quando = Date.parse(trovato?.[1] ?? '');
+      expect(quando, percorso).toBeLessThanOrEqual(Date.now());
     }
     const regioni = pagine.filter((file) => file.includes('/calendario-scolastico/2026-2027/') && !file.endsWith('/2026-2027/index.html') && !file.includes('ponti-e-festivita'));
     expect(regioni.length).toBe(21);

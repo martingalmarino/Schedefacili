@@ -1,6 +1,6 @@
 import { spawnSync } from 'node:child_process';
 import { describe, expect, it } from 'vitest';
-import { lastmodPagina } from '../src/lib/lastmod';
+import { fontiPagina, lastmodPagina, scegliLastmod } from '../src/lib/lastmod';
 import { URL_NUOVE } from '../src/lib/schede-utili';
 import { contaParole } from '../src/lib/testi-schede';
 import {
@@ -48,15 +48,21 @@ function entroIlBordo(opzioni: OpzioniFoglio) {
 }
 
 describe('lastmod delle pagine nuove', () => {
-  it('usa git log -1 e non l’ora del build', () => {
+  it('usa l’ultimo commit della pagina o dei suoi dati, non l’ora del build', () => {
     for (const percorso of URL_NUOVE) {
-      const base = percorso.replace(/\/$/, '');
-      const candidati = [`src/pages${base}.astro`, `src/pages${base}/index.astro`];
-      const file = candidati.find((voce) => spawnSync('git', ['log', '-1', '--format=%cI', '--', voce], { encoding: 'utf8' }).stdout.trim());
-      const atteso = spawnSync('git', ['log', '-1', '--format=%cI', '--', file ?? ''], { encoding: 'utf8' }).stdout.trim();
-      expect(atteso, percorso).not.toBe('');
-      expect(lastmodPagina(percorso)).toBe(atteso);
+      const date = fontiPagina(percorso).map((file) =>
+        spawnSync('git', ['log', '-1', '--format=%cI', '--', file], { encoding: 'utf8' }).stdout.trim(),
+      );
+      const atteso = date.filter(Boolean).sort((a, b) => Date.parse(b) - Date.parse(a))[0];
+      const salvato = lastmodPagina(percorso);
+      if (atteso) {
+        expect(atteso).not.toMatch(/\.\d{3}Z$/);
+        expect(salvato).toBe(atteso);
+      } else {
+        expect(Date.now() - Date.parse(salvato), percorso).toBeGreaterThan(60_000);
+      }
     }
+    expect(scegliLastmod(undefined, '2026-10-23T12:00:00-03:00')).toBe('2026-10-23T12:00:00-03:00');
   });
 });
 

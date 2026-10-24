@@ -23,6 +23,13 @@ export default function VersioneDsa({ targetId = 'scheda' }: Props) {
     const acceso = leggiDsa();
     setAttivo(acceso);
     document.getElementById(targetId)?.classList.toggle('dsa', acceso);
+    const su = (evento: Event) => {
+      const prossimo = Boolean((evento as CustomEvent<boolean>).detail);
+      setAttivo(prossimo);
+      document.getElementById(targetId)?.classList.toggle('dsa', prossimo);
+    };
+    window.addEventListener('schedefacili-dsa', su);
+    return () => window.removeEventListener('schedefacili-dsa', su);
   }, [targetId]);
 
   return (
@@ -34,6 +41,7 @@ export default function VersioneDsa({ targetId = 'scheda' }: Props) {
         const prossimo = !attivo;
         setAttivo(prossimo);
         applicaDsa(prossimo, targetId);
+        window.dispatchEvent(new CustomEvent('schedefacili-dsa', { detail: prossimo }));
       }}
     >
       Versione DSA (carattere ad alta leggibilità)

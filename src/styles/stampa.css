@@ -44,3 +44,12 @@
 html.stampa-foglio {
   page: foglio-a4;
 }
+
+@page linea-tempo {
+  size: A4 landscape;
+  margin: 8mm;
+}
+
+html.stampa-linea {
+  page: linea-tempo;
+}

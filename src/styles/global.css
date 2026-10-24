@@ -323,6 +323,54 @@ h3,
     break-before: auto !important;
     margin-top: 4px !important;
   }
+
+  html.stampa-linea main {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: none !important;
+  }
+
+  html.stampa-linea .griglia-linea,
+  html.stampa-linea .schede-anni,
+  html.stampa-linea .anteprima-linea {
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+    border: 0 !important;
+  }
+
+  html.stampa-linea .foglio-linea {
+    width: 281mm !important;
+    height: 194mm !important;
+    max-width: none !important;
+  }
+
+  html.stampa-linea .interruzione-foglio {
+    break-before: page;
+  }
+
+  html.stampa-linea .schede-anni {
+    display: none !important;
+  }
+
+  html.stampa-esercizi .linea-spiegazione {
+    display: none !important;
+  }
+
+  html.stampa-esercizi .schede-anni {
+    display: block !important;
+  }
+
+  html.stampa-esercizi .schede-anni .anteprima-linea {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  html.stampa-solo .schede-anni .anteprima-soluzioni {
+    display: none !important;
+  }
 }
 
 .anteprima-foglio {
@@ -347,6 +395,44 @@ h3,
   width: 100%;
   height: auto;
   background: #fff;
+}
+
+.anteprima-linea {
+  min-width: 0;
+  max-width: 100%;
+  overflow: auto;
+}
+
+.foglio-linea {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  height: auto;
+  max-width: 281mm;
+  background: #fff;
+}
+
+.foglio-vuota,
+.foglio-dsa {
+  display: none;
+}
+
+#scheda.versione-vuota .foglio-completa,
+#scheda.versione-vuota .foglio-dsa {
+  display: none;
+}
+
+#scheda.versione-vuota .foglio-vuota {
+  display: block;
+}
+
+#scheda.dsa .foglio-completa,
+#scheda.dsa .foglio-vuota {
+  display: none;
+}
+
+#scheda.dsa .foglio-dsa {
+  display: block;
 }
 
 .scheda-foglio.dsa {

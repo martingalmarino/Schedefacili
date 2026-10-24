@@ -1,25 +1,63 @@
 import { spawnSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
+import dateSalvate from '../data/lastmod.json';
 import { dataAggiornamentoIso } from './aggiornamento';
 
-const cache = new Map<string, string>();
+const mappa = dateSalvate as Record<string, string>;
+const cache = new Map<string, string | undefined>();
+let gitCompleto: boolean | undefined;
 
-function dataBuild(): string {
-  return new Date().toISOString();
+const FONTI: { prefisso: string; file: string[] }[] = [
+  { prefisso: '/fogli-da-stampare/', file: ['src/lib/fogli.ts', 'src/lib/testi-fogli.ts'] },
+  { prefisso: '/orologio-da-stampare/', file: ['src/lib/orologio-svg.ts', 'src/lib/ora.ts', 'src/lib/testi-orologio.ts'] },
+  { prefisso: '/generatori/schede-orologio/', file: ['src/lib/orologio-svg.ts', 'src/lib/schede-orologio.ts', 'src/lib/ora.ts'] },
+  { prefisso: '/numeri-romani/', file: ['src/lib/romani.ts', 'src/lib/schede-romani.ts', 'src/lib/tabelle-romane.ts', 'src/lib/testi-romani.ts'] },
+  {
+    prefisso: '/linea-del-tempo/',
+    file: [
+      'src/data/linea-del-tempo/preistoria.ts',
+      'src/components/linea/icone.ts',
+      'src/lib/anni.ts',
+      'src/lib/schede-anni.ts',
+      'src/lib/linea-cristo.ts',
+      'src/lib/testi-cristo.ts',
+    ],
+  },
+];
+
+function repoConStoria(): boolean {
+  if (gitCompleto !== undefined) return gitCompleto;
+  const esito = spawnSync('git', ['rev-parse', '--is-shallow-repository'], {
+    encoding: 'utf8',
+    cwd: process.cwd(),
+  });
+  gitCompleto = esito.status === 0 && esito.stdout.trim() === 'false';
+  return gitCompleto;
 }
 
 function dataGit(file: string): string | undefined {
-  const nota = cache.get(file);
-  if (nota) return nota;
-  if (!existsSync(file)) return undefined;
+  if (cache.has(file)) return cache.get(file);
+  if (!existsSync(file)) {
+    cache.set(file, undefined);
+    return undefined;
+  }
   const esito = spawnSync('git', ['log', '-1', '--format=%cI', '--', file], {
     encoding: 'utf8',
     cwd: process.cwd(),
   });
-  const uscita = esito.stdout?.trim();
-  if (esito.status !== 0 || !uscita) return undefined;
-  cache.set(file, uscita);
-  return uscita;
+  const uscita = esito.status === 0 ? esito.stdout?.trim() : '';
+  const data = uscita || undefined;
+  cache.set(file, data);
+  return data;
+}
+
+export function scegliLastmod(git: string | undefined, salvata: string | undefined): string | undefined {
+  return git ?? salvata;
+}
+
+function dataFile(file: string): string | undefined {
+  const git = repoConStoria() ? dataGit(file) : undefined;
+  return scegliLastmod(git, mappa[file]);
 }
 
 function fileDellaPagina(pathname: string): string | undefined {
@@ -38,9 +76,17 @@ function fileDellaPagina(pathname: string): string | undefined {
   return undefined;
 }
 
+export function fontiPagina(pathname: string): string[] {
+  const pagina = fileDellaPagina(pathname);
+  const extra = FONTI.filter((voce) => pathname.startsWith(voce.prefisso)).flatMap((voce) => voce.file);
+  return [...new Set([...(pagina ? [pagina] : []), ...extra])];
+}
+
+function piuRecente(date: string[]): string | undefined {
+  return date.sort((a, b) => Date.parse(b) - Date.parse(a))[0];
+}
+
 export function lastmodPagina(pathname: string): string {
   if (pathname.startsWith('/calendario-scolastico/')) return dataAggiornamentoIso();
-  const file = fileDellaPagina(pathname);
-  if (!file) return dataBuild();
-  return dataGit(file) ?? dataBuild();
+  return piuRecente(fontiPagina(pathname).map((file) => dataFile(file)).filter((data): data is string => Boolean(data))) ?? dataAggiornamentoIso();
 }

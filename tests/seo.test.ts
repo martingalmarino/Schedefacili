@@ -2,7 +2,7 @@ import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { describe, expect, it } from 'vitest';
-import { URL_NUOVE } from '../src/lib/schede-utili';
+import { URL_LINEA, URL_NUOVE } from '../src/lib/schede-utili';
 
 function fileHtml(dir: string): string[] {
   return readdirSync(dir).flatMap((nome) => {
@@ -24,10 +24,10 @@ describe('HTML generato', () => {
   const dist = join(process.cwd(), 'dist', 'client');
   const pagine = fileHtml(dist);
 
-  it('genera 84 pagine HTML statiche; orologio e schede orologio sono on demand', () => {
+  it('genera 87 pagine HTML statiche; orologio e schede orologio sono on demand', () => {
     const indice = pagine.filter((file) => file.endsWith('/index.html') || file.endsWith('\\index.html'));
-    expect(indice).toHaveLength(84);
-    expect(pagine).toHaveLength(84);
+    expect(indice).toHaveLength(87);
+    expect(pagine).toHaveLength(87);
   });
 
   it('rispetta title, description, H1, canonical, lingua e In breve', () => {
@@ -101,7 +101,8 @@ function controllaPaginaNuova(html: string, percorso: string) {
   expect(html.includes('"@type":"Event"') || html.includes('"@type": "Event"')).toBe(false);
   const visibile = testoVisibile(html);
   for (const parola of VIETATE) {
-    expect(visibile.includes(parola), `${percorso} contiene «${parola}»`).toBe(false);
+    const trovato = parola === 'le una' ? /(?<![A-Za-zÀ-ÿ])le una/.test(visibile) : visibile.includes(parola);
+    expect(trovato, `${percorso} contiene «${parola}»`).toBe(false);
   }
   const faq = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)]
     .map((blocco) => JSON.parse(blocco[1]) as { '@type'?: string; mainEntity?: { name: string; acceptedAnswer: { text: string } }[] })
@@ -129,7 +130,7 @@ describe('calendari', () => {
 describe('pagine nuove', () => {
   const dist = join(process.cwd(), 'dist', 'client');
 
-  it('rispetta SEO, FAQ visibile e il lessico sulle 10 URL', async () => {
+  it('rispetta SEO, FAQ visibile e il lessico sulle URL nuove', async () => {
     process.env.NODE_ENV = 'production';
     process.env.VERCEL_ENV = 'production';
     delete process.env.SITE_URL;
@@ -142,6 +143,14 @@ describe('pagine nuove', () => {
         ? readFileSync(file, 'utf8')
         : await (await modulo.default.fetch(new Request(`http://127.0.0.1${percorso}`))).text();
       controllaPaginaNuova(html, percorso);
+      if (!URL_LINEA.includes(percorso as (typeof URL_LINEA)[number])) continue;
+      expect(html, percorso).toContain('"@type":"LearningResource"');
+      const visibile = testoVisibile(html);
+      expect(visibile, percorso).not.toMatch(/(?<!\d)0\s*a\.C\./);
+      expect(visibile, percorso).not.toMatch(/(?<!\d)0\s*d\.C\./);
+      for (const parola of ['anno 0', 'TODO', 'segnaposto', 'lorem', 'il 8', 'il 11']) {
+        expect(visibile.includes(parola), `${percorso} contiene «${parola}»`).toBe(false);
+      }
     }
   });
 });

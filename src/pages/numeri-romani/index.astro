@@ -48,6 +48,7 @@ const seo = buildSeo({
 const collegamenti = [
   ...PAGINE_ROMANI.map((pagina) => ({ href: pagina.href, etichetta: pagina.nome })),
   { href: '/orologio-da-stampare/', etichetta: 'Orologio da stampare' },
+  { href: '/linea-del-tempo/avanti-e-dopo-cristo/', etichetta: 'Avanti e dopo Cristo' },
   { href: '/tabelline/', etichetta: 'Tabelline' },
 ];
 ---
@@ -111,7 +112,10 @@ const collegamenti = [
       <h2 class="mt-10 text-[28px]">Dove li trovi</h2>
       <ul class="mt-3 grid list-disc gap-2 pl-6">
         <li>Sugli orologi, al posto delle ore. C’è anche un <a href="/orologio-da-stampare/" class="font-bold hover:text-terracotta">orologio da costruire</a>.</li>
-        <li>Nei secoli: il XXI secolo è quello in corso.</li>
+        <li>
+          Nei secoli: il XXI secolo è quello in corso. Per metterli in fila c’è la{' '}
+          <a href="/linea-del-tempo/avanti-e-dopo-cristo/" class="font-bold hover:text-terracotta">linea avanti e dopo Cristo</a>.
+        </li>
         <li>Nei capitoli dei libri: il capitolo IV è il quarto.</li>
       </ul>
 
