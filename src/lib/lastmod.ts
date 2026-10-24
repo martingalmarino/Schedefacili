@@ -1,4 +1,4 @@
-import { execSync } from 'node:child_process';
+import { spawnSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import { dataAggiornamentoIso } from './aggiornamento';
 
@@ -12,17 +12,14 @@ function dataGit(file: string): string | undefined {
   const nota = cache.get(file);
   if (nota) return nota;
   if (!existsSync(file)) return undefined;
-  try {
-    const uscita = execSync(`git log -1 --format=%cI -- ${JSON.stringify(`:(literal)${file}`)}`, {
-      encoding: 'utf8',
-      stdio: ['ignore', 'pipe', 'ignore'],
-    }).trim();
-    if (!uscita) return undefined;
-    cache.set(file, uscita);
-    return uscita;
-  } catch {
-    return undefined;
-  }
+  const esito = spawnSync('git', ['log', '-1', '--format=%cI', '--', file], {
+    encoding: 'utf8',
+    cwd: process.cwd(),
+  });
+  const uscita = esito.stdout?.trim();
+  if (esito.status !== 0 || !uscita) return undefined;
+  cache.set(file, uscita);
+  return uscita;
 }
 
 function fileDellaPagina(pathname: string): string | undefined {

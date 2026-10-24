@@ -54,6 +54,14 @@ export function dataEstesa(iso: string): string {
   return `${data.getDate()} ${MESI[data.getMonth()]} ${data.getFullYear()}`;
 }
 
+export function articoloData(iso: string): string {
+  const data = parseData(iso);
+  if (!data) return iso;
+  const giorno = data.getDate();
+  const articolo = giorno === 8 || giorno === 11 ? "l'" : 'il ';
+  return `${articolo}${dataEstesa(iso)}`;
+}
+
 export function dataBreve(iso: string): string {
   const data = parseData(iso);
   if (!data) return iso;
@@ -92,6 +100,7 @@ export function conArticolo(slug: string, nome: string): string {
 
 export function inRegione(slug: string, nome: string): string {
   if (slug === 'marche') return `nelle ${nome}`;
+  if (slug === 'lazio') return `nel ${nome}`;
   if (CON_ARTICOLO.has(slug)) return `nella ${nome}`;
   return `in ${nome}`;
 }
@@ -129,8 +138,7 @@ export function testoInBreve(regione: RegioneDato, voce: CalendarioVoce): string
     voce.natale?.dal && voce.natale.al
       ? ` Le vacanze di Natale vanno dal ${dataEstesa(voce.natale.dal)} al ${dataEstesa(voce.natale.al)}.`
       : '';
-  const nota = voce.nota ? ` ${voce.nota}` : '';
-  return `${attacco} le lezioni dell’anno ${ANNO} iniziano il ${dataEstesa(voce.inizio)} e finiscono il ${dataEstesa(voce.fine)}.${natale} Quelle di Pasqua dal ${dataEstesa(voce.pasqua.dal)} al ${dataEstesa(voce.pasqua.al)}.${nota}`;
+  return `${attacco} le lezioni dell’anno ${ANNO} iniziano ${articoloData(voce.inizio)} e finiscono ${articoloData(voce.fine)}.${natale} Quelle di Pasqua dal ${dataEstesa(voce.pasqua.dal)} al ${dataEstesa(voce.pasqua.al)}.`;
 }
 
 export function festeNazionali(): VoceFesta[] {
@@ -184,12 +192,12 @@ const RISPOSTA_OTTOBRE =
 export function faqRegione(regione: RegioneDato, voce: CalendarioVoce) {
   const dove = inRegione(regione.slug, regione.nome);
   const completo = calendarioCompleto(voce);
-  const inizio = completo && voce.inizio ? `Le lezioni iniziano il ${dataEstesa(voce.inizio)}.` : RISPOSTA_ATTESA;
+  const inizio = completo && voce.inizio ? `Le lezioni iniziano ${articoloData(voce.inizio)}.` : RISPOSTA_ATTESA;
   const natale =
     voce.natale?.dal && voce.natale.al
       ? `Secondo la delibera regionale, dal ${dataEstesa(voce.natale.dal)} al ${dataEstesa(voce.natale.al)}.`
-      : (voce.nota ?? RISPOSTA_ATTESA);
-  const fine = completo && voce.fine ? `Le lezioni finiscono il ${dataEstesa(voce.fine)}.` : RISPOSTA_ATTESA;
+      : 'La data delle vacanze di Natale non è ancora stata indicata nel calendario regionale.';
+  const fine = completo && voce.fine ? `Le lezioni finiscono ${articoloData(voce.fine)}.` : RISPOSTA_ATTESA;
   return [
     { domanda: `Quando inizia la scuola ${dove} nel 2026?`, risposta: inizio },
     { domanda: `Quando iniziano le vacanze di Natale ${dove}?`, risposta: natale },

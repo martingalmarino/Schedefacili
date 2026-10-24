@@ -113,6 +113,19 @@ function controllaPaginaNuova(html: string, percorso: string) {
   }
 }
 
+describe('calendari', () => {
+  const dist = join(process.cwd(), 'dist', 'client', 'calendario-scolastico');
+
+  it('non mostra nel testo visibile le parole vietate', () => {
+    for (const file of fileHtml(dist)) {
+      const visibile = testoVisibile(readFileSync(file, 'utf8'));
+      for (const parola of VIETATE) {
+        expect(visibile.includes(parola), `${file} contiene «${parola}»`).toBe(false);
+      }
+    }
+  });
+});
+
 describe('pagine nuove', () => {
   const dist = join(process.cwd(), 'dist', 'client');
 

@@ -61,5 +61,5 @@ export function regioniCartina() {
 }
 
 export function conteggioPagineCartine(): number {
-  return 1 + CARTINE.length;
+  return CARTINE.length;
 }

@@ -1,5 +1,7 @@
+import { execFileSync } from 'node:child_process';
 import { createServer, type Server } from 'node:http';
-import { mkdirSync, readFileSync, existsSync, statSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, readFileSync, existsSync, statSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { join, normalize } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { describe, expect, it } from 'vitest';
@@ -224,7 +226,123 @@ describe('stampa dei fogli A4', () => {
       await sito.close();
     }
   }, 120000);
+
+  it('stampa il righello da 50 mm, il quadretto da 1 cm, il convertitore, la tabellina e il Veneto su un A4', async () => {
+    const sito = await avvia(DIST);
+    const browser = await chromium.launch();
+    try {
+      const page = await browser.newPage({ viewport: { width: 1400, height: 1800 } });
+      const pdfDi = async (percorso: string) => {
+        await page.goto(`${sito.url}${percorso}`, { waitUntil: 'load' });
+        return page.pdf({
+          format: 'A4',
+          preferCSSPageSize: true,
+          printBackground: true,
+          margin: { top: '0', right: '0', bottom: '0', left: '0' },
+        });
+      };
+      for (const percorso of PAGINE) {
+        expect(paginePdf(await pdfDi(percorso)), percorso).toBe(1);
+      }
+      const quadretti = await pdfDi('/fogli-da-stampare/quadretti-1-cm/');
+      const ppm = raster254(quadretti);
+      const righello = lunghezzaRighello(ppm);
+      expect(Math.abs(righello - 500)).toBeLessThanOrEqual(3);
+      const quadretto = passoQuadretto(ppm);
+      expect(Math.abs(quadretto - 100)).toBeLessThanOrEqual(1);
+      expect(paginePdf(await pdfDi('/numeri-romani/convertitore/'))).toBe(1);
+      expect(paginePdf(await pdfDi('/tabelline/tabellina-del-7/'))).toBe(1);
+      expect(paginePdf(await pdfDi('/calendario-scolastico/2026-2027/veneto/'))).toBe(1);
+    } finally {
+      await browser.close();
+      await sito.close();
+    }
+  }, 120000);
 });
+
+function raster254(pdf: Buffer): { w: number; h: number; dati: Buffer } {
+  const cartella = mkdtempSync(join(tmpdir(), 'righello-'));
+  const sorgente = join(cartella, 'foglio.pdf');
+  const uscita = join(cartella, 'foglio.ppm');
+  writeFileSync(sorgente, pdf);
+  execFileSync('gs', ['-dSAFER', '-dBATCH', '-dNOPAUSE', '-sDEVICE=ppmraw', '-r254', `-sOutputFile=${uscita}`, sorgente], {
+    stdio: 'ignore',
+  });
+  return leggiPpm(readFileSync(uscita));
+}
+
+function leggiPpm(buffer: Buffer): { w: number; h: number; dati: Buffer } {
+  let i = 0;
+  const token: string[] = [];
+  while (token.length < 4 && i < buffer.length) {
+    while (buffer[i] === 32 || buffer[i] === 10 || buffer[i] === 13 || buffer[i] === 9) i += 1;
+    if (buffer[i] === 35) {
+      while (buffer[i] !== 10) i += 1;
+      continue;
+    }
+    const inizio = i;
+    while (i < buffer.length && buffer[i] !== 32 && buffer[i] !== 10 && buffer[i] !== 13 && buffer[i] !== 9) i += 1;
+    token.push(buffer.toString('ascii', inizio, i));
+  }
+  return { w: Number(token[1]), h: Number(token[2]), dati: buffer.subarray(i + 1) };
+}
+
+function scuro(ppm: { w: number; dati: Buffer }, x: number, y: number): boolean {
+  const o = (y * ppm.w + x) * 3;
+  return ppm.dati[o]! < 80 && ppm.dati[o + 1]! < 90 && ppm.dati[o + 2]! < 120;
+}
+
+function lunghezzaRighello(ppm: { w: number; h: number; dati: Buffer }): number {
+  let migliore = 0;
+  let riga = 0;
+  for (let y = 0; y < ppm.h; y += 1) {
+    let run = 0;
+    let max = 0;
+    for (let x = 0; x < ppm.w; x += 1) {
+      if (scuro(ppm, x, y)) {
+        run += 1;
+        max = Math.max(max, run);
+      } else run = 0;
+    }
+    if (max > migliore) {
+      migliore = max;
+      riga = y;
+    }
+  }
+  const tacche: number[] = [];
+  for (let x = 0; x < ppm.w; x += 1) {
+    if (scuro(ppm, x, Math.max(0, riga - 12))) tacche.push(x);
+  }
+  const gruppi: number[][] = [];
+  for (const x of tacche) {
+    const ultimo = gruppi[gruppi.length - 1];
+    if (!ultimo || x - ultimo[ultimo.length - 1]! > 8) gruppi.push([x]);
+    else ultimo.push(x);
+  }
+  if (gruppi.length < 2) return migliore;
+  const centro = (gruppo: number[]) => gruppo.reduce((somma, valore) => somma + valore, 0) / gruppo.length;
+  return Math.round(centro(gruppi[gruppi.length - 1]!) - centro(gruppi[0]!));
+}
+
+function passoQuadretto(ppm: { w: number; h: number; dati: Buffer }): number {
+  const y = Math.round(ppm.h * 0.45);
+  const centri: number[] = [];
+  let run: number[] = [];
+  const chiudi = () => {
+    if (run.length > 0) centri.push(run.reduce((somma, valore) => somma + valore, 0) / run.length);
+    run = [];
+  };
+  for (let x = 0; x < ppm.w; x += 1) {
+    const o = (y * ppm.w + x) * 3;
+    const chiaro = ppm.dati[o]! > 235 && ppm.dati[o + 1]! > 235 && ppm.dati[o + 2]! > 235;
+    if (chiaro) chiudi();
+    else run.push(x);
+  }
+  chiudi();
+  const passi = centri.slice(1).map((valore, indice) => valore - centri[indice]!);
+  const decine = passi.filter((passo) => passo > 80 && passo < 120);
+  return decine[0] ?? 0;
+}
 
 async function scatta(page: Page, url: string, file: string) {
   await page.goto(url, { waitUntil: 'load' });

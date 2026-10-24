@@ -54,6 +54,13 @@ const seo = buildSeo({
     <div class="no-stampa">
       <h1 class="mt-2 mb-4 font-display text-[34px] leading-tight font-semibold min-[601px]:text-[40px]">{SEO_HUB_FOGLI.h1}</h1>
       <InBreve aggiornato={aggiornato}>{IN_BREVE_HUB}</InBreve>
+      <div class="comandi-scheda my-4 flex max-w-xl flex-wrap items-center gap-3">
+        <VersioneDsa client:load targetId="scheda" />
+        <div class="min-w-[220px] flex-1">
+          <TastoStampa etichetta="Stampa (PDF A4)" />
+        </div>
+      </div>
+      <p class="m-0 max-w-[640px]">{FRASE_STAMPA}</p>
       <ul class="mt-6 grid list-none gap-4 p-0 min-[601px]:grid-cols-3">
         {
           PAGINE_FOGLI.map((pagina) => (
@@ -96,13 +103,6 @@ const seo = buildSeo({
           }
         </tbody>
       </table>
-      <div class="comandi-scheda my-4 flex max-w-xl flex-wrap items-center gap-3">
-        <VersioneDsa client:load targetId="scheda" />
-        <div class="min-w-[220px] flex-1">
-          <TastoStampa etichetta="Stampa (PDF A4)" />
-        </div>
-      </div>
-      <p class="m-0 max-w-[640px]">{FRASE_STAMPA}</p>
       <p class="mt-3 mb-0">L’anteprima qui sotto è il foglio da 1 cm. Le altre due misure sono nelle schede.</p>
       <FoglioOpzioni client:visible path={path} iniziale={opzioni} />
       <p class="mt-4 mb-2 text-muted">L’anteprima è in millimetri. Se non entra nello schermo, scorri il foglio.</p>

@@ -46,21 +46,59 @@ const collegamenti = [
 ---
 
 <Base seo={seo}>
-  <Breadcrumbs
-    items={[
-      { nome: 'Home', href: '/' },
-      { nome: 'Numeri romani', href: '/numeri-romani/' },
-      { nome: 'Convertitore', href: path },
-    ]}
-  />
+  <div class="no-stampa">
+    <Breadcrumbs
+      items={[
+        { nome: 'Home', href: '/' },
+        { nome: 'Numeri romani', href: '/numeri-romani/' },
+        { nome: 'Convertitore', href: path },
+      ]}
+    />
+  </div>
   <main id="scheda" class="scheda-foglio mx-auto max-w-[1120px] px-6 pb-16">
     <AttivaDsa id="scheda" />
-    <h1 class="mt-2 mb-4 font-display text-[34px] leading-tight font-semibold min-[601px]:text-[40px]">{SEO_CONVERTITORE.h1}</h1>
-    <InBreve aggiornato={aggiornato}>{IN_BREVE_CONVERTITORE}</InBreve>
-    <div class="comandi-scheda my-4 flex max-w-xl flex-wrap items-center gap-3">
-      <VersioneDsa client:load targetId="scheda" />
+    <div class="no-stampa">
+      <h1 class="mt-2 mb-4 font-display text-[34px] leading-tight font-semibold min-[601px]:text-[40px]">{SEO_CONVERTITORE.h1}</h1>
+      <InBreve aggiornato={aggiornato}>{IN_BREVE_CONVERTITORE}</InBreve>
+      <div class="comandi-scheda my-4 flex max-w-xl flex-wrap items-center gap-3">
+        <VersioneDsa client:load targetId="scheda" />
+      </div>
     </div>
     <Convertitore client:visible />
+    <h2 class="mt-8 text-[22px]">I sette simboli</h2>
+    <table class="tabella-mobile mt-2 w-full max-w-md border-collapse bg-white text-left">
+      <thead>
+        <tr class="border-b border-solid border-bordo">
+          <th class="px-3 py-2">Simbolo</th>
+          <th class="px-3 py-2">Vale</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          [
+            ['I', '1'],
+            ['V', '5'],
+            ['X', '10'],
+            ['L', '50'],
+            ['C', '100'],
+            ['D', '500'],
+            ['M', '1000'],
+          ].map(([simbolo, valore]) => (
+            <tr class="border-b border-solid border-bordo">
+              <td class="numeri-ora px-3 py-1 font-display text-[20px]" data-label="Simbolo">{simbolo}</td>
+              <td class="cifre px-3 py-1" data-label="Vale">{valore}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+    <h2 class="mt-6 text-[22px]">Tre regole</h2>
+    <ol class="mt-2 grid list-decimal gap-1 pl-6">
+      <li>Si sommano. VI vale 6, perché 5 più 1. XII vale 12.</li>
+      <li>Si sottrae se il simbolo minore sta prima. IV vale 4, IX vale 9, XL vale 40.</li>
+      <li>Non più di tre simboli uguali di fila. Il 4 è IV, non IIII. Il 9 è IX, non VIIII.</li>
+    </ol>
+    <div class="no-stampa">
     <h2 class="mt-10 text-[28px]">Esempi</h2>
     <ul class="mt-3 grid list-none gap-2 p-0">
       {
@@ -85,6 +123,7 @@ const collegamenti = [
           </a>
         ))
       }
-    </nav>
+      </nav>
+    </div>
   </main>
 </Base>

@@ -1,4 +1,7 @@
+import { spawnSync } from 'node:child_process';
 import { describe, expect, it } from 'vitest';
+import { lastmodPagina } from '../src/lib/lastmod';
+import { URL_NUOVE } from '../src/lib/schede-utili';
 import { contaParole } from '../src/lib/testi-schede';
 import {
   FRASE_RIGHELLO,
@@ -44,6 +47,19 @@ function entroIlBordo(opzioni: OpzioniFoglio) {
   }
 }
 
+describe('lastmod delle pagine nuove', () => {
+  it('usa git log -1 e non l’ora del build', () => {
+    for (const percorso of URL_NUOVE) {
+      const base = percorso.replace(/\/$/, '');
+      const candidati = [`src/pages${base}.astro`, `src/pages${base}/index.astro`];
+      const file = candidati.find((voce) => spawnSync('git', ['log', '-1', '--format=%cI', '--', voce], { encoding: 'utf8' }).stdout.trim());
+      const atteso = spawnSync('git', ['log', '-1', '--format=%cI', '--', file ?? ''], { encoding: 'utf8' }).stdout.trim();
+      expect(atteso, percorso).not.toBe('');
+      expect(lastmodPagina(percorso)).toBe(atteso);
+    }
+  });
+});
+
 describe('fogli A4', () => {
   it('tiene i quadretti da 1 cm a 10 mm, cioè 37,8 px a 96 dpi', () => {
     const xs = modelloFoglio(BASE)
@@ -59,8 +75,7 @@ describe('fogli A4', () => {
       entroIlBordo({ ...BASE, tipo, margine: false, intestazione: true });
     }
     const righello = modelloFoglio(BASE).linee.find((linea) => linea.ruolo === 'righello' && linea.y1 === linea.y2);
-    expect(righello).toBeTruthy();
-    expect((righello?.x2 ?? 0) - (righello?.x1 ?? 0)).toBe(50);
+    expect(righello).toMatchObject({ x1: 150, x2: 200, y1: 290, y2: 290, spessore: 0.4, stroke: '#1F2A44' });
   });
 
   it('mette il margine rosso a 15 mm e lo toglie con ?margine=no', () => {

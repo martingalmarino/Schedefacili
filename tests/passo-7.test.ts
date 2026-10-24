@@ -15,7 +15,7 @@ describe('home e ricerca', () => {
   it('tiene la meta della home dentro il limite e i conteggi dai dati', () => {
     expect(META_HOME.length).toBeLessThanOrEqual(155);
     expect(REGIONI.length).toBe(21);
-    expect(conteggioPagineCartine()).toBe(22);
+    expect(conteggioPagineCartine()).toBe(21);
     expect(NUMERI_TABELLINE.length).toBe(10);
     expect(website().potentialAction).toBeUndefined();
   });

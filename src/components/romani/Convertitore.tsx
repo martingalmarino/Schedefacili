@@ -35,10 +35,10 @@ export default function Convertitore() {
 
   return (
     <form method="get" action="/numeri-romani/convertitore/" className="mt-4 max-w-xl" onSubmit={invia}>
-      <label className="mb-1 block text-[14px] font-bold" htmlFor="numero-romano">
+      <label className="no-stampa mb-1 block text-[14px] font-bold" htmlFor="numero-romano">
         Numero arabo o romano
       </label>
-      <div className="flex flex-wrap gap-3">
+      <div className="no-stampa flex flex-wrap gap-3">
         <input
           id="numero-romano"
           name="n"

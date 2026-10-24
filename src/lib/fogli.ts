@@ -50,7 +50,7 @@ export const TESTO_INTESTAZIONE = 'Nome ______ Data ______';
 
 const X0 = 5;
 const X1 = 205;
-const Y_MAX = 292;
+const Y_MAX = 282;
 const MARGINE_X = 15;
 const RIGHELLO = 50;
 const ROSSO = '#C0392B';
@@ -140,25 +140,26 @@ export function modelloFoglio(opzioni: OpzioniFoglio): ModelloFoglio {
     });
   }
 
-  const yRiga = 288;
+  const yRiga = 290;
+  const xRiga = 150;
   linee.push({
-    x1: X1 - RIGHELLO,
+    x1: xRiga,
     y1: yRiga,
-    x2: X1,
+    x2: xRiga + RIGHELLO,
     y2: yRiga,
     stroke: '#1F2A44',
-    spessore: 0.45,
+    spessore: 0.4,
     ruolo: 'righello',
     passo: RIGHELLO,
   });
-  for (const x of [X1 - RIGHELLO, X1]) {
+  for (const x of [xRiga, xRiga + RIGHELLO]) {
     linee.push({
       x1: x,
       y1: yRiga - 1.5,
       x2: x,
       y2: yRiga + 1.5,
       stroke: '#1F2A44',
-      spessore: 0.35,
+      spessore: 0.4,
       ruolo: 'righello',
     });
   }
@@ -175,19 +176,15 @@ export function modelloFoglio(opzioni: OpzioniFoglio): ModelloFoglio {
     });
   }
   testi.push({
-    x: 203,
-    y: 281,
-    size: 2.4,
+    x: 200,
+    y: 286.5,
+    size: 2.5,
     anchor: 'end',
     classe: 'righello-testo',
-    html: 'Misura questo segmento: deve essere <tspan class="cifre" font-family="Fraunces, serif">5</tspan> cm',
+    html: '5 cm',
   });
 
-  return {
-    linee,
-    rettangoli: [{ x: 128, y: 274, w: 77, h: 18, fill: '#ffffff' }],
-    testi,
-  };
+  return { linee, rettangoli: [], testi };
 }
 
 function esc(testo: string): string {

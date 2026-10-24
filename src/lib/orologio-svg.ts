@@ -59,17 +59,29 @@ function quadrante(input: {
       `<line x1="${n(esterno.x)}" y1="${n(esterno.y)}" x2="${n(interno.x)}" y2="${n(interno.y)}" stroke="${INK}" stroke-width="${lungo ? 0.45 : 0.25}"/>`,
     );
   }
+  if (input.lancette) {
+    const raggioNumeri = raggio * 0.72;
+    const oraAngolo = (input.ore % 12) * 30 + input.minuto * 0.5;
+    const puntaOre = punto(cx, cy, raggio * 0.48, oraAngolo);
+    const puntaMin = punto(cx, cy, raggioNumeri * 0.85, input.minuto * 6);
+    const coloreOre = input.colori ? SALVIA : INK;
+    const coloreMin = input.colori ? TERRA : INK;
+    pezzi.push(
+      `<line x1="${n(cx)}" y1="${n(cy)}" x2="${n(puntaOre.x)}" y2="${n(puntaOre.y)}" stroke="${coloreOre}" stroke-width="${n(Math.max(0.7, raggio * 0.035))}" stroke-linecap="round"/>`,
+      `<line x1="${n(cx)}" y1="${n(cy)}" x2="${n(puntaMin.x)}" y2="${n(puntaMin.y)}" stroke="${coloreMin}" stroke-width="${n(Math.max(0.45, raggio * 0.02))}" stroke-linecap="round"/>`,
+    );
+  }
   if (input.numeri) {
     for (let ora = 1; ora <= 12; ora += 1) {
       const pos = punto(cx, cy, raggio * 0.72, ora * 30);
       pezzi.push(
-        `<text class="numeri-ora cifre" x="${n(pos.x)}" y="${n(pos.y)}" text-anchor="middle" dominant-baseline="central" fill="${INK}" font-family="Fraunces, serif" font-size="${n(raggio * 0.16)}">${ora}</text>`,
+        `<text class="numeri-ora cifre" x="${n(pos.x)}" y="${n(pos.y)}" text-anchor="middle" dominant-baseline="central" fill="${INK}" font-family="Fraunces, serif" font-size="${n(raggio * 0.16)}" stroke="#fff" stroke-width="${n(raggio * 0.02)}" paint-order="stroke">${ora}</text>`,
       );
     }
   }
   if (input.minuti && input.numeri) {
     for (let minuto = 0; minuto < 60; minuto += 5) {
-      const pos = punto(cx, cy, raggio * 0.9, minuto * 6);
+      const pos = punto(cx, cy, raggio + 4, minuto * 6);
       pezzi.push(
         `<text class="numeri-ora cifre" x="${n(pos.x)}" y="${n(pos.y)}" text-anchor="middle" dominant-baseline="central" fill="${INK}" font-family="Fraunces, serif" font-size="${n(Math.max(2.2, raggio * 0.055))}">${minuto}</text>`,
       );
@@ -82,17 +94,6 @@ function quadrante(input: {
         `<text class="numeri-ora cifre" x="${n(pos.x)}" y="${n(pos.y)}" text-anchor="middle" dominant-baseline="central" fill="${INK}" font-family="Fraunces, serif" font-size="${n(raggio * 0.09)}">${ora === 24 ? 24 : ora}</text>`,
       );
     }
-  }
-  if (input.lancette) {
-    const oraAngolo = (input.ore % 12) * 30 + input.minuto * 0.5;
-    const puntaOre = punto(cx, cy, raggio * 0.48, oraAngolo);
-    const puntaMin = punto(cx, cy, raggio * 0.72, input.minuto * 6);
-    const coloreOre = input.colori ? SALVIA : INK;
-    const coloreMin = input.colori ? TERRA : INK;
-    pezzi.push(
-      `<line x1="${n(cx)}" y1="${n(cy)}" x2="${n(puntaOre.x)}" y2="${n(puntaOre.y)}" stroke="${coloreOre}" stroke-width="${n(Math.max(0.7, raggio * 0.035))}" stroke-linecap="round"/>`,
-      `<line x1="${n(cx)}" y1="${n(cy)}" x2="${n(puntaMin.x)}" y2="${n(puntaMin.y)}" stroke="${coloreMin}" stroke-width="${n(Math.max(0.45, raggio * 0.02))}" stroke-linecap="round"/>`,
-    );
   }
   pezzi.push(`<circle cx="${n(cx)}" cy="${n(cy)}" r="${n(Math.max(0.7, raggio * 0.03))}" fill="${INK}"/>`);
   return pezzi.join('');
@@ -176,7 +177,7 @@ function intestazioneScheda(testo: string, soluzioni: boolean, seed: number): st
     return `<text class="numeri-ora" x="105" y="12" text-anchor="middle" fill="${INK}" font-family="Fraunces, serif" font-size="7">Soluzioni</text>`;
   }
   return [
-    `<text x="12" y="8" fill="${INK}" font-family="Atkinson Hyperlegible, sans-serif" font-size="3.4">Nome ______</text>`,
+    `<text x="12" y="8" fill="${INK}" font-family="Atkinson Hyperlegible, sans-serif" font-size="3.4">Nome ______  Data ______</text>`,
     `<text x="198" y="8" text-anchor="end" fill="${INK}" font-family="Atkinson Hyperlegible, sans-serif" font-size="3.2">${esc(testo)}</text>`,
     `<text x="198" y="13" text-anchor="end" fill="${INK}" font-family="Atkinson Hyperlegible, sans-serif" font-size="3">Scheda <tspan class="numeri-ora cifre" font-family="Fraunces, serif">${seed}</tspan></text>`,
   ].join('');

@@ -194,6 +194,10 @@ h3,
 }
 
 @media print {
+  html:not(.stampa-foglio) main {
+    padding: 10mm !important;
+  }
+
   .date-regione {
     display: grid !important;
     grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
@@ -253,6 +257,7 @@ h3,
     max-width: none !important;
     width: 210mm !important;
     height: 297mm !important;
+    max-height: none !important;
     overflow: hidden !important;
     border: 0 !important;
     content-visibility: visible !important;
@@ -281,6 +286,42 @@ h3,
 
   html.stampa-solo .anteprima-soluzioni {
     display: none !important;
+  }
+
+  .in-breve {
+    padding: 6px 8px !important;
+    font-size: 11px !important;
+  }
+
+  .griglia-scheda {
+    display: block !important;
+  }
+
+  .scheda-tabellina h1 {
+    font-size: 16px !important;
+    margin: 0 0 4px !important;
+  }
+
+  .scheda-tabellina h2 {
+    font-size: 14px !important;
+    margin: 6px 0 2px !important;
+  }
+
+  .scheda-tabellina .scheda-numeri {
+    font-size: 13px !important;
+  }
+
+  .scheda-tabellina table.scheda-numeri td {
+    padding: 0 6px !important;
+  }
+
+  .scheda-tabellina ol.scheda-numeri {
+    gap: 1px !important;
+  }
+
+  .scheda-tabellina .soluzioni {
+    break-before: auto !important;
+    margin-top: 4px !important;
   }
 }
 

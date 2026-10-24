@@ -36,7 +36,8 @@ if (!voce) {
 }
 
 const h1 = h1Regione(regione.slug, regione.nome);
-const description = descrizioneRegione(inRegione(regione.slug, regione.nome));
+const dove = inRegione(regione.slug, regione.nome);
+const description = descrizioneRegione(regione.slug === 'lazio' ? 'in Lazio' : dove);
 const domande = faqRegione(regione, voce);
 const aggiornato = testoAggiornato();
 const seo = buildSeo({
@@ -46,7 +47,7 @@ const seo = buildSeo({
   h1,
   keywords: [
     `calendario scolastico ${regione.nome.toLocaleLowerCase('it')} 2026 2027`,
-    `quando inizia la scuola ${inRegione(regione.slug, regione.nome)}`,
+    `quando inizia la scuola ${regione.slug === 'lazio' ? 'in Lazio' : dove}`,
     `vacanze di natale ${regione.nome.toLocaleLowerCase('it')} 2026`,
     `ponti scolastici ${regione.nome.toLocaleLowerCase('it')}`,
     `fine scuola ${regione.nome.toLocaleLowerCase('it')} 2027`,
