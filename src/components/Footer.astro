@@ -2,6 +2,7 @@
 import { ANNO_SLUG } from '../config/site';
 import { INFO, STRUMENTI } from '../data/nav';
 import { regioniPiuPopolose, urlCalendarioRegione } from '../data/regioni';
+import { marcaAnni } from '../lib/cifre';
 import { dataInItaliano } from '../lib/ricorrenze';
 
 const aggiornato = dataInItaliano(new Date());
@@ -59,7 +60,7 @@ const calendario = regioniPiuPopolose();
       </div>
     </div>
     <p class="mt-[22px] border-t border-solid border-[#3A4562] pt-3 opacity-85">
-      Fonti: Ministero dell’Istruzione e del Merito, delibere regionali · Confini ISTAT, CC BY 4.0 · Aggiornato il {aggiornato}
+      <span set:html={marcaAnni(`Fonti: Ministero dell’Istruzione e del Merito, delibere regionali · Confini ISTAT, CC BY 4.0 · Aggiornato il ${aggiornato}`)} />
     </p>
   </div>
 </footer>

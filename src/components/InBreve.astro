@@ -1,4 +1,6 @@
 ---
+import { marcaAnni } from '../lib/cifre';
+
 interface Fonte {
   etichetta: string;
   href: string;
@@ -21,11 +23,11 @@ const mostraMeta = Boolean(fonte || aggiornato);
       <i class="mt-2 block">
         {fonte && (
           <>
-            Fonte: <a href={fonte.href}>{fonte.etichetta}</a>
+            Fonte: <a href={fonte.href} set:html={marcaAnni(fonte.etichetta)} />
           </>
         )}
         {fonte && aggiornato && ' · '}
-        {aggiornato && <>Aggiornato il {aggiornato}</>}
+        {aggiornato && <span set:html={`Aggiornato il ${marcaAnni(aggiornato)}`} />}
       </i>
     )
   }

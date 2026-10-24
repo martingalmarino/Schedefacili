@@ -117,10 +117,10 @@ const seo = buildSeo({
                         {riga.regione.nome}
                       </a>
                     </td>
-                    <td class="px-3.5 py-2.5" data-label="Inizio">{riga.inizio}</td>
-                    <td class="px-3.5 py-2.5" data-label="Fine">{riga.fine}</td>
-                    <td class="px-3.5 py-2.5" data-label="Natale">{riga.natale}</td>
-                    <td class="px-3.5 py-2.5" data-label="Pasqua">{riga.pasqua}</td>
+                    <td class="px-3.5 py-2.5" data-label="Inizio"><span class:list={[/\d/.test(riga.inizio) && 'cifre']}>{riga.inizio}</span></td>
+                    <td class="px-3.5 py-2.5" data-label="Fine"><span class:list={[/\d/.test(riga.fine) && 'cifre']}>{riga.fine}</span></td>
+                    <td class="px-3.5 py-2.5" data-label="Natale"><span class:list={[/\d/.test(riga.natale) && 'cifre']}>{riga.natale}</span></td>
+                    <td class="px-3.5 py-2.5" data-label="Pasqua"><span class:list={[/\d/.test(riga.pasqua) && 'cifre']}>{riga.pasqua}</span></td>
                     <td class="px-3.5 py-2.5" data-label="Stato">{riga.stato}</td>
                   </tr>
                 ))

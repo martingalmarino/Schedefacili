@@ -2,6 +2,7 @@
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import Faq from '../../components/Faq.astro';
 import InBreve from '../../components/InBreve.astro';
+import { marcaAnni } from '../../lib/cifre';
 import { dataInItaliano } from '../../lib/ricorrenze';
 import { webPage } from '../../lib/schema';
 import { buildSeo } from '../../lib/seo';
@@ -54,8 +55,7 @@ const seo = buildSeo({
   <main class="mx-auto max-w-[1120px] px-6 pb-16">
     <h1 class="mt-2 mb-4 font-display text-[34px] leading-tight font-semibold min-[601px]:text-[40px]">{SEO_HUB_CARTINE.h1}</h1>
     <InBreve aggiornato={aggiornato}>
-      Ventidue cartine mute da stampare: l’Italia e le 20 regioni. I confini sono quelli ISTAT al 1° gennaio 2026. I nomi
-      non sono scritti: li aggiunge l’alunno.
+      <span set:html={marcaAnni('Ventidue cartine mute da stampare: l’Italia e le 20 regioni. I confini sono quelli ISTAT al 1° gennaio 2026. I nomi non sono scritti: li aggiunge l’alunno.')} />
     </InBreve>
     <ul class="mt-6 grid gap-3 min-[601px]:grid-cols-2">
       <li>

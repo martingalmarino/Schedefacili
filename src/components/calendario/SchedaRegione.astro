@@ -15,6 +15,7 @@ import {
   urlNazionale,
   urlPonti,
 } from '../../lib/calendario';
+import { marcaAnni } from '../../lib/cifre';
 import { prossimaRicorrenza, type Festivita } from '../../lib/ricorrenze';
 import Breadcrumbs from '../Breadcrumbs.astro';
 import Faq from '../Faq.astro';
@@ -74,7 +75,7 @@ const chiavi = [
         aggiornato={aggiornato}
         fonte={completo && voce.fonte ? { etichetta: voce.fonte.titolo, href: voce.fonte.url } : undefined}
       >
-        {testoInBreve(regione, voce)}
+        <span set:html={marcaAnni(testoInBreve(regione, voce))} />
       </InBreve>
       <div class="my-5 grid grid-cols-2 gap-4 min-[601px]:grid-cols-4">
         {
@@ -103,7 +104,7 @@ const chiavi = [
                 {
                   righe.map((riga) => (
                     <tr class="border-b border-solid border-[#eee]">
-                      <td class="px-3.5 py-2.5" data-label="Data">{dataEstesa(riga.data)}</td>
+                      <td class="px-3.5 py-2.5" data-label="Data"><span class="cifre">{dataEstesa(riga.data)}</span></td>
                       <td class="px-3.5 py-2.5" data-label="Ricorrenza">{riga.nome}</td>
                       <td class="px-3.5 py-2.5" data-label="Tipo">{riga.tipo}</td>
                     </tr>
@@ -113,7 +114,7 @@ const chiavi = [
             </table>
           </div>
           <p class="mt-2 text-[14px] text-muted">
-            Fonte: <a href={FONTE_FESTIVITA.href}>{FONTE_FESTIVITA.etichetta}</a>
+            Fonte: <a href={FONTE_FESTIVITA.href} set:html={marcaAnni(FONTE_FESTIVITA.etichetta)} />
           </p>
           <h2 class="mt-6 mb-1 text-[28px]">Domande frequenti</h2>
           <Faq domande={domande} />

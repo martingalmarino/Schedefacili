@@ -1,4 +1,5 @@
 ---
+import { marcaAnni } from '../lib/cifre';
 import { faqPage, jsonLd, type VoceFaq } from '../lib/schema';
 
 interface Props {
@@ -13,7 +14,7 @@ const { domande } = Astro.props;
     domande.map((voce) => (
       <>
         <h3 class="mt-4 mb-1 text-[19px]">{voce.domanda}</h3>
-        <p class="m-0">{voce.risposta}</p>
+        <p class="m-0" set:html={marcaAnni(voce.risposta)} />
       </>
     ))
   }

@@ -1,5 +1,6 @@
 ---
 import { dataEstesa, festeNazionali, nomeGiorno } from '../../lib/calendario';
+import { marcaAnni } from '../../lib/cifre';
 
 const feste = festeNazionali();
 const perGiorno = new Map(feste.map((festa) => [festa.data, festa.nome]));
@@ -26,7 +27,7 @@ const intestazione = ['lun', 'mar', 'mer', 'gio', 'ven', 'sab', 'dom'];
       mesi.map((mese) => (
         <div>
           <p class="m-0 mb-1 font-bold capitalize">
-            {mese.nome} {mese.anno}
+            {mese.nome} <span class="cifre">{mese.anno}</span>
           </p>
           <div class="grid grid-cols-7 text-center text-[11px]">
             {intestazione.map((giorno) => (
@@ -39,7 +40,7 @@ const intestazione = ['lun', 'mar', 'mer', 'gio', 'ven', 'sab', 'dom'];
                   : `${mese.anno}-${String(mese.mese + 1).padStart(2, '0')}-${String(giorno).padStart(2, '0')}`;
               const festa = iso ? perGiorno.get(iso) : undefined;
               return (
-                <span class:list={['py-0.5', festa && 'font-bold underline']} title={festa}>
+                <span class:list={['cifre py-0.5', festa && 'font-bold underline']} title={festa}>
                   {giorno ?? ''}
                 </span>
               );
@@ -50,7 +51,7 @@ const intestazione = ['lun', 'mar', 'mer', 'gio', 'ven', 'sab', 'dom'];
     }
   </div>
   <ul class="mt-4 pl-5 text-[12px]">
-    {feste.map((festa) => <li>{dataEstesa(festa.data)}, {nomeGiorno(festa.data)}: {festa.nome}</li>)}
+    {feste.map((festa) => <li set:html={marcaAnni(`${dataEstesa(festa.data)}, ${nomeGiorno(festa.data)}: ${festa.nome}`)} />)}
   </ul>
 </section>
 

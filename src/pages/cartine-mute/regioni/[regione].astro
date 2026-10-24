@@ -13,6 +13,7 @@ import {
   seoCartina,
   urlCartinaRegione,
 } from '../../../lib/cartine-pagine';
+import { marcaAnni } from '../../../lib/cifre';
 import { dataInItaliano } from '../../../lib/ricorrenze';
 import { imageObject, urlAssoluto, webPage } from '../../../lib/schema';
 import { buildSeo } from '../../../lib/seo';
@@ -85,8 +86,7 @@ const seo = buildSeo({
     <h1 class="mt-2 mb-4 font-display text-[34px] leading-tight font-semibold min-[601px]:text-[40px]">{seoCarta.h1}</h1>
     <div class="no-stampa">
       <InBreve aggiornato={aggiornato}>
-        {seoCarta.h1} mostra il contorno, senza nomi. Puoi accendere i confini provinciali e un punto per ogni
-        capoluogo. I dati sono ISTAT, al 1° gennaio 2026.
+        <span set:html={`${marcaAnni(seoCarta.h1)} mostra il contorno, senza nomi. Puoi accendere i confini provinciali e un punto per ogni capoluogo. I dati sono ISTAT, al 1° gennaio ${marcaAnni('2026')}.`} />
       </InBreve>
     </div>
     <CartinaFigura slug={slug} dettaglio="Con le province" h1={seoCarta.h1} />

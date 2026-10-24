@@ -12,6 +12,7 @@ import {
   SEO_PONTI,
   urlNazionale,
 } from '../../../lib/calendario';
+import { marcaAnni } from '../../../lib/cifre';
 import { dataInItaliano } from '../../../lib/ricorrenze';
 import { webPage } from '../../../lib/schema';
 import { buildSeo } from '../../../lib/seo';
@@ -73,9 +74,7 @@ const seo = buildSeo({
     <div class="mx-auto max-w-[1120px] px-6 pb-8">
       <h1 class="mt-2 mb-4 font-display text-[34px] leading-tight font-semibold min-[601px]:text-[40px]">{SEO_PONTI.h1}</h1>
       <InBreve aggiornato={aggiornato}>
-        Le feste nazionali del 2026/27 valgono in tutta Italia. Un ponte è possibile quando la festa cade di martedì o
-        di giovedì, nel giorno accanto al fine settimana. Non è una chiusura decisa, finché la Regione non lo scrive in
-        delibera.
+        <span set:html={marcaAnni('Le feste nazionali del 2026/27 valgono in tutta Italia. Un ponte è possibile quando la festa cade di martedì o di giovedì, nel giorno accanto al fine settimana. Non è una chiusura decisa, finché la Regione non lo scrive in delibera.')} />
       </InBreve>
       <p class="mt-4 mb-3 text-muted">
         La festa del santo patrono è locale e non ha una data unica: non la elenchiamo senza la delibera.
@@ -94,7 +93,7 @@ const seo = buildSeo({
               voci.map((voce) => (
                 <tr id={`festa-${voce.data}`} class="border-b border-solid border-[#eee]">
                   <td class="px-3.5 py-2.5" data-label="Data">
-                    {dataEstesa(voce.data)}
+                    <span class="cifre">{dataEstesa(voce.data)}</span>
                     <span class="block text-[14px] font-normal text-muted">{nomeGiorno(voce.data)}</span>
                   </td>
                   <td class="px-3.5 py-2.5" data-label="Ricorrenza">{voce.nome}</td>
@@ -106,7 +105,7 @@ const seo = buildSeo({
         </table>
       </div>
       <p class="mt-2 text-[14px] text-muted">
-        Fonte: <a href={FONTE_FESTIVITA.href}>{FONTE_FESTIVITA.etichetta}</a>. Pasqua e il lunedì dell’Angelo sono
+        Fonte: <a href={FONTE_FESTIVITA.href} set:html={marcaAnni(FONTE_FESTIVITA.etichetta)} />. Pasqua e il lunedì dell’Angelo sono
         calcolati con il computus gregoriano.
       </p>
       <h2 class="mt-8 mb-1 text-[28px]">Domande frequenti</h2>

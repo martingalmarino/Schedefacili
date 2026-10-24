@@ -15,17 +15,7 @@
   h1,
   h2,
   h3 {
-    @apply font-display;
     font-weight: 600;
-    font-optical-sizing: none;
-    font-variation-settings: "opsz" 18, "SOFT" 0, "WONK" 0;
-    font-variant-numeric: lining-nums;
-  }
-
-  .font-display {
-    font-optical-sizing: none;
-    font-variation-settings: "opsz" 18, "SOFT" 0, "WONK" 0;
-    font-variant-numeric: lining-nums;
   }
 
   a {
@@ -145,8 +135,27 @@
   font-style: normal;
 }
 
-.scheda-numeri {
+h1,
+h2,
+h3,
+.font-display,
+.scheda-numeri,
+.cifre {
   font-family: Fraunces, serif;
+  font-optical-sizing: none;
+  font-variant-numeric: lining-nums;
+  font-variation-settings: "opsz" 18, "SOFT" 0, "WONK" 0;
+}
+
+.testo {
+  font-family: "Atkinson Hyperlegible", sans-serif;
+  font-optical-sizing: auto;
+  font-variant-numeric: normal;
+  font-variation-settings: normal;
+}
+
+.dsa .testo {
+  font-family: OpenDyslexic, sans-serif;
 }
 
 .dsa .scheda-numeri,
@@ -172,8 +181,10 @@
   min-height: 1.8em;
 }
 
-.dsa :where(h1, h2, h3, .font-display) {
+.dsa :where(h1, h2, h3, .font-display, .scheda-numeri, .cifre) {
   font-family: OpenDyslexic, sans-serif;
+  font-variant-numeric: normal;
+  font-variation-settings: normal;
 }
 
 #carta {

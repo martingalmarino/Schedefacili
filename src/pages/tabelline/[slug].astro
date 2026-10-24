@@ -137,11 +137,11 @@ const seo = buildSeo({
     </ol>
     <details class="no-stampa mt-6">
       <summary class="cursor-pointer font-bold">Soluzioni</summary>
-      <ol class="mt-3 grid list-decimal gap-2 pl-6">
+      <ol class="scheda-numeri mt-3 grid list-decimal gap-2 pl-6">
         {
           foglio.map((voce) => (
             <li>
-              {voce.fattoreA} × {voce.fattoreB} = {voce.prodotto}. Manca {soluzioneDi(voce)}.
+              {voce.fattoreA} × {voce.fattoreB} = {voce.prodotto}. <span class="testo">Manca</span> {soluzioneDi(voce)}.
             </li>
           ))
         }

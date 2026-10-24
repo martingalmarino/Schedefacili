@@ -5,6 +5,7 @@ import Pill from '../../components/Pill.astro';
 import Pills from '../../components/Pills.astro';
 import { REGIONI, urlCalendarioRegione } from '../../data/regioni';
 import { SEO_HUB, urlNazionale, urlPonti } from '../../lib/calendario';
+import { marcaAnni } from '../../lib/cifre';
 import { dataInItaliano } from '../../lib/ricorrenze';
 import { webPage } from '../../lib/schema';
 import { buildSeo } from '../../lib/seo';
@@ -52,8 +53,7 @@ const seo = buildSeo({
   <main class="mx-auto max-w-[1120px] px-6 pt-8 pb-8">
     <h1 class="mb-4 font-display text-[34px] leading-tight font-semibold min-[601px]:text-[40px]">{SEO_HUB.h1}</h1>
     <InBreve aggiornato={aggiornato}>
-      Il calendario scolastico cambia da Regione a Regione. Per il 2026/27 inizio, fine, vacanze e ponti arrivano dal
-      riepilogo del Ministero. Se un dato non c’è, la pagina lo dice. Le feste nazionali valgono in tutta Italia.
+      <span set:html={marcaAnni('Il calendario scolastico cambia da Regione a Regione. Per il 2026/27 inizio, fine, vacanze e ponti arrivano dal riepilogo del Ministero. Se un dato non c’è, la pagina lo dice. Le feste nazionali valgono in tutta Italia.')} />
     </InBreve>
     <p class="mt-4 mb-5">
       <a href={urlNazionale()} class="font-bold hover:text-terracotta">Tutte le regioni a confronto</a>
