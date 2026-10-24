@@ -1,0 +1,30 @@
+---
+interface Props {
+  href: string;
+  etichetta?: string;
+  conteggio?: string;
+}
+
+const { href, etichetta, conteggio } = Astro.props;
+const parole = etichetta?.split(' ') ?? [];
+const ultima = parole.pop();
+---
+
+<a
+  href={href}
+  class="inline-block w-fit max-w-full self-start rounded-full border-[1.5px] border-solid border-pill bg-white px-[15px] py-[7px] text-[15px] leading-snug font-bold hover:border-terracotta"
+>
+  {
+    etichetta ? (
+      <>
+        {parole.length > 0 && <>{parole.join(' ')} </>}
+        <span class="whitespace-nowrap">
+          {ultima}
+          {conteggio && <small class="font-bold text-terracotta"> {conteggio}</small>}
+        </span>
+      </>
+    ) : (
+      <slot />
+    )
+  }
+</a>

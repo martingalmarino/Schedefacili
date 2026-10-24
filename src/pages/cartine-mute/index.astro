@@ -1,0 +1,77 @@
+---
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Faq from '../../components/Faq.astro';
+import InBreve from '../../components/InBreve.astro';
+import { dataInItaliano } from '../../lib/ricorrenze';
+import { webPage } from '../../lib/schema';
+import { buildSeo } from '../../lib/seo';
+import { regioniCartina, SEO_HUB_CARTINE, urlCartinaRegione } from '../../lib/cartine-pagine';
+import Base from '../../layouts/Base.astro';
+
+const path = '/cartine-mute/';
+const aggiornato = dataInItaliano(new Date());
+const regioni = regioniCartina();
+const domande = [
+  {
+    domanda: 'Le cartine hanno i nomi scritti?',
+    risposta: 'No. Sono mute. Puoi accendere i confini interni e i punti dei capoluoghi, senza i nomi.',
+  },
+  {
+    domanda: 'Da dove arrivano i confini?',
+    risposta: 'Dai confini delle unità amministrative a fini statistici dell’ISTAT, al 1° gennaio 2026, in licenza CC BY 4.0.',
+  },
+  {
+    domanda: 'C’è la cartina dell’Europa?',
+    risposta: 'No. In queste pagine ci sono l’Italia e le 20 regioni. L’ISTAT non pubblica i confini europei.',
+  },
+  {
+    domanda: 'Posso stamparle in A4?',
+    risposta: 'Sì. La stampa segue la versione che vedi: solo il contorno, oppure con i confini e i capoluoghi accesi.',
+  },
+];
+const seo = buildSeo({
+  title: SEO_HUB_CARTINE.title,
+  description: SEO_HUB_CARTINE.description,
+  path,
+  h1: SEO_HUB_CARTINE.h1,
+  keywords: ['cartine mute', 'cartina muta italia', 'cartine regioni da stampare'],
+  image: '/og/cartine.png',
+  schema: [
+    webPage({
+      path,
+      name: SEO_HUB_CARTINE.h1,
+      description: SEO_HUB_CARTINE.description,
+      dateModified: new Date().toISOString(),
+    }),
+  ],
+});
+---
+
+<Base seo={seo}>
+  <div class="no-stampa">
+    <Breadcrumbs items={[{ nome: 'Home', href: '/' }, { nome: 'Cartine mute', href: path }]} />
+  </div>
+  <main class="mx-auto max-w-[1120px] px-6 pb-16">
+    <h1 class="mt-2 mb-4 font-display text-[34px] leading-tight font-semibold min-[601px]:text-[40px]">{SEO_HUB_CARTINE.h1}</h1>
+    <InBreve aggiornato={aggiornato}>
+      Ventidue cartine mute da stampare: l’Italia e le 20 regioni. I confini sono quelli ISTAT al 1° gennaio 2026. I nomi
+      non sono scritti: li aggiunge l’alunno.
+    </InBreve>
+    <ul class="mt-6 grid gap-3 min-[601px]:grid-cols-2">
+      <li>
+        <a href="/cartine-mute/italia/" class="block rounded-xl bg-white px-4 py-3 font-bold hover:text-terracotta">Italia</a>
+      </li>
+      {
+        regioni.map((carta) => (
+          <li>
+            <a href={urlCartinaRegione(carta.slug)} class="block rounded-xl bg-white px-4 py-3 font-bold hover:text-terracotta">
+              {carta.nome}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+    <h2 class="mt-10 text-[28px]">Domande</h2>
+    <Faq domande={domande} />
+  </main>
+</Base>

@@ -1,0 +1,91 @@
+---
+import CartinaFigura from '../../components/schede/CartinaFigura.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Faq from '../../components/Faq.astro';
+import InBreve from '../../components/InBreve.astro';
+import { FONTE_CONFINI } from '../../data/cartine';
+import { LICENZA_CARTE, regioniCartina, seoCartina, urlCartinaRegione } from '../../lib/cartine-pagine';
+import { dataInItaliano } from '../../lib/ricorrenze';
+import { imageObject, urlAssoluto, webPage } from '../../lib/schema';
+import { buildSeo } from '../../lib/seo';
+import Base from '../../layouts/Base.astro';
+
+const path = '/cartine-mute/italia/';
+const seoCarta = seoCartina('italia', 'Italia');
+const aggiornato = dataInItaliano(new Date());
+const domande = [
+  {
+    domanda: 'Cosa cambia tra muta, regioni e capoluoghi?',
+    risposta: 'Muta mostra solo il contorno. Con le regioni compaiono i confini regionali. Con i capoluoghi compare un punto, senza il nome.',
+  },
+  {
+    domanda: 'I punti sono le città?',
+    risposta: 'Sono un punto dentro ciascuna regione, sul territorio del capoluogo regionale. Trento e Bolzano sono segnati entrambi.',
+  },
+  {
+    domanda: 'Posso stampare una sola regione?',
+    risposta: 'Sì. Ogni regione ha la sua cartina, con le province al posto dei confini regionali.',
+  },
+];
+const seo = buildSeo({
+  title: seoCarta.title,
+  description: seoCarta.description,
+  path,
+  h1: seoCarta.h1,
+  keywords: ['cartina muta italia', 'cartina muta da stampare', 'regioni italiane'],
+  image: '/og/cartine.png',
+  schema: [
+    webPage({ path, name: seoCarta.h1, description: seoCarta.description, dateModified: new Date().toISOString() }),
+    imageObject({
+      url: urlAssoluto('/cartine/italia.svg'),
+      license: LICENZA_CARTE,
+      creditText: 'ISTAT',
+      nome: seoCarta.h1,
+      acquireLicensePage: FONTE_CONFINI,
+    }),
+  ],
+});
+---
+
+<Base seo={seo}>
+  <div class="no-stampa">
+    <Breadcrumbs
+      items={[
+        { nome: 'Home', href: '/' },
+        { nome: 'Cartine mute', href: '/cartine-mute/' },
+        { nome: 'Italia', href: path },
+      ]}
+    />
+  </div>
+  <main class="mx-auto max-w-[1120px] px-6 pb-16">
+    <h1 class="mt-2 mb-4 font-display text-[34px] leading-tight font-semibold min-[601px]:text-[40px]">{seoCarta.h1}</h1>
+    <div class="no-stampa">
+      <InBreve aggiornato={aggiornato}>
+        La cartina muta dell’Italia mostra il contorno del Paese. Puoi aggiungere i confini delle 20 regioni e i punti
+        dei capoluoghi. I nomi restano da scrivere.
+      </InBreve>
+    </div>
+    <CartinaFigura slug="italia" dettaglio="Con le regioni" h1={seoCarta.h1} />
+    <div class="no-stampa mt-8 max-w-[720px]">
+      <p>
+        In classe tieni prima la versione muta: l’alunno riconosce la forma e segna nord e sud. Poi accendi le regioni e
+        chiedi di scrivere solo quelle che confinano con la sua. I punti dei capoluoghi servono dopo, quando i nomi delle
+        città sono già stati detti a voce.
+      </p>
+      <h2 class="mt-8 text-[28px]">Regioni</h2>
+      <ul class="mt-3 flex flex-wrap gap-3 font-bold">
+        {
+          regioniCartina().map((carta) => (
+            <li>
+              <a href={urlCartinaRegione(carta.slug)} class="hover:text-terracotta">
+                {carta.nome}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <h2 class="mt-10 text-[28px]">Domande</h2>
+      <Faq domande={domande} />
+    </div>
+  </main>
+</Base>

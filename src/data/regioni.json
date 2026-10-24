@@ -1,0 +1,159 @@
+{
+  "fontePopolazione": "https://demo.istat.it/app/?i=POS&l=it",
+  "riferimentoPopolazione": "1° gennaio 2026",
+  "voci": [
+    {
+      "nome": "Abruzzo",
+      "slug": "abruzzo",
+      "capoluogo": "L’Aquila",
+      "confinanti": ["lazio", "marche", "molise"],
+      "cartina": "abruzzo"
+    },
+    {
+      "nome": "Basilicata",
+      "slug": "basilicata",
+      "capoluogo": "Potenza",
+      "confinanti": ["calabria", "campania", "puglia"],
+      "cartina": "basilicata"
+    },
+    {
+      "nome": "Calabria",
+      "slug": "calabria",
+      "capoluogo": "Catanzaro",
+      "confinanti": ["basilicata"],
+      "cartina": "calabria"
+    },
+    {
+      "nome": "Campania",
+      "slug": "campania",
+      "capoluogo": "Napoli",
+      "confinanti": ["basilicata", "lazio", "molise", "puglia"],
+      "cartina": "campania",
+      "ordinePopolazione": 3
+    },
+    {
+      "nome": "Emilia-Romagna",
+      "slug": "emilia-romagna",
+      "capoluogo": "Bologna",
+      "confinanti": ["liguria", "lombardia", "marche", "piemonte", "toscana", "veneto"],
+      "cartina": "emilia-romagna",
+      "ordinePopolazione": 6
+    },
+    {
+      "nome": "Friuli Venezia Giulia",
+      "slug": "friuli-venezia-giulia",
+      "capoluogo": "Trieste",
+      "confinanti": ["veneto"],
+      "cartina": "friuli-venezia-giulia"
+    },
+    {
+      "nome": "Lazio",
+      "slug": "lazio",
+      "capoluogo": "Roma",
+      "confinanti": ["abruzzo", "campania", "marche", "molise", "toscana", "umbria"],
+      "cartina": "lazio",
+      "ordinePopolazione": 2
+    },
+    {
+      "nome": "Liguria",
+      "slug": "liguria",
+      "capoluogo": "Genova",
+      "confinanti": ["emilia-romagna", "piemonte", "toscana"],
+      "cartina": "liguria"
+    },
+    {
+      "nome": "Lombardia",
+      "slug": "lombardia",
+      "capoluogo": "Milano",
+      "confinanti": ["emilia-romagna", "piemonte", "trento", "veneto"],
+      "cartina": "lombardia",
+      "ordinePopolazione": 1
+    },
+    {
+      "nome": "Marche",
+      "slug": "marche",
+      "capoluogo": "Ancona",
+      "confinanti": ["abruzzo", "emilia-romagna", "lazio", "toscana", "umbria"],
+      "cartina": "marche"
+    },
+    {
+      "nome": "Molise",
+      "slug": "molise",
+      "capoluogo": "Campobasso",
+      "confinanti": ["abruzzo", "campania", "lazio", "puglia"],
+      "cartina": "molise"
+    },
+    {
+      "nome": "Piemonte",
+      "slug": "piemonte",
+      "capoluogo": "Torino",
+      "confinanti": ["emilia-romagna", "liguria", "lombardia", "valle-d-aosta"],
+      "cartina": "piemonte"
+    },
+    {
+      "nome": "Puglia",
+      "slug": "puglia",
+      "capoluogo": "Bari",
+      "confinanti": ["basilicata", "campania", "molise"],
+      "cartina": "puglia"
+    },
+    {
+      "nome": "Sardegna",
+      "slug": "sardegna",
+      "capoluogo": "Cagliari",
+      "confinanti": [],
+      "cartina": "sardegna"
+    },
+    {
+      "nome": "Sicilia",
+      "slug": "sicilia",
+      "capoluogo": "Palermo",
+      "confinanti": [],
+      "cartina": "sicilia",
+      "ordinePopolazione": 5
+    },
+    {
+      "nome": "Toscana",
+      "slug": "toscana",
+      "capoluogo": "Firenze",
+      "confinanti": ["emilia-romagna", "lazio", "liguria", "marche", "umbria"],
+      "cartina": "toscana"
+    },
+    {
+      "nome": "Provincia autonoma di Trento",
+      "slug": "trento",
+      "capoluogo": "Trento",
+      "confinanti": ["bolzano", "lombardia", "veneto"],
+      "cartina": "trentino-alto-adige"
+    },
+    {
+      "nome": "Provincia autonoma di Bolzano",
+      "slug": "bolzano",
+      "capoluogo": "Bolzano",
+      "confinanti": ["trento", "veneto"],
+      "cartina": "trentino-alto-adige"
+    },
+    {
+      "nome": "Umbria",
+      "slug": "umbria",
+      "capoluogo": "Perugia",
+      "confinanti": ["lazio", "marche", "toscana"],
+      "cartina": "umbria"
+    },
+    {
+      "nome": "Valle d’Aosta",
+      "slug": "valle-d-aosta",
+      "capoluogo": "Aosta",
+      "confinanti": ["piemonte"],
+      "cartina": "valle-d-aosta"
+    },
+    {
+      "nome": "Veneto",
+      "slug": "veneto",
+      "capoluogo": "Venezia",
+      "confinanti": ["bolzano", "emilia-romagna", "friuli-venezia-giulia", "lombardia", "trento"],
+      "cartina": "veneto",
+      "ordinePopolazione": 4
+    }
+  ]
+}

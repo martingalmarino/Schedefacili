@@ -1,0 +1,166 @@
+---
+import Faq from '../components/Faq.astro';
+import InBreve from '../components/InBreve.astro';
+import Pill from '../components/Pill.astro';
+import Pills from '../components/Pills.astro';
+import CercaSito from '../components/CercaSito';
+import { ANNO, ANNO_SLUG } from '../config/site';
+import { REGIONI, urlCalendarioRegione } from '../data/regioni';
+import { conteggioPagineCartine, regioniCartina } from '../lib/cartine-pagine';
+import { TEMI_CRUCIPUZZLE } from '../lib/crucipuzzle-temi';
+import { organization, webPage, website } from '../lib/schema';
+import { buildSeo } from '../lib/seo';
+import { NUMERI_TABELLINE } from '../lib/tabelline';
+import Base from '../layouts/Base.astro';
+
+const h1 = 'Schede didattiche da stampare, pronte in un minuto';
+const description =
+  'Schede didattiche gratuite per la scuola primaria: calendario scolastico 2026/27 per regione, tabelline anche DSA, crucipuzzle e cartine mute da stampare.';
+const calendari = REGIONI.length;
+const cartine = conteggioPagineCartine();
+const tabelline = NUMERI_TABELLINE.length;
+const temi = TEMI_CRUCIPUZZLE.length;
+const regioniCarta = regioniCartina().length;
+const domande = [
+  {
+    domanda: 'Le schede di Schede Facili sono gratuite?',
+    risposta: 'Sì. Prepari la scheda e la stampi in A4, senza registrazione.',
+  },
+  {
+    domanda: 'Per quale scuola sono pensate?',
+    risposta: 'Per la scuola primaria e dell’infanzia, per insegnanti e genitori.',
+  },
+  {
+    domanda: 'Come stampo una scheda?',
+    risposta: 'Apri la scheda e stampa dal browser. Il foglio è A4.',
+  },
+  {
+    domanda: 'Il calendario scolastico è uguale in tutta Italia?',
+    risposta:
+      'No. Inizio, fine, vacanze e ponti dipendono dalla delibera regionale. Se manca la fonte, la pagina lo indica.',
+  },
+];
+const seo = buildSeo({
+  title: 'Schede Facili – schede didattiche e calendario scolastico',
+  description,
+  path: '/',
+  h1,
+  keywords: [
+    'schede didattiche',
+    'calendario scolastico',
+    'tabelline',
+    'crucipuzzle',
+    'cartine mute',
+    'scuola primaria',
+  ],
+  image: '/og/home.png',
+  schema: [
+    website(),
+    organization(),
+    webPage({
+      path: '/',
+      name: h1,
+      description,
+      dateModified: new Date().toISOString(),
+    }),
+  ],
+});
+---
+
+<Base seo={seo} striscia>
+  <main>
+    <section class="pt-8 pb-5 min-[601px]:pt-14 min-[601px]:pb-9">
+      <div class="mx-auto max-w-[1120px] px-6">
+        <h1 class="max-w-[760px] text-[34px] leading-[1.08] font-semibold min-[601px]:text-[50px]">
+          Schede didattiche da stampare, <em class="text-terracotta not-italic">pronte in un minuto</em>
+        </h1>
+        <p class="my-4 mb-6 max-w-[640px] text-[17px] min-[601px]:text-[20px]">
+          Calendario scolastico della tua regione, tabelline, crucipuzzle e cartine mute per la scuola primaria. Scegli,
+          personalizza e stampa in A4.
+        </p>
+        <CercaSito client:load />
+        <a href="#calendario" class="mt-4 inline-block text-[19px] font-bold text-terracotta">
+          Trova il calendario della tua regione
+        </a>
+        <div class="mt-[30px] flex gap-[18px] min-[601px]:gap-10">
+          <div class="text-[15px]">
+            <b class="block font-display text-[26px] font-semibold text-salvia min-[601px]:text-[34px]">{calendari}</b>
+            calendari regionali
+          </div>
+          <div class="text-[15px]">
+            <b class="block font-display text-[26px] font-semibold text-salvia min-[601px]:text-[34px]">{cartine}</b>
+            cartine mute ISTAT
+          </div>
+          <div class="text-[15px]">
+            <b class="block font-display text-[26px] font-semibold text-salvia min-[601px]:text-[34px]">{tabelline}</b>
+            tabelline + generatore
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="calendario" class="py-[30px]">
+      <div class="mx-auto max-w-[1120px] px-6">
+        <h2 class="mb-1.5 text-[28px]">Calendario scolastico {ANNO}</h2>
+        <p class="m-0 mb-4 text-muted">Inizio, fine, vacanze e ponti della tua regione.</p>
+        <Pills>
+          {REGIONI.map((regione) => <Pill href={urlCalendarioRegione(regione.slug)} etichetta={regione.nome} />)}
+        </Pills>
+      </div>
+    </section>
+
+    <section class="py-[30px]">
+      <div class="mx-auto max-w-[1120px] px-6">
+        <div class="grid grid-cols-1 gap-x-[22px] gap-y-7 min-[540px]:grid-cols-2 min-[1040px]:grid-cols-4">
+          <div>
+            <h3 class="mb-2.5 text-[19px] leading-snug"><span class="titolo-gruppo">Schede da stampare</span></h3>
+            <Pills colonna>
+              <Pill href="/tabelline/" etichetta="Tabelline" conteggio="1–10" />
+              <Pill href="/tabelline/tavola-pitagorica/" etichetta="Tavola pitagorica" />
+              <Pill href="/generatori/" etichetta="Crucipuzzle a tema" conteggio={String(temi)} />
+            </Pills>
+          </div>
+          <div>
+            <h3 class="mb-2.5 text-[19px] leading-snug"><span class="titolo-gruppo">Generatori</span></h3>
+            <Pills colonna>
+              <Pill href="/generatori/tabelline/" etichetta="Generatore di tabelline" />
+              <Pill href="/generatori/crucipuzzle/" etichetta="Generatore di crucipuzzle" />
+              <Pill href="/generatori/tabelline/?dsa=1" etichetta="Modalità DSA" />
+            </Pills>
+          </div>
+          <div>
+            <h3 class="mb-2.5 text-[19px] leading-snug"><span class="titolo-gruppo">Cartine mute</span></h3>
+            <Pills colonna>
+              <Pill href="/cartine-mute/italia/" etichetta="Italia" />
+              <Pill href="/cartine-mute/" etichetta="Regioni" conteggio={String(regioniCarta)} />
+            </Pills>
+          </div>
+          <div>
+            <h3 class="mb-2.5 text-[19px] leading-snug"><span class="titolo-gruppo">Calendario</span></h3>
+            <Pills colonna>
+              <Pill href={`/calendario-scolastico/${ANNO_SLUG}/`} etichetta="Tutte le regioni" />
+              <Pill href={`/calendario-scolastico/${ANNO_SLUG}/ponti-e-festivita/`} etichetta="Ponti e festività" />
+            </Pills>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-[30px]">
+      <div class="mx-auto max-w-[1120px] px-6">
+        <InBreve>
+          Schede Facili raccoglie schede operative gratuite per la scuola primaria e dell’infanzia: calendari scolastici
+          regionali con le fonti ufficiali, tabelline anche in versione per alunni con DSA, crucipuzzle e cartine mute da
+          stampare in A4, senza registrazione.
+        </InBreve>
+      </div>
+    </section>
+
+    <section class="py-[30px]">
+      <div class="mx-auto max-w-[1120px] px-6">
+        <h2 class="mb-1.5 text-[28px]">Domande frequenti</h2>
+        <Faq domande={domande} />
+      </div>
+    </section>
+  </main>
+</Base>

@@ -1,0 +1,96 @@
+---
+import AttivaDsa from '../../components/schede/AttivaDsa.astro';
+import TavolaPitagorica from '../../components/schede/TavolaPitagorica';
+import TestoClasse from '../../components/schede/TestoClasse.astro';
+import VersioneDsa from '../../components/schede/VersioneDsa';
+import TastoStampa from '../../components/calendario/TastoStampa.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Faq from '../../components/Faq.astro';
+import InBreve from '../../components/InBreve.astro';
+import { dataInItaliano } from '../../lib/ricorrenze';
+import { learningResource, urlAssoluto, webPage } from '../../lib/schema';
+import { buildSeo } from '../../lib/seo';
+import { SEO_TAVOLA, testoClasseTavola } from '../../lib/testi-schede';
+import Base from '../../layouts/Base.astro';
+
+const path = '/tabelline/tavola-pitagorica/';
+const aggiornato = dataInItaliano(new Date());
+const domande = [
+  {
+    domanda: 'Cosa c’è in una casella?',
+    risposta: 'Il prodotto della riga per la colonna. La riga del 7 e la colonna del 4 si incontrano su 28.',
+  },
+  {
+    domanda: 'La tavola vuota mostra il numero se ci passo sopra?',
+    risposta: 'No. Resta vuota, da completare a matita. Il passaggio del mouse illumina solo la tavola piena.',
+  },
+  {
+    domanda: 'Fino a quale prodotto arriva?',
+    risposta: 'Fino a 10 × 10 = 100. Le righe e le colonne vanno da 1 a 10.',
+  },
+  {
+    domanda: 'Posso stampare una sola tabellina?',
+    risposta: 'Sì. Ogni tabellina dall’1 al 10 ha una pagina propria, con esercizi a completamento.',
+  },
+];
+const seo = buildSeo({
+  title: SEO_TAVOLA.title,
+  description: SEO_TAVOLA.description,
+  path,
+  h1: SEO_TAVOLA.h1,
+  keywords: ['tavola pitagorica', 'tavola pitagorica da stampare', 'tabelline da stampare'],
+  image: '/og/tabelline.png',
+  schema: [
+    webPage({
+      path,
+      name: SEO_TAVOLA.h1,
+      description: SEO_TAVOLA.description,
+      dateModified: new Date().toISOString(),
+    }),
+    learningResource({
+      nome: SEO_TAVOLA.h1,
+      descrizione: SEO_TAVOLA.description,
+      url: urlAssoluto(path),
+      educationalLevel: 'Scuola primaria',
+    }),
+  ],
+});
+---
+
+<Base seo={seo}>
+  <div class="no-stampa">
+    <Breadcrumbs
+      items={[
+        { nome: 'Home', href: '/' },
+        { nome: 'Tabelline', href: '/tabelline/' },
+        { nome: 'Tavola pitagorica', href: path },
+      ]}
+    />
+  </div>
+  <main id="scheda" class="mx-auto max-w-[1120px] px-6 pb-16">
+    <AttivaDsa />
+    <h1 class="mt-2 mb-4 font-display text-[34px] leading-tight font-semibold min-[601px]:text-[40px]">{SEO_TAVOLA.h1}</h1>
+    <div class="no-stampa">
+      <InBreve aggiornato={aggiornato}>
+        La tavola raccoglie le tabelline dall’1 al 10. Ogni casella è il prodotto della riga per la colonna, fino a 10 ×
+        10 = 100. Puoi lasciarla piena, svuotarla da completare o stamparla in versione DSA.
+      </InBreve>
+      <div class="my-4 flex max-w-xl flex-wrap items-center gap-3">
+        <VersioneDsa client:load targetId="scheda" />
+        <div class="min-w-[220px] flex-1">
+          <TastoStampa etichetta="Stampa (PDF A4)" />
+        </div>
+      </div>
+    </div>
+    <TavolaPitagorica client:load />
+    <p class="no-stampa mt-4 font-bold">
+      <a href="/tabelline/" class="hover:text-terracotta">Tutte le tabelline</a>
+      <span aria-hidden="true"> · </span>
+      <a href="/generatori/tabelline/" class="hover:text-terracotta">Generatore di tabelline</a>
+    </p>
+    <TestoClasse testo={testoClasseTavola()}>
+      <h2 class="mt-10 text-[28px]">Domande</h2>
+      <Faq domande={domande} />
+    </TestoClasse>
+  </main>
+</Base>

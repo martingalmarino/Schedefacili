@@ -1,0 +1,48 @@
+---
+import { EMAIL } from '../config/site';
+import { dataInItaliano } from '../lib/ricorrenze';
+import { webPage } from '../lib/schema';
+import { buildSeo } from '../lib/seo';
+import PaginaLegale from '../layouts/PaginaLegale.astro';
+
+const path = '/termini/';
+const h1 = 'Termini di utilizzo';
+const description =
+  'Uso gratuito delle schede per la scuola e per casa, crediti delle cartine e limiti del calendario scolastico.';
+const aggiornato = dataInItaliano(new Date());
+const seo = buildSeo({
+  title: 'Termini di utilizzo – Schede Facili',
+  description,
+  path,
+  h1,
+  keywords: ['termini di utilizzo', 'schede facili'],
+  schema: [webPage({ path, name: h1, description, dateModified: new Date().toISOString() })],
+});
+---
+
+<PaginaLegale seo={seo} aggiornato={aggiornato}>
+  <p slot="breve">
+    Le schede si stampano gratis per la classe o per casa. Le date del calendario valgono quando la pagina cita la
+    delibera.
+  </p>
+  <h2>Uso dei materiali</h2>
+  <p>
+    L’utente può stampare e fotocopiare le schede per la scuola e per l’uso familiare. Non è consentito rivenderle come
+    proprie né togliere il credito delle cartine.
+  </p>
+  <h2>Calendario</h2>
+  <p>
+    Inizio, fine, vacanze e ponti dipendono dalla delibera regionale. Se la fonte non è indicata, la data non è
+    pubblicata. Le festività nazionali restano quelle di legge.
+  </p>
+  <h2>Cartine</h2>
+  <p>
+    I confini sono un’elaborazione su dati ISTAT, licenza CC BY 4.0. Il credito resta visibile sulla pagina e sulla
+    stampa.
+  </p>
+  <h2>Disponibilità</h2>
+  <p>
+    Il sito è offerto così com’è, senza un obbligo di risultato. Per segnalare un errore si scrive a {EMAIL}.
+    L’informativa privacy e la pagina cookie descrivono i dati e il consenso.
+  </p>
+</PaginaLegale>

@@ -1,0 +1,32 @@
+---
+interface Fonte {
+  etichetta: string;
+  href: string;
+}
+
+interface Props {
+  fonte?: Fonte;
+  aggiornato?: string;
+}
+
+const { fonte, aggiornato } = Astro.props;
+const mostraMeta = Boolean(fonte || aggiornato);
+---
+
+<div class="max-w-[820px] rounded-lg border-l-[5px] border-solid border-salvia bg-white px-[22px] py-[18px]">
+  <b>In breve.</b>{' '}
+  <slot />
+  {
+    mostraMeta && (
+      <i class="mt-2 block">
+        {fonte && (
+          <>
+            Fonte: <a href={fonte.href}>{fonte.etichetta}</a>
+          </>
+        )}
+        {fonte && aggiornato && ' · '}
+        {aggiornato && <>Aggiornato il {aggiornato}</>}
+      </i>
+    )
+  }
+</div>

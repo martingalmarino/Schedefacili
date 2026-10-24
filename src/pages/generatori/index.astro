@@ -1,0 +1,89 @@
+---
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Faq from '../../components/Faq.astro';
+import InBreve from '../../components/InBreve.astro';
+import { dataInItaliano } from '../../lib/ricorrenze';
+import { webPage } from '../../lib/schema';
+import { buildSeo } from '../../lib/seo';
+import { h1Crucipuzzle, percorsoCrucipuzzle, TEMI_CRUCIPUZZLE } from '../../lib/crucipuzzle-temi';
+import { SEO_HUB_GENERATORI } from '../../lib/testi-schede';
+import Base from '../../layouts/Base.astro';
+
+const path = '/generatori/';
+const aggiornato = dataInItaliano(new Date());
+const domande = [
+  {
+    domanda: 'Quali generatori ci sono?',
+    risposta: 'Due generatori, tabelline e crucipuzzle, più otto crucipuzzle già pronti da stampare. Tutti escono in A4.',
+  },
+  {
+    domanda: 'Il foglio resta uguale se lo riapro?',
+    risposta: 'Sì, se lasci gli stessi segni e lo stesso numero della scheda. Quel numero è il seme della scheda.',
+  },
+  {
+    domanda: 'Costa qualcosa?',
+    risposta: 'No. Le schede si creano e si stampano senza pagamento.',
+  },
+  {
+    domanda: 'C’è una versione più leggibile?',
+    risposta: 'Sì. Ogni generatore ha la versione DSA: più spazio e un carattere pensato per la lettura.',
+  },
+];
+const seo = buildSeo({
+  title: SEO_HUB_GENERATORI.title,
+  description: SEO_HUB_GENERATORI.description,
+  path,
+  h1: SEO_HUB_GENERATORI.h1,
+  keywords: ['generatore schede', 'schede da stampare', 'generatore tabelline', 'crucipuzzle'],
+  image: '/og/generatori.png',
+  schema: [
+    webPage({
+      path,
+      name: SEO_HUB_GENERATORI.h1,
+      description: SEO_HUB_GENERATORI.description,
+      dateModified: new Date().toISOString(),
+    }),
+  ],
+});
+---
+
+<Base seo={seo}>
+  <div class="no-stampa">
+    <Breadcrumbs items={[{ nome: 'Home', href: '/' }, { nome: 'Generatori', href: path }]} />
+  </div>
+  <main class="mx-auto max-w-[1120px] px-6 pb-16">
+    <h1 class="mt-2 mb-4 font-display text-[34px] leading-tight font-semibold min-[601px]:text-[40px]">{SEO_HUB_GENERATORI.h1}</h1>
+    <InBreve aggiornato={aggiornato}>
+      Due generatori per la scuola primaria: tabelline da completare e crucipuzzle con le parole che scegli. Sotto ci sono
+      anche otto crucipuzzle già pronti. Il numero della scheda ti fa ristampare lo stesso foglio.
+    </InBreve>
+    <ul class="mt-6 grid gap-3">
+      <li>
+        <a href="/generatori/tabelline/" class="block rounded-xl bg-white px-4 py-3 hover:text-terracotta">
+          <b>Generatore di tabelline</b>
+          <span class="mt-1 block text-muted">Scegli i numeri, il buco e quante operazioni stampare.</span>
+        </a>
+      </li>
+      <li>
+        <a href="/generatori/crucipuzzle/" class="block rounded-xl bg-white px-4 py-3 hover:text-terracotta">
+          <b>Generatore di crucipuzzle</b>
+          <span class="mt-1 block text-muted">Scrivi le parole, scegli la griglia e stampa con le soluzioni.</span>
+        </a>
+      </li>
+    </ul>
+    <h2 class="mt-10 text-[28px]">Crucipuzzle già pronti</h2>
+    <ul class="mt-4 grid gap-3 min-[601px]:grid-cols-2">
+      {
+        TEMI_CRUCIPUZZLE.map((tema) => (
+          <li>
+            <a href={percorsoCrucipuzzle(tema.slug)} class="block rounded-xl bg-white px-4 py-3 font-bold hover:text-terracotta">
+              {h1Crucipuzzle(tema)}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+    <h2 class="mt-10 text-[28px]">Domande</h2>
+    <Faq domande={domande} />
+  </main>
+</Base>

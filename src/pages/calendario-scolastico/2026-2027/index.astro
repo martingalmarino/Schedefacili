@@ -1,0 +1,137 @@
+---
+import CalendarioAnnuale from '../../../components/calendario/CalendarioAnnuale.astro';
+import TastoStampa from '../../../components/calendario/TastoStampa.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import Faq from '../../../components/Faq.astro';
+import InBreve from '../../../components/InBreve.astro';
+import { ANNO, ANNO_SLUG } from '../../../config/site';
+import calendarioJson from '../../../data/calendario/2026-2027.json';
+import { REGIONI, urlCalendarioRegione } from '../../../data/regioni';
+import { schemaCalendario } from '../../../data/schemi';
+import { calendarioCompleto, dataBreve, intervallo, SEO_NAZIONALE, urlPonti } from '../../../lib/calendario';
+import { dataInItaliano } from '../../../lib/ricorrenze';
+import { dataset, webPage } from '../../../lib/schema';
+import { buildSeo } from '../../../lib/seo';
+import Base from '../../../layouts/Base.astro';
+
+const calendario = schemaCalendario.parse(calendarioJson);
+const aggiornato = dataInItaliano(new Date());
+const ufficiali = calendario.voci.filter((voce) => voce.stato === 'ufficiale').length;
+const righe = REGIONI.map((regione) => {
+  const voce = calendario.voci.find((altra) => altra.slug === regione.slug);
+  if (!voce) throw new Error(`Manca il calendario di ${regione.slug}`);
+  const completo = calendarioCompleto(voce);
+  return {
+    regione,
+    inizio: completo && voce.inizio ? dataBreve(voce.inizio) : 'In attesa',
+    fine: completo && voce.fine ? dataBreve(voce.fine) : 'In attesa',
+    natale: voce.natale?.dal && voce.natale.al ? intervallo(voce.natale.dal, voce.natale.al) : 'In attesa',
+    pasqua: completo && voce.pasqua.dal && voce.pasqua.al ? intervallo(voce.pasqua.dal, voce.pasqua.al) : 'In attesa',
+    stato: voce.stato === 'ufficiale' ? 'Ufficiale' : 'In attesa',
+  };
+});
+const domande = [
+  {
+    domanda: 'Da dove arrivano le date del 2026/27?',
+    risposta: 'Dal riepilogo dei calendari regionali del Ministero. Ogni pagina regionale cita quel documento.',
+  },
+  {
+    domanda: 'Le feste nazionali cambiano da regione a regione?',
+    risposta: 'No. Il 4 ottobre, Ognissanti, Natale, l’Epifania, il 25 aprile, il 1° maggio e il 2 giugno valgono in tutta Italia.',
+  },
+  {
+    domanda: 'Dove vedo i ponti possibili?',
+    risposta: 'Nella pagina dei ponti e delle festività. Un ponte possibile non è una chiusura, finché la Regione non lo delibera.',
+  },
+  {
+    domanda: 'Posso stampare il confronto?',
+    risposta: 'Sì. La stampa mostra l’anno scolastico con le feste nazionali. Le date regionali compaiono solo se sono verificate.',
+  },
+];
+const schema = [
+  webPage({
+    path: `/calendario-scolastico/${ANNO_SLUG}/`,
+    name: SEO_NAZIONALE.h1,
+    description: SEO_NAZIONALE.description,
+    dateModified: new Date().toISOString(),
+  }),
+];
+if (ufficiali >= 1) {
+  schema.push(
+    dataset({
+      nome: 'Calendario scolastico 2026/2027 per regione',
+      descrizione: SEO_NAZIONALE.description,
+      url: `/calendario-scolastico/${ANNO_SLUG}/`,
+    }),
+  );
+}
+const seo = buildSeo({
+  title: SEO_NAZIONALE.title,
+  description: SEO_NAZIONALE.description,
+  path: `/calendario-scolastico/${ANNO_SLUG}/`,
+  h1: SEO_NAZIONALE.h1,
+  keywords: ['calendario scolastico 2026 2027', 'calendario scolastico regioni', 'inizio scuola 2026', 'fine scuola 2027'],
+  image: '/og/calendario.png',
+  schema,
+});
+---
+
+<Base seo={seo}>
+  <div class="no-stampa">
+    <Breadcrumbs
+      items={[
+        { nome: 'Home', href: '/' },
+        { nome: 'Calendario scolastico', href: '/calendario-scolastico/' },
+        { nome: ANNO, href: `/calendario-scolastico/${ANNO_SLUG}/` },
+      ]}
+    />
+    <main>
+      <div class="mx-auto max-w-[1120px] px-6 pb-8">
+        <h1 class="mt-2 mb-4 font-display text-[34px] leading-tight font-semibold min-[601px]:text-[40px]">{SEO_NAZIONALE.h1}</h1>
+        <InBreve aggiornato={aggiornato}>
+          La tabella mette a confronto le 21 regioni e province autonome. Le date arrivano dal riepilogo del Ministero.
+          Dove un intervallo manca, la cella resta in attesa. Le feste nazionali sono già nelle pagine di ciascuna
+          regione.
+        </InBreve>
+        <p class="mt-4">
+          <a href={urlPonti()} class="font-bold hover:text-terracotta">Ponti e festività</a>
+        </p>
+        <div class="my-4 max-w-sm">
+          <TastoStampa />
+        </div>
+        <div class="min-w-0">
+          <table class="tabella-mobile w-full border-collapse overflow-hidden rounded-[10px] bg-white">
+            <thead>
+              <tr>
+                {['Regione', 'Inizio', 'Fine', 'Natale', 'Pasqua', 'Stato'].map((colonna) => (
+                  <th class="bg-salvia px-3.5 py-2.5 text-left font-sans text-white">{colonna}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {
+                righe.map((riga) => (
+                  <tr class="border-b border-solid border-[#eee]">
+                    <td class="px-3.5 py-2.5" data-label="Regione">
+                      <a href={urlCalendarioRegione(riga.regione.slug)} class="font-bold hover:text-terracotta">
+                        {riga.regione.nome}
+                      </a>
+                    </td>
+                    <td class="px-3.5 py-2.5" data-label="Inizio">{riga.inizio}</td>
+                    <td class="px-3.5 py-2.5" data-label="Fine">{riga.fine}</td>
+                    <td class="px-3.5 py-2.5" data-label="Natale">{riga.natale}</td>
+                    <td class="px-3.5 py-2.5" data-label="Pasqua">{riga.pasqua}</td>
+                    <td class="px-3.5 py-2.5" data-label="Stato">{riga.stato}</td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+        <h2 class="mt-8 mb-1 text-[28px]">Domande frequenti</h2>
+        <Faq domande={domande} />
+      </div>
+    </main>
+  </div>
+  <CalendarioAnnuale />
+</Base>

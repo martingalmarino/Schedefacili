@@ -1,0 +1,66 @@
+---
+import { dataEstesa, festeNazionali, nomeGiorno } from '../../lib/calendario';
+
+const feste = festeNazionali();
+const perGiorno = new Map(feste.map((festa) => [festa.data, festa.nome]));
+const mesi = Array.from({ length: 10 }, (_, indice) => {
+  const cursor = new Date(Date.UTC(2026, 8 + indice, 1));
+  const anno = cursor.getUTCFullYear();
+  const mese = cursor.getUTCMonth();
+  const nome = new Intl.DateTimeFormat('it-IT', { month: 'long', timeZone: 'UTC' }).format(cursor);
+  const offset = (cursor.getUTCDay() + 6) % 7;
+  const giorni = new Date(Date.UTC(anno, mese + 1, 0)).getUTCDate();
+  const celle = [...Array(offset).fill(null), ...Array.from({ length: giorni }, (_, giorno) => giorno + 1)];
+  return { anno, mese, nome, celle };
+});
+const intestazione = ['lun', 'mar', 'mer', 'gio', 'ven', 'sab', 'dom'];
+---
+
+<section class="solo-stampa">
+  <p class="m-0 font-display text-[22px] font-semibold">Calendario scolastico 2026/2027</p>
+  <p class="mt-1 mb-4 text-[14px]">
+    Sono segnate solo le feste nazionali. Le sospensioni regionali stanno nella scheda di ogni regione.
+  </p>
+  <div class="grid grid-cols-2 gap-4">
+    {
+      mesi.map((mese) => (
+        <div>
+          <p class="m-0 mb-1 font-bold capitalize">
+            {mese.nome} {mese.anno}
+          </p>
+          <div class="grid grid-cols-7 text-center text-[11px]">
+            {intestazione.map((giorno) => (
+              <span class="font-bold">{giorno}</span>
+            ))}
+            {mese.celle.map((giorno) => {
+              const iso =
+                giorno === null
+                  ? ''
+                  : `${mese.anno}-${String(mese.mese + 1).padStart(2, '0')}-${String(giorno).padStart(2, '0')}`;
+              const festa = iso ? perGiorno.get(iso) : undefined;
+              return (
+                <span class:list={['py-0.5', festa && 'font-bold underline']} title={festa}>
+                  {giorno ?? ''}
+                </span>
+              );
+            })}
+          </div>
+        </div>
+      ))
+    }
+  </div>
+  <ul class="mt-4 pl-5 text-[12px]">
+    {feste.map((festa) => <li>{dataEstesa(festa.data)}, {nomeGiorno(festa.data)}: {festa.nome}</li>)}
+  </ul>
+</section>
+
+<style>
+  .solo-stampa {
+    display: none;
+  }
+  @media print {
+    .solo-stampa {
+      display: block;
+    }
+  }
+</style>

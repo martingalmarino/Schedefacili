@@ -1,0 +1,180 @@
+---
+import AttivaDsa from '../../components/schede/AttivaDsa.astro';
+import VersioneDsa from '../../components/schede/VersioneDsa';
+import TastoStampa from '../../components/calendario/TastoStampa.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Faq from '../../components/Faq.astro';
+import InBreve from '../../components/InBreve.astro';
+import { dataInItaliano } from '../../lib/ricorrenze';
+import { learningResource, urlAssoluto, webPage } from '../../lib/schema';
+import { buildSeo } from '../../lib/seo';
+import {
+  descrizioneCrucipuzzle,
+  grigliaTema,
+  h1Crucipuzzle,
+  mascheraSoluzione,
+  percorsoCrucipuzzle,
+  percorsoGeneratoreTema,
+  temaCrucipuzzle,
+  TEMI_CRUCIPUZZLE,
+  titoloCrucipuzzle,
+} from '../../lib/crucipuzzle-temi';
+import Base from '../../layouts/Base.astro';
+
+export function getStaticPaths() {
+  return TEMI_CRUCIPUZZLE.map((tema) => ({ params: { tema: tema.slug }, props: { slug: tema.slug } }));
+}
+
+interface Props {
+  slug: string;
+}
+
+const { slug } = Astro.props;
+const tema = temaCrucipuzzle(slug);
+const path = percorsoCrucipuzzle(slug);
+const h1 = h1Crucipuzzle(tema);
+const descrizione = descrizioneCrucipuzzle(tema);
+const titolo = titoloCrucipuzzle(tema);
+const griglia = grigliaTema(tema);
+const maschera = mascheraSoluzione(griglia);
+const parole = griglia.parole.map((voce) => voce.parola);
+const aggiornato = dataInItaliano(new Date());
+const domande = [
+  {
+    domanda: 'Le parole sono sempre nello stesso posto?',
+    risposta: 'Sì. Questa griglia è fissa, così puoi ristampare lo stesso foglio per tutta la classe.',
+  },
+  {
+    domanda: 'Posso cambiare le parole?',
+    risposta: 'Sì. Apri il generatore: le parole di questo tema sono già scritte e puoi toglierne o aggiungerne.',
+  },
+  {
+    domanda: 'Dove sono le soluzioni?',
+    risposta: 'In fondo al foglio, su una seconda pagina. In classe restano chiuse finché non le apri.',
+  },
+  {
+    domanda: 'La versione DSA toglie delle parole?',
+    risposta: 'No. Ingrandisce le lettere e aumenta lo spazio. Le parole e i posti restano gli stessi.',
+  },
+];
+const seo = buildSeo({
+  title: titolo,
+  description: descrizione,
+  path,
+  h1,
+  keywords: [`crucipuzzle ${tema.etichetta.toLowerCase()}`, 'crucipuzzle da stampare', 'crucipuzzle scuola primaria'],
+  image: '/og/generatori.png',
+  schema: [
+    webPage({ path, name: h1, description: descrizione, dateModified: new Date().toISOString() }),
+    learningResource({
+      nome: h1,
+      descrizione,
+      url: urlAssoluto(path),
+      educationalLevel: 'Scuola primaria',
+    }),
+  ],
+});
+---
+
+<Base seo={seo}>
+  <div class="no-stampa">
+    <Breadcrumbs
+      items={[
+        { nome: 'Home', href: '/' },
+        { nome: 'Generatori', href: '/generatori/' },
+        { nome: h1, href: path },
+      ]}
+    />
+  </div>
+  <main id="scheda" class="mx-auto max-w-[1120px] px-6 pb-16">
+    <AttivaDsa />
+    <h1 class="mt-2 mb-4 font-display text-[34px] leading-tight font-semibold min-[601px]:text-[40px]">{h1}</h1>
+    <div class="no-stampa">
+      <InBreve aggiornato={aggiornato}>
+        {h1} porta dodici parole in una griglia 12×12, solo in orizzontale e in verticale. Il foglio è sempre lo stesso,
+        con le soluzioni su una seconda pagina. Se vuoi altre parole, aprilo nel generatore.
+      </InBreve>
+      <div class="my-4 flex max-w-xl flex-wrap items-center gap-3">
+        <VersioneDsa client:load targetId="scheda" />
+        <div class="min-w-[220px] flex-1">
+          <TastoStampa etichetta="Stampa (PDF A4)" />
+        </div>
+      </div>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="griglia-lettere border-collapse bg-white text-center text-[18px] font-bold">
+        <tbody>
+          {
+            griglia.griglia.map((riga) => (
+              <tr>
+                {riga.map((lettera) => (
+                  <td class="h-8 w-8 border border-solid border-inchiostro">{lettera}</td>
+                ))}
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+    <p class="mt-4 font-bold">Parole: {parole.join(', ')}</p>
+    <p class="no-stampa mt-4">
+      <a href={percorsoGeneratoreTema(slug)} class="font-bold hover:text-terracotta">Personalizzalo nel generatore</a>
+    </p>
+    <details class="no-stampa mt-6">
+      <summary class="cursor-pointer font-bold">Soluzioni</summary>
+      <div class="mt-3 overflow-x-auto">
+        <table class="griglia-lettere border-collapse bg-white text-center text-[18px] font-bold">
+          <tbody>
+            {
+              griglia.griglia.map((riga, indiceRiga) => (
+                <tr>
+                  {riga.map((lettera, indiceColonna) => (
+                    <td class="h-8 w-8 border border-solid border-[#ccc]">{maschera[indiceRiga]?.[indiceColonna] ? lettera : ''}</td>
+                  ))}
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </details>
+    <section class="soluzioni solo-stampa">
+      <h2 class="text-[28px]">Soluzioni</h2>
+      <table class="griglia-lettere border-collapse text-center text-[18px] font-bold">
+        <tbody>
+          {
+            griglia.griglia.map((riga, indiceRiga) => (
+              <tr>
+                {riga.map((lettera, indiceColonna) => (
+                  <td class="h-8 w-8 border border-solid border-inchiostro">{maschera[indiceRiga]?.[indiceColonna] ? lettera : ''}</td>
+                ))}
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </section>
+    <div class="no-stampa mt-10 max-w-[720px]">
+      <p>
+        In classe questo crucipuzzle chiude un argomento già detto a voce. Le dodici parole stanno scritte sotto la
+        griglia: l’alunno le cerca, non le indovina. Prima di consegnare il foglio, leggi l’elenco insieme. Se una parola
+        è ancora nuova, toglila dal compito e tienila per la lezione dopo.
+      </p>
+      <p>
+        La versione DSA lascia le stesse lettere, più grandi e con più aria. Attivala prima di stampare. Le soluzioni
+        escono su una pagina a parte: tienile in cattedra e dalle all’alunno solo alla correzione.
+      </p>
+      <nav class="mt-6 flex flex-wrap gap-3 font-bold" aria-label="Altri crucipuzzle">
+        {
+          TEMI_CRUCIPUZZLE.filter((voce) => voce.slug !== slug).map((voce) => (
+            <a href={percorsoCrucipuzzle(voce.slug)} class="hover:text-terracotta">
+              {voce.etichetta}
+            </a>
+          ))
+        }
+      </nav>
+      <h2 class="mt-10 text-[28px]">Domande</h2>
+      <Faq domande={domande} />
+    </div>
+  </main>
+</Base>

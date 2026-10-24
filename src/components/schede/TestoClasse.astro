@@ -1,0 +1,12 @@
+---
+interface Props {
+  testo: string;
+}
+
+const { testo } = Astro.props;
+---
+
+<div class="no-stampa mt-10 max-w-[720px]">
+  {testo.split('\n\n').map((paragrafo) => <p class="mt-4">{paragrafo}</p>)}
+  <slot />
+</div>

@@ -1,0 +1,32 @@
+---
+import { SITE_NAME } from '../config/site';
+import type { SeoResult } from '../lib/seo';
+import { jsonLd } from '../lib/schema';
+
+interface Props {
+  seo: SeoResult;
+}
+
+const { seo } = Astro.props;
+---
+
+<title>{seo.title}</title>
+<meta name="description" content={seo.description} />
+<link rel="canonical" href={seo.canonical} />
+<meta name="robots" content={seo.robots} />
+<meta property="og:title" content={seo.title} />
+<meta property="og:description" content={seo.description} />
+<meta property="og:url" content={seo.canonical} />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="it_IT" />
+<meta property="og:site_name" content={SITE_NAME} />
+<meta property="og:image" content={seo.image} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={seo.title} />
+<meta name="twitter:description" content={seo.description} />
+<meta name="twitter:image" content={seo.image} />
+{
+  seo.schema.map((blocco) => <script type="application/ld+json" set:html={jsonLd(blocco)} />)
+}

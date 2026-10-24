@@ -1,0 +1,158 @@
+---
+import { ANNO } from '../../config/site';
+import { REGIONI, urlCalendarioRegione } from '../../data/regioni';
+import type { CalendarioVoce, RegioneDato } from '../../data/schemi';
+import {
+  calendarioCompleto,
+  dataBreve,
+  dataEstesa,
+  etichettaCartina,
+  festeNazionali,
+  FONTE_FESTIVITA,
+  intervallo,
+  testoInBreve,
+  urlCartina,
+  urlNazionale,
+  urlPonti,
+} from '../../lib/calendario';
+import { prossimaRicorrenza, type Festivita } from '../../lib/ricorrenze';
+import Breadcrumbs from '../Breadcrumbs.astro';
+import Faq from '../Faq.astro';
+import InBreve from '../InBreve.astro';
+import Pill from '../Pill.astro';
+import Pills from '../Pills.astro';
+import CalendarioAnnuale from './CalendarioAnnuale.astro';
+import TastoStampa from './TastoStampa.astro';
+
+interface Props {
+  regione: RegioneDato;
+  voce: CalendarioVoce;
+  h1: string;
+  domande: { domanda: string; risposta: string }[];
+  aggiornato: string;
+}
+
+const { regione, voce, h1, domande, aggiornato } = Astro.props;
+const completo = calendarioCompleto(voce);
+const inizio = completo && voce.inizio ? dataBreve(voce.inizio) : 'In attesa';
+const fine = completo && voce.fine ? dataBreve(voce.fine) : 'In attesa';
+const natale = voce.natale?.dal && voce.natale.al ? intervallo(voce.natale.dal, voce.natale.al) : 'In attesa';
+const pasqua = completo && voce.pasqua.dal && voce.pasqua.al ? intervallo(voce.pasqua.dal, voce.pasqua.al) : 'In attesa';
+const feste = festeNazionali();
+const righe = [
+  ...feste.map((festa) => ({ data: festa.data, nome: festa.nome, tipo: festa.tipo })),
+  ...(completo
+    ? voce.ponti.map((ponte) => ({ data: ponte.data, nome: ponte.motivo, tipo: 'Delibera regionale' }))
+    : []),
+].sort((a, b) => a.data.localeCompare(b.data));
+const vicine = regione.confinanti.flatMap((slug) => {
+  const trovata = REGIONI.find((altra) => altra.slug === slug);
+  return trovata ? [trovata] : [];
+});
+const prossima = prossimaRicorrenza(feste as Festivita[], new Date());
+const chiavi = [
+  ['Inizio lezioni', inizio],
+  ['Vacanze di Natale', natale],
+  ['Vacanze di Pasqua', pasqua],
+  ['Fine lezioni', fine],
+];
+---
+
+<div class="no-stampa">
+  <Breadcrumbs
+    items={[
+      { nome: 'Home', href: '/' },
+      { nome: 'Calendario scolastico', href: '/calendario-scolastico/' },
+      { nome: ANNO, href: urlNazionale() },
+      { nome: regione.nome, href: urlCalendarioRegione(regione.slug) },
+    ]}
+  />
+  <main>
+    <div class="mx-auto max-w-[1120px] px-6 pb-8">
+      <h1 class="mt-2 mb-4 font-display text-[34px] leading-tight font-semibold min-[601px]:text-[40px]">{h1}</h1>
+      <InBreve
+        aggiornato={aggiornato}
+        fonte={completo && voce.fonte ? { etichetta: voce.fonte.titolo, href: voce.fonte.url } : undefined}
+      >
+        {testoInBreve(regione, voce)}
+      </InBreve>
+      <div class="my-5 grid grid-cols-2 gap-4 min-[601px]:grid-cols-4">
+        {
+          chiavi.map(([etichetta, valore]) => (
+            <div class="rounded-xl border-t-[5px] border-solid border-salvia bg-white px-4 py-4">
+              <small class="block text-muted">{etichetta}</small>
+              <b class="font-display text-[24px] leading-tight font-semibold">{valore}</b>
+            </div>
+          ))
+        }
+      </div>
+      <div class="grid items-start gap-7 min-[601px]:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+        <div class="min-w-0">
+          <h2 class="mb-1 text-[28px]">Festività e ponti</h2>
+          <p class="m-0 mb-3 text-muted">Feste nazionali. I giorni decisi dalla Regione compariranno con la delibera.</p>
+          <div class="min-w-0">
+            <table class="tabella-mobile w-full border-collapse overflow-hidden rounded-[10px] bg-white">
+              <thead>
+                <tr>
+                  <th class="bg-salvia px-3.5 py-2.5 text-left font-sans text-white">Data</th>
+                  <th class="bg-salvia px-3.5 py-2.5 text-left font-sans text-white">Ricorrenza</th>
+                  <th class="bg-salvia px-3.5 py-2.5 text-left font-sans text-white">Tipo</th>
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  righe.map((riga) => (
+                    <tr class="border-b border-solid border-[#eee]">
+                      <td class="px-3.5 py-2.5" data-label="Data">{dataEstesa(riga.data)}</td>
+                      <td class="px-3.5 py-2.5" data-label="Ricorrenza">{riga.nome}</td>
+                      <td class="px-3.5 py-2.5" data-label="Tipo">{riga.tipo}</td>
+                    </tr>
+                  ))
+                }
+              </tbody>
+            </table>
+          </div>
+          <p class="mt-2 text-[14px] text-muted">
+            Fonte: <a href={FONTE_FESTIVITA.href}>{FONTE_FESTIVITA.etichetta}</a>
+          </p>
+          <h2 class="mt-6 mb-1 text-[28px]">Domande frequenti</h2>
+          <Faq domande={domande} />
+        </div>
+        <aside class="rounded-xl bg-white p-[18px]">
+          <TastoStampa />
+          <h3 class="mb-2.5 font-display text-[18px]">Altre regioni</h3>
+          {
+            vicine.length > 0 ? (
+              <Pills>
+                {vicine.map((vicina) => (
+                  <Pill href={urlCalendarioRegione(vicina.slug)} etichetta={vicina.nome} />
+                ))}
+              </Pills>
+            ) : (
+              <p class="m-0 mb-3">Nessuna regione confinante sulla terraferma.</p>
+            )
+          }
+          <p class="mt-3 mb-4">
+            <a href={urlNazionale()} class="hover:text-terracotta">Tutte le regioni</a>
+          </p>
+          <h3 class="mb-2 font-display text-[18px]">Per la tua classe</h3>
+          <p class="m-0">
+            <a href={urlCartina(regione.cartina)} class="hover:text-terracotta">{etichettaCartina(regione)}</a>
+          </p>
+          <p class="mt-2 mb-0">
+            {
+              prossima ? (
+                <a href={`${urlPonti()}#festa-${prossima.data}`} class="hover:text-terracotta">
+                  {prossima.nome}, {prossima.etichetta}
+                </a>
+              ) : (
+                <a href={urlPonti()} class="hover:text-terracotta">Festività nazionali</a>
+              )
+            }
+          </p>
+        </aside>
+      </div>
+    </div>
+  </main>
+</div>
+<CalendarioAnnuale />

@@ -1,0 +1,47 @@
+---
+import { FONTE_CONFINI } from '../data/cartine';
+import { LICENZA_CARTE } from '../lib/cartine-pagine';
+import { dataInItaliano } from '../lib/ricorrenze';
+import { webPage } from '../lib/schema';
+import { buildSeo } from '../lib/seo';
+import PaginaLegale from '../layouts/PaginaLegale.astro';
+
+const path = '/fonti-e-licenze/';
+const h1 = 'Fonti e licenze';
+const description =
+  'Fonti del calendario scolastico, confini ISTAT in CC BY 4.0 e licenze SIL OFL di OpenDyslexic, Fraunces e Atkinson Hyperlegible.';
+const aggiornato = dataInItaliano(new Date());
+const seo = buildSeo({
+  title: 'Fonti e licenze – Schede Facili',
+  description,
+  path,
+  h1,
+  keywords: ['fonti', 'licenze', 'ISTAT', 'OpenDyslexic'],
+  schema: [webPage({ path, name: h1, description, dateModified: new Date().toISOString() })],
+});
+---
+
+<PaginaLegale seo={seo} aggiornato={aggiornato}>
+  <p slot="breve">
+    Il calendario cita il Ministero e le delibere regionali. Le cartine citano l’ISTAT. I caratteri sono in licenza SIL
+    OFL e partono dal sito, non da Google.
+  </p>
+  <h2>Calendario scolastico</h2>
+  <p>
+    Le date regionali si pubblicano solo con la fonte: il Ministero dell’Istruzione e del Merito e la delibera della
+    regione. Se l’indirizzo della delibera manca, la pagina resta in attesa. Le festività nazionali seguono la legge. Il
+    riepilogo è nel <a href="/calendario-scolastico/">calendario scolastico</a>.
+  </p>
+  <h2>Cartine mute</h2>
+  <p>
+    Elaborazione su dati ISTAT, Confini delle unità amministrative a fini statistici, licenza
+    <a href={LICENZA_CARTE}>CC BY 4.0</a>. La fonte è la pagina
+    <a href={FONTE_CONFINI}>ISTAT sui confini amministrativi</a>. Il credito resta sotto la carta e nella stampa.
+  </p>
+  <h2>Caratteri</h2>
+  <p>
+    OpenDyslexic è distribuito con la licenza <a href="https://openfontlicense.org/">SIL Open Font License 1.1</a>.
+    Fraunces, di Undercase Type, e Atkinson Hyperlegible, del Braille Institute, usano la stessa licenza. I file dei
+    caratteri partono da questo sito.
+  </p>
+</PaginaLegale>

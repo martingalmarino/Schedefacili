@@ -1,0 +1,16 @@
+---
+interface Props {
+  etichetta?: string;
+}
+
+const { etichetta = 'Stampa il calendario (PDF A4)' } = Astro.props;
+---
+
+<button type="button" class="stampa-calendario mb-3.5 block w-full cursor-pointer rounded-[10px] border-0 bg-terracotta px-3 py-3 text-center font-sans text-[16px] font-bold text-white">
+  {etichetta}
+</button>
+<script>
+  document.querySelectorAll('.stampa-calendario').forEach((bottone) => {
+    bottone.addEventListener('click', () => window.print());
+  });
+</script>

@@ -1,0 +1,13 @@
+---
+interface Props {
+  id?: string;
+}
+
+const { id = 'scheda' } = Astro.props;
+---
+
+<script is:inline define:vars={{ id }}>
+  if (new URLSearchParams(location.search).get('dsa') === '1') {
+    document.getElementById(id)?.classList.add('dsa');
+  }
+</script>

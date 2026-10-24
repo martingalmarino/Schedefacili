@@ -1,0 +1,22 @@
+---
+import { NAV } from '../data/nav';
+import MenuMobile from './MenuMobile';
+---
+
+<header class="relative border-b border-solid border-bordo bg-white">
+  <div class="mx-auto flex h-[68px] max-w-[1120px] items-center gap-7 px-6">
+    <a href="/" class="font-display text-[26px] leading-none font-extrabold" aria-label="Schede Facili">
+      schede<span class="text-terracotta" aria-hidden="true">✎</span>facili
+    </a>
+    <nav class="hidden items-center gap-[22px] text-[15px] font-bold min-[601px]:flex" aria-label="Sezioni">
+      {
+        NAV.map((voce) => (
+          <a href={voce.href} class="hover:text-terracotta">
+            {voce.label}
+          </a>
+        ))
+      }
+    </nav>
+    <MenuMobile client:load links={NAV} />
+  </div>
+</header>

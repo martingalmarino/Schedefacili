@@ -1,0 +1,105 @@
+---
+import AttivaDsa from '../../components/schede/AttivaDsa.astro';
+import GeneratoreCrucipuzzle from '../../components/schede/GeneratoreCrucipuzzle';
+import TestoClasse from '../../components/schede/TestoClasse.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Faq from '../../components/Faq.astro';
+import InBreve from '../../components/InBreve.astro';
+import animali from '../../data/parole/animali.json';
+import colori from '../../data/parole/colori.json';
+import corpo from '../../data/parole/corpo-umano.json';
+import frutta from '../../data/parole/frutta.json';
+import mestieri from '../../data/parole/mestieri.json';
+import natale from '../../data/parole/natale.json';
+import scuola from '../../data/parole/scuola.json';
+import stagioni from '../../data/parole/stagioni.json';
+import { dataInItaliano } from '../../lib/ricorrenze';
+import { urlAssoluto, webApplication, webPage } from '../../lib/schema';
+import { buildSeo } from '../../lib/seo';
+import { SEO_CRUCIPUZZLE, testoClasseCrucipuzzle } from '../../lib/testi-schede';
+import Base from '../../layouts/Base.astro';
+
+const etichette: Record<string, string> = {
+  animali: 'Animali',
+  stagioni: 'Stagioni',
+  natale: 'Natale',
+  'corpo-umano': 'Corpo umano',
+  frutta: 'Frutta',
+  scuola: 'Scuola',
+  colori: 'Colori',
+  mestieri: 'Mestieri',
+};
+const temi = [animali, stagioni, natale, corpo, frutta, scuola, colori, mestieri].map((tema) => ({
+  tema: tema.tema,
+  etichetta: etichette[tema.tema] ?? tema.tema,
+  parole: tema.parole,
+}));
+const path = '/generatori/crucipuzzle/';
+const aggiornato = dataInItaliano(new Date());
+const domande = [
+  {
+    domanda: 'Perché una parola non entra?',
+    risposta: 'Perché è più lunga del lato della griglia, oppure perché le caselle libere non bastano. Accorcia l’elenco o aumenta le caselle.',
+  },
+  {
+    domanda: 'Posso scrivere parole con l’accento?',
+    risposta: 'Sì. L’accento e l’apostrofo si tolgono e la parola passa in maiuscolo: «L’ape» diventa APE.',
+  },
+  {
+    domanda: 'Cosa cambia in modalità DSA?',
+    risposta: 'Le lettere si ingrandiscono e restano solo le direzioni orizzontale e verticale. Diagonali e senso contrario si spengono.',
+  },
+  {
+    domanda: 'Dove vedo le soluzioni?',
+    risposta: 'Se spunti «Stampa con le soluzioni», in fondo al foglio compare una seconda griglia con solo le parole.',
+  },
+];
+const seo = buildSeo({
+  title: SEO_CRUCIPUZZLE.title,
+  description: SEO_CRUCIPUZZLE.description,
+  path,
+  h1: SEO_CRUCIPUZZLE.h1,
+  keywords: ['crucipuzzle da stampare', 'generatore crucipuzzle', 'crucipuzzle scuola primaria'],
+  image: '/og/generatori.png',
+  schema: [
+    webPage({
+      path,
+      name: SEO_CRUCIPUZZLE.h1,
+      description: SEO_CRUCIPUZZLE.description,
+      dateModified: new Date().toISOString(),
+    }),
+    webApplication({
+      nome: SEO_CRUCIPUZZLE.h1,
+      descrizione: SEO_CRUCIPUZZLE.description,
+      url: urlAssoluto(path),
+    }),
+  ],
+});
+---
+
+<Base seo={seo}>
+  <div class="no-stampa">
+    <Breadcrumbs
+      items={[
+        { nome: 'Home', href: '/' },
+        { nome: 'Generatori', href: '/generatori/' },
+        { nome: 'Crucipuzzle', href: path },
+      ]}
+    />
+  </div>
+  <main id="scheda" class="mx-auto max-w-[1120px] px-6 pb-16">
+    <AttivaDsa />
+    <h1 class="mt-2 mb-4 font-display text-[34px] leading-tight font-semibold min-[601px]:text-[40px]">{SEO_CRUCIPUZZLE.h1}</h1>
+    <div class="no-stampa">
+      <InBreve aggiornato={aggiornato}>
+        Scrivi le parole, scegli le caselle e le direzioni e guarda l’anteprima prima di stampare. Con lo stesso numero
+        di scheda la griglia non cambia. La modalità DSA lascia lettere grandi e solo due direzioni.
+      </InBreve>
+    </div>
+    <GeneratoreCrucipuzzle client:load temi={temi} />
+    <TestoClasse testo={testoClasseCrucipuzzle()}>
+      <h2 class="mt-10 text-[28px]">Domande</h2>
+      <Faq domande={domande} />
+    </TestoClasse>
+  </main>
+</Base>

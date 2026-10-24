@@ -1,0 +1,34 @@
+---
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import InBreve from '../components/InBreve.astro';
+import type { SeoResult } from '../lib/seo';
+import Base from './Base.astro';
+
+interface Props {
+  seo: SeoResult;
+  aggiornato?: string;
+  bozza?: boolean;
+}
+
+const { seo, aggiornato, bozza = false } = Astro.props;
+---
+
+<Base seo={seo}>
+  <Breadcrumbs items={[{ nome: 'Home', href: '/' }, { nome: seo.h1, href: seo.path }]} />
+  <main class="mx-auto max-w-[760px] px-6 pb-16">
+    {
+      bozza && (
+        <p class="mt-4 rounded-lg bg-ocra px-4 py-3 font-bold text-inchiostro" role="note">
+          Bozza: testo da far verificare a un legale
+        </p>
+      )
+    }
+    <h1 class="mt-2 mb-4 font-display text-[34px] leading-tight font-semibold min-[601px]:text-[40px]">{seo.h1}</h1>
+    <InBreve aggiornato={aggiornato}>
+      <slot name="breve" />
+    </InBreve>
+    <div class="prose-legale mt-6">
+      <slot />
+    </div>
+  </main>
+</Base>

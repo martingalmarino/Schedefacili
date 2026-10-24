@@ -1,0 +1,744 @@
+{
+  "anno": "2026-2027",
+  "festivitaNazionali": {
+    "4-ottobre": {
+      "stato": "ufficiale",
+      "nome": "Festa nazionale di San Francesco d'Assisi, patrono d'Italia",
+      "fonte": {
+        "titolo": "Legge 8 ottobre 2025, n. 151 – Istituzione della festa nazionale di San Francesco d'Assisi (GU Serie Generale n. 236 del 10-10-2025), in vigore dal 01/01/2026",
+        "url": "https://www.gazzettaufficiale.it/eli/id/2025/10/10/25G00153/SG",
+        "consultato": "2026-10-23"
+      }
+    }
+  },
+  "regioni": {
+    "abruzzo": {
+      "stato": "ufficiale",
+      "inizio": "2026-09-16",
+      "fine": "2027-06-09",
+      "natale": {
+        "dal": "2026-12-23",
+        "al": "2027-01-05"
+      },
+      "pasqua": {
+        "dal": "2027-03-25",
+        "al": "2027-03-30"
+      },
+      "ponti": [
+        {
+          "data": "2026-12-07",
+          "motivo": "Ponte (sospensione regionale)"
+        }
+      ],
+      "fonte": {
+        "titolo": "MIM – Riepilogo calendari scolastici regionali a.s. 2026/2027 (allegato all'O.M. n. 106 del 10 giugno 2026)",
+        "url": "https://www.mim.gov.it/documents/20182/10323380/Riepilogo+Calendari+scolastici+regionali+a.s.+2026_2027_.pdf/5aff7d2d-7e89-036b-6e18-fc8810a477b0",
+        "pagina": "1",
+        "consultato": "2026-10-23"
+      }
+    },
+    "basilicata": {
+      "stato": "ufficiale",
+      "inizio": "2026-09-16",
+      "fine": "2027-06-08",
+      "natale": null,
+      "pasqua": {
+        "dal": "2027-03-25",
+        "al": "2027-03-30"
+      },
+      "ponti": [
+        {
+          "data": "2027-02-08",
+          "motivo": "Carnevale (sospensione regionale)"
+        },
+        {
+          "data": "2027-02-09",
+          "motivo": "Carnevale (sospensione regionale)"
+        }
+      ],
+      "fonte": {
+        "titolo": "MIM – Riepilogo calendari scolastici regionali a.s. 2026/2027 (allegato all'O.M. n. 106 del 10 giugno 2026)",
+        "url": "https://www.mim.gov.it/documents/20182/10323380/Riepilogo+Calendari+scolastici+regionali+a.s.+2026_2027_.pdf/5aff7d2d-7e89-036b-6e18-fc8810a477b0",
+        "pagina": "1",
+        "consultato": "2026-10-23"
+      },
+      "nota": "Il riepilogo MIM non riporta le vacanze di Natale per la Basilicata: campo lasciato vuoto finché non si verifica la delibera regionale."
+    },
+    "calabria": {
+      "stato": "ufficiale",
+      "inizio": "2026-09-15",
+      "fine": "2027-06-08",
+      "natale": {
+        "dal": "2026-12-23",
+        "al": "2027-01-06"
+      },
+      "pasqua": {
+        "dal": "2027-03-25",
+        "al": "2027-03-30"
+      },
+      "ponti": [
+        {
+          "data": "2026-11-02",
+          "motivo": "Ponte (sospensione regionale)"
+        },
+        {
+          "data": "2026-12-07",
+          "motivo": "Ponte (sospensione regionale)"
+        }
+      ],
+      "fonte": {
+        "titolo": "MIM – Riepilogo calendari scolastici regionali a.s. 2026/2027 (allegato all'O.M. n. 106 del 10 giugno 2026)",
+        "url": "https://www.mim.gov.it/documents/20182/10323380/Riepilogo+Calendari+scolastici+regionali+a.s.+2026_2027_.pdf/5aff7d2d-7e89-036b-6e18-fc8810a477b0",
+        "pagina": "1",
+        "consultato": "2026-10-23"
+      }
+    },
+    "campania": {
+      "stato": "ufficiale",
+      "inizio": "2026-09-15",
+      "fine": "2027-06-08",
+      "natale": {
+        "dal": "2026-12-23",
+        "al": "2027-01-05"
+      },
+      "pasqua": {
+        "dal": "2027-03-25",
+        "al": "2027-03-30"
+      },
+      "ponti": [
+        {
+          "data": "2026-11-02",
+          "motivo": "Ponte (sospensione regionale)"
+        },
+        {
+          "data": "2026-12-07",
+          "motivo": "Ponte (sospensione regionale)"
+        },
+        {
+          "data": "2027-02-08",
+          "motivo": "Carnevale (sospensione regionale)"
+        },
+        {
+          "data": "2027-02-09",
+          "motivo": "Carnevale (sospensione regionale)"
+        }
+      ],
+      "fonte": {
+        "titolo": "MIM – Riepilogo calendari scolastici regionali a.s. 2026/2027 (allegato all'O.M. n. 106 del 10 giugno 2026)",
+        "url": "https://www.mim.gov.it/documents/20182/10323380/Riepilogo+Calendari+scolastici+regionali+a.s.+2026_2027_.pdf/5aff7d2d-7e89-036b-6e18-fc8810a477b0",
+        "pagina": "1",
+        "consultato": "2026-10-23"
+      },
+      "nota": "Nel PDF MIM l'inizio è stampato 15.09.2025 e alcune date natalizie con anno 2025/2026: refusi evidenti, interpretati come a.s. 2026/27."
+    },
+    "emilia-romagna": {
+      "stato": "ufficiale",
+      "inizio": "2026-09-15",
+      "fine": "2027-06-05",
+      "natale": {
+        "dal": "2026-12-24",
+        "al": "2027-01-06"
+      },
+      "pasqua": {
+        "dal": "2027-03-25",
+        "al": "2027-03-30"
+      },
+      "ponti": [
+        {
+          "data": "2026-11-02",
+          "motivo": "Ponte (sospensione regionale)"
+        }
+      ],
+      "fonte": {
+        "titolo": "MIM – Riepilogo calendari scolastici regionali a.s. 2026/2027 (allegato all'O.M. n. 106 del 10 giugno 2026)",
+        "url": "https://www.mim.gov.it/documents/20182/10323380/Riepilogo+Calendari+scolastici+regionali+a.s.+2026_2027_.pdf/5aff7d2d-7e89-036b-6e18-fc8810a477b0",
+        "pagina": "1",
+        "consultato": "2026-10-23"
+      },
+      "nota": "Nel PDF MIM il Natale è stampato 24.12.2025–06.01.2026: refuso, interpretato come 2026/27."
+    },
+    "friuli-venezia-giulia": {
+      "stato": "ufficiale",
+      "inizio": "2026-09-14",
+      "fine": "2027-06-09",
+      "natale": {
+        "dal": "2026-12-24",
+        "al": "2027-01-05"
+      },
+      "pasqua": {
+        "dal": "2027-03-25",
+        "al": "2027-03-30"
+      },
+      "ponti": [
+        {
+          "data": "2026-12-07",
+          "motivo": "Ponte (sospensione regionale)"
+        },
+        {
+          "data": "2027-02-08",
+          "motivo": "Carnevale (sospensione regionale)"
+        },
+        {
+          "data": "2027-02-09",
+          "motivo": "Carnevale (sospensione regionale)"
+        },
+        {
+          "data": "2027-02-10",
+          "motivo": "Carnevale (sospensione regionale)"
+        }
+      ],
+      "fonte": {
+        "titolo": "MIM – Riepilogo calendari scolastici regionali a.s. 2026/2027 (allegato all'O.M. n. 106 del 10 giugno 2026)",
+        "url": "https://www.mim.gov.it/documents/20182/10323380/Riepilogo+Calendari+scolastici+regionali+a.s.+2026_2027_.pdf/5aff7d2d-7e89-036b-6e18-fc8810a477b0",
+        "pagina": "1",
+        "consultato": "2026-10-23"
+      }
+    },
+    "lazio": {
+      "stato": "ufficiale",
+      "inizio": "2026-09-15",
+      "fine": "2027-06-08",
+      "natale": {
+        "dal": "2026-12-23",
+        "al": "2027-01-06"
+      },
+      "pasqua": {
+        "dal": "2027-03-25",
+        "al": "2027-03-30"
+      },
+      "ponti": [],
+      "fonte": {
+        "titolo": "MIM – Riepilogo calendari scolastici regionali a.s. 2026/2027 (allegato all'O.M. n. 106 del 10 giugno 2026)",
+        "url": "https://www.mim.gov.it/documents/20182/10323380/Riepilogo+Calendari+scolastici+regionali+a.s.+2026_2027_.pdf/5aff7d2d-7e89-036b-6e18-fc8810a477b0",
+        "pagina": "1",
+        "consultato": "2026-10-23"
+      }
+    },
+    "liguria": {
+      "stato": "ufficiale",
+      "inizio": "2026-09-14",
+      "fine": "2027-06-08",
+      "natale": {
+        "dal": "2026-12-23",
+        "al": "2027-01-06"
+      },
+      "pasqua": {
+        "dal": "2027-03-25",
+        "al": "2027-03-30"
+      },
+      "ponti": [
+        {
+          "data": "2026-12-07",
+          "motivo": "Ponte (sospensione regionale)"
+        },
+        {
+          "data": "2027-02-08",
+          "motivo": "Carnevale (sospensione regionale)"
+        },
+        {
+          "data": "2027-02-09",
+          "motivo": "Carnevale (sospensione regionale)"
+        }
+      ],
+      "fonte": {
+        "titolo": "MIM – Riepilogo calendari scolastici regionali a.s. 2026/2027 (allegato all'O.M. n. 106 del 10 giugno 2026)",
+        "url": "https://www.mim.gov.it/documents/20182/10323380/Riepilogo+Calendari+scolastici+regionali+a.s.+2026_2027_.pdf/5aff7d2d-7e89-036b-6e18-fc8810a477b0",
+        "pagina": "1",
+        "consultato": "2026-10-23"
+      }
+    },
+    "lombardia": {
+      "stato": "ufficiale",
+      "inizio": "2026-09-14",
+      "fine": "2027-06-08",
+      "natale": {
+        "dal": "2026-12-23",
+        "al": "2027-01-05"
+      },
+      "pasqua": {
+        "dal": "2027-03-25",
+        "al": "2027-03-30"
+      },
+      "ponti": [
+        {
+          "data": "2027-02-08",
+          "motivo": "Carnevale (sospensione regionale)"
+        },
+        {
+          "data": "2027-02-09",
+          "motivo": "Carnevale (sospensione regionale)"
+        }
+      ],
+      "fonte": {
+        "titolo": "MIM – Riepilogo calendari scolastici regionali a.s. 2026/2027 (allegato all'O.M. n. 106 del 10 giugno 2026)",
+        "url": "https://www.mim.gov.it/documents/20182/10323380/Riepilogo+Calendari+scolastici+regionali+a.s.+2026_2027_.pdf/5aff7d2d-7e89-036b-6e18-fc8810a477b0",
+        "pagina": "1",
+        "consultato": "2026-10-23"
+      }
+    },
+    "marche": {
+      "stato": "ufficiale",
+      "inizio": "2026-09-14",
+      "fine": "2027-06-05",
+      "natale": {
+        "dal": "2026-12-23",
+        "al": "2027-01-06"
+      },
+      "pasqua": {
+        "dal": "2027-03-25",
+        "al": "2027-03-30"
+      },
+      "ponti": [],
+      "fonte": {
+        "titolo": "MIM – Riepilogo calendari scolastici regionali a.s. 2026/2027 (allegato all'O.M. n. 106 del 10 giugno 2026)",
+        "url": "https://www.mim.gov.it/documents/20182/10323380/Riepilogo+Calendari+scolastici+regionali+a.s.+2026_2027_.pdf/5aff7d2d-7e89-036b-6e18-fc8810a477b0",
+        "pagina": "1",
+        "consultato": "2026-10-23"
+      }
+    },
+    "molise": {
+      "stato": "ufficiale",
+      "inizio": "2026-09-14",
+      "fine": "2027-06-09",
+      "natale": {
+        "dal": "2026-12-23",
+        "al": "2027-01-06"
+      },
+      "pasqua": {
+        "dal": "2027-03-25",
+        "al": "2027-03-30"
+      },
+      "ponti": [
+        {
+          "data": "2027-02-08",
+          "motivo": "Carnevale (sospensione regionale)"
+        },
+        {
+          "data": "2027-02-09",
+          "motivo": "Carnevale (sospensione regionale)"
+        },
+        {
+          "data": "2027-02-10",
+          "motivo": "Carnevale (sospensione regionale)"
+        },
+        {
+          "data": "2027-05-31",
+          "motivo": "Ponte (sospensione regionale)"
+        },
+        {
+          "data": "2027-06-01",
+          "motivo": "Ponte (sospensione regionale)"
+        }
+      ],
+      "fonte": {
+        "titolo": "MIM – Riepilogo calendari scolastici regionali a.s. 2026/2027 (allegato all'O.M. n. 106 del 10 giugno 2026)",
+        "url": "https://www.mim.gov.it/documents/20182/10323380/Riepilogo+Calendari+scolastici+regionali+a.s.+2026_2027_.pdf/5aff7d2d-7e89-036b-6e18-fc8810a477b0",
+        "pagina": "1",
+        "consultato": "2026-10-23"
+      }
+    },
+    "piemonte": {
+      "stato": "ufficiale",
+      "inizio": "2026-09-14",
+      "fine": "2027-06-10",
+      "natale": {
+        "dal": "2026-12-23",
+        "al": "2027-01-05"
+      },
+      "pasqua": {
+        "dal": "2027-03-25",
+        "al": "2027-03-30"
+      },
+      "ponti": [
+        {
+          "data": "2026-12-07",
+          "motivo": "Ponte (sospensione regionale)"
+        },
+        {
+          "data": "2027-02-06",
+          "motivo": "Carnevale (sospensione regionale)"
+        },
+        {
+          "data": "2027-02-07",
+          "motivo": "Carnevale (sospensione regionale)"
+        },
+        {
+          "data": "2027-02-08",
+          "motivo": "Carnevale (sospensione regionale)"
+        },
+        {
+          "data": "2027-02-09",
+          "motivo": "Carnevale (sospensione regionale)"
+        },
+        {
+          "data": "2027-02-10",
+          "motivo": "Carnevale (sospensione regionale)"
+        }
+      ],
+      "fonte": {
+        "titolo": "MIM – Riepilogo calendari scolastici regionali a.s. 2026/2027 (allegato all'O.M. n. 106 del 10 giugno 2026)",
+        "url": "https://www.mim.gov.it/documents/20182/10323380/Riepilogo+Calendari+scolastici+regionali+a.s.+2026_2027_.pdf/5aff7d2d-7e89-036b-6e18-fc8810a477b0",
+        "pagina": "1",
+        "consultato": "2026-10-23"
+      }
+    },
+    "puglia": {
+      "stato": "ufficiale",
+      "inizio": "2026-09-17",
+      "fine": "2027-06-08",
+      "natale": {
+        "dal": "2026-12-23",
+        "al": "2027-01-06"
+      },
+      "pasqua": {
+        "dal": "2027-03-25",
+        "al": "2027-03-30"
+      },
+      "ponti": [
+        {
+          "data": "2026-12-07",
+          "motivo": "Ponte (sospensione regionale)"
+        }
+      ],
+      "fonte": {
+        "titolo": "MIM – Riepilogo calendari scolastici regionali a.s. 2026/2027 (allegato all'O.M. n. 106 del 10 giugno 2026)",
+        "url": "https://www.mim.gov.it/documents/20182/10323380/Riepilogo+Calendari+scolastici+regionali+a.s.+2026_2027_.pdf/5aff7d2d-7e89-036b-6e18-fc8810a477b0",
+        "pagina": "1",
+        "consultato": "2026-10-23"
+      }
+    },
+    "sardegna": {
+      "stato": "ufficiale",
+      "inizio": "2026-09-16",
+      "fine": "2027-06-08",
+      "natale": {
+        "dal": "2026-12-23",
+        "al": "2027-01-05"
+      },
+      "pasqua": {
+        "dal": "2027-03-25",
+        "al": "2027-03-30"
+      },
+      "ponti": [
+        {
+          "data": "2026-11-02",
+          "motivo": "Ponte (sospensione regionale)"
+        },
+        {
+          "data": "2027-02-09",
+          "motivo": "Carnevale (sospensione regionale)"
+        },
+        {
+          "data": "2027-04-28",
+          "motivo": "Sa die de sa Sardigna"
+        }
+      ],
+      "fonte": {
+        "titolo": "MIM – Riepilogo calendari scolastici regionali a.s. 2026/2027 (allegato all'O.M. n. 106 del 10 giugno 2026)",
+        "url": "https://www.mim.gov.it/documents/20182/10323380/Riepilogo+Calendari+scolastici+regionali+a.s.+2026_2027_.pdf/5aff7d2d-7e89-036b-6e18-fc8810a477b0",
+        "pagina": "1",
+        "consultato": "2026-10-23"
+      }
+    },
+    "sicilia": {
+      "stato": "ufficiale",
+      "inizio": "2026-09-15",
+      "fine": "2027-06-10",
+      "natale": {
+        "dal": "2026-12-23",
+        "al": "2027-01-07"
+      },
+      "pasqua": {
+        "dal": "2027-03-25",
+        "al": "2027-03-30"
+      },
+      "ponti": [
+        {
+          "data": "2026-11-02",
+          "motivo": "Ponte (sospensione regionale)"
+        },
+        {
+          "data": "2026-12-07",
+          "motivo": "Ponte (sospensione regionale)"
+        }
+      ],
+      "fonte": {
+        "titolo": "MIM – Riepilogo calendari scolastici regionali a.s. 2026/2027 (allegato all'O.M. n. 106 del 10 giugno 2026)",
+        "url": "https://www.mim.gov.it/documents/20182/10323380/Riepilogo+Calendari+scolastici+regionali+a.s.+2026_2027_.pdf/5aff7d2d-7e89-036b-6e18-fc8810a477b0",
+        "pagina": "1",
+        "consultato": "2026-10-23"
+      }
+    },
+    "toscana": {
+      "stato": "ufficiale",
+      "inizio": "2026-09-15",
+      "fine": "2027-06-10",
+      "natale": {
+        "dal": "2026-12-24",
+        "al": "2027-01-06"
+      },
+      "pasqua": {
+        "dal": "2027-03-25",
+        "al": "2027-03-30"
+      },
+      "ponti": [],
+      "fonte": {
+        "titolo": "MIM – Riepilogo calendari scolastici regionali a.s. 2026/2027 (allegato all'O.M. n. 106 del 10 giugno 2026)",
+        "url": "https://www.mim.gov.it/documents/20182/10323380/Riepilogo+Calendari+scolastici+regionali+a.s.+2026_2027_.pdf/5aff7d2d-7e89-036b-6e18-fc8810a477b0",
+        "pagina": "1",
+        "consultato": "2026-10-23"
+      }
+    },
+    "umbria": {
+      "stato": "ufficiale",
+      "inizio": "2026-09-14",
+      "fine": "2027-06-08",
+      "natale": {
+        "dal": "2026-12-23",
+        "al": "2027-01-06"
+      },
+      "pasqua": {
+        "dal": "2027-03-25",
+        "al": "2027-03-30"
+      },
+      "ponti": [
+        {
+          "data": "2026-11-02",
+          "motivo": "Ponte (sospensione regionale)"
+        },
+        {
+          "data": "2026-12-07",
+          "motivo": "Ponte (sospensione regionale)"
+        }
+      ],
+      "fonte": {
+        "titolo": "MIM – Riepilogo calendari scolastici regionali a.s. 2026/2027 (allegato all'O.M. n. 106 del 10 giugno 2026)",
+        "url": "https://www.mim.gov.it/documents/20182/10323380/Riepilogo+Calendari+scolastici+regionali+a.s.+2026_2027_.pdf/5aff7d2d-7e89-036b-6e18-fc8810a477b0",
+        "pagina": "1",
+        "consultato": "2026-10-23"
+      }
+    },
+    "valle-d-aosta": {
+      "stato": "ufficiale",
+      "inizio": "2026-09-10",
+      "fine": "2027-06-09",
+      "natale": {
+        "dal": "2026-12-24",
+        "al": "2027-01-06"
+      },
+      "pasqua": {
+        "dal": "2027-03-25",
+        "al": "2027-03-30"
+      },
+      "ponti": [
+        {
+          "data": "2026-11-02",
+          "motivo": "Ponte (sospensione regionale)"
+        },
+        {
+          "data": "2026-12-07",
+          "motivo": "Ponte (sospensione regionale)"
+        },
+        {
+          "data": "2027-01-30",
+          "motivo": "Sant'Orso (sospensione regionale)"
+        },
+        {
+          "data": "2027-02-08",
+          "motivo": "Carnevale (sospensione regionale)"
+        },
+        {
+          "data": "2027-02-09",
+          "motivo": "Carnevale (sospensione regionale)"
+        },
+        {
+          "data": "2027-02-10",
+          "motivo": "Carnevale (sospensione regionale)"
+        }
+      ],
+      "fonte": {
+        "titolo": "MIM – Riepilogo calendari scolastici regionali a.s. 2026/2027 (allegato all'O.M. n. 106 del 10 giugno 2026)",
+        "url": "https://www.mim.gov.it/documents/20182/10323380/Riepilogo+Calendari+scolastici+regionali+a.s.+2026_2027_.pdf/5aff7d2d-7e89-036b-6e18-fc8810a477b0",
+        "pagina": "1",
+        "consultato": "2026-10-23"
+      }
+    },
+    "veneto": {
+      "stato": "ufficiale",
+      "inizio": "2026-09-10",
+      "fine": "2027-06-12",
+      "natale": {
+        "dal": "2026-12-24",
+        "al": "2027-01-05"
+      },
+      "pasqua": {
+        "dal": "2027-03-25",
+        "al": "2027-03-30"
+      },
+      "ponti": [
+        {
+          "data": "2026-10-30",
+          "motivo": "Ponte (sospensione regionale)"
+        },
+        {
+          "data": "2026-10-31",
+          "motivo": "Ponte (sospensione regionale)"
+        },
+        {
+          "data": "2026-11-02",
+          "motivo": "Ponte (sospensione regionale)"
+        },
+        {
+          "data": "2026-12-07",
+          "motivo": "Ponte (sospensione regionale)"
+        },
+        {
+          "data": "2027-02-08",
+          "motivo": "Carnevale (sospensione regionale)"
+        },
+        {
+          "data": "2027-02-09",
+          "motivo": "Carnevale (sospensione regionale)"
+        },
+        {
+          "data": "2027-02-10",
+          "motivo": "Carnevale (sospensione regionale)"
+        },
+        {
+          "data": "2027-04-29",
+          "motivo": "Ponte (sospensione regionale)"
+        },
+        {
+          "data": "2027-04-30",
+          "motivo": "Ponte (sospensione regionale)"
+        },
+        {
+          "data": "2027-05-31",
+          "motivo": "Ponte (sospensione regionale)"
+        },
+        {
+          "data": "2027-06-01",
+          "motivo": "Ponte (sospensione regionale)"
+        }
+      ],
+      "fonte": {
+        "titolo": "MIM – Riepilogo calendari scolastici regionali a.s. 2026/2027 (allegato all'O.M. n. 106 del 10 giugno 2026)",
+        "url": "https://www.mim.gov.it/documents/20182/10323380/Riepilogo+Calendari+scolastici+regionali+a.s.+2026_2027_.pdf/5aff7d2d-7e89-036b-6e18-fc8810a477b0",
+        "pagina": "1",
+        "consultato": "2026-10-23"
+      },
+      "nota": "Nel PDF MIM l'inizio è stampato 10.09.2025: refuso, interpretato come 10.09.2026."
+    },
+    "trento": {
+      "stato": "ufficiale",
+      "inizio": "2026-09-10",
+      "fine": "2027-06-08",
+      "natale": {
+        "dal": "2026-12-23",
+        "al": "2027-01-06"
+      },
+      "pasqua": {
+        "dal": "2027-03-25",
+        "al": "2027-03-31"
+      },
+      "ponti": [
+        {
+          "data": "2026-11-02",
+          "motivo": "Ponte (sospensione regionale)"
+        },
+        {
+          "data": "2026-12-07",
+          "motivo": "Ponte (sospensione regionale)"
+        },
+        {
+          "data": "2027-02-08",
+          "motivo": "Carnevale (sospensione regionale)"
+        },
+        {
+          "data": "2027-02-09",
+          "motivo": "Carnevale (sospensione regionale)"
+        },
+        {
+          "data": "2027-04-29",
+          "motivo": "Ponte (sospensione regionale)"
+        },
+        {
+          "data": "2027-04-30",
+          "motivo": "Ponte (sospensione regionale)"
+        }
+      ],
+      "fonte": {
+        "titolo": "MIM – Riepilogo calendari scolastici regionali a.s. 2026/2027 (allegato all'O.M. n. 106 del 10 giugno 2026)",
+        "url": "https://www.mim.gov.it/documents/20182/10323380/Riepilogo+Calendari+scolastici+regionali+a.s.+2026_2027_.pdf/5aff7d2d-7e89-036b-6e18-fc8810a477b0",
+        "pagina": "1",
+        "consultato": "2026-10-23"
+      }
+    },
+    "bolzano": {
+      "stato": "ufficiale",
+      "inizio": "2026-09-07",
+      "fine": "2027-06-16",
+      "natale": {
+        "dal": "2026-12-24",
+        "al": "2027-01-06"
+      },
+      "pasqua": {
+        "dal": "2027-03-25",
+        "al": "2027-03-30"
+      },
+      "ponti": [
+        {
+          "data": "2026-11-02",
+          "motivo": "Vacanze autunnali"
+        },
+        {
+          "data": "2026-11-03",
+          "motivo": "Vacanze autunnali"
+        },
+        {
+          "data": "2026-11-04",
+          "motivo": "Vacanze autunnali"
+        },
+        {
+          "data": "2026-11-05",
+          "motivo": "Vacanze autunnali"
+        },
+        {
+          "data": "2026-11-06",
+          "motivo": "Vacanze autunnali"
+        },
+        {
+          "data": "2026-12-07",
+          "motivo": "Ponte (sospensione regionale)"
+        },
+        {
+          "data": "2027-02-08",
+          "motivo": "Carnevale (sospensione regionale)"
+        },
+        {
+          "data": "2027-02-09",
+          "motivo": "Carnevale (sospensione regionale)"
+        },
+        {
+          "data": "2027-02-10",
+          "motivo": "Carnevale (sospensione regionale)"
+        },
+        {
+          "data": "2027-02-11",
+          "motivo": "Carnevale (sospensione regionale)"
+        },
+        {
+          "data": "2027-02-12",
+          "motivo": "Carnevale (sospensione regionale)"
+        }
+      ],
+      "fonte": {
+        "titolo": "MIM – Riepilogo calendari scolastici regionali a.s. 2026/2027 (allegato all'O.M. n. 106 del 10 giugno 2026)",
+        "url": "https://www.mim.gov.it/documents/20182/10323380/Riepilogo+Calendari+scolastici+regionali+a.s.+2026_2027_.pdf/5aff7d2d-7e89-036b-6e18-fc8810a477b0",
+        "pagina": "1",
+        "consultato": "2026-10-23"
+      },
+      "nota": "Nel PDF MIM la fine è stampata 16.06.2026: refuso, interpretato come 16.06.2027."
+    }
+  }
+}

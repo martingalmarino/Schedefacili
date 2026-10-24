@@ -1,0 +1,34 @@
+<script is:inline>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() {
+    dataLayer.push(arguments);
+  }
+  gtag('consent', 'default', {
+    ad_storage: 'denied',
+    ad_user_data: 'denied',
+    ad_personalization: 'denied',
+    analytics_storage: 'denied',
+    wait_for_update: 500,
+  });
+
+  window.riapriConsenso = function () {
+    var fc = window.googlefc;
+    if (fc && typeof fc.showRevocationMessage === 'function') {
+      fc.showRevocationMessage();
+      return;
+    }
+    document.querySelectorAll('[data-stato-consenso]').forEach(function (nodo) {
+      nodo.hidden = false;
+    });
+  };
+
+  document.addEventListener('click', function (evento) {
+    var nodo = evento.target;
+    if (nodo && nodo.closest && nodo.closest('[data-riapri-consenso]')) {
+      evento.preventDefault();
+      window.riapriConsenso();
+    }
+  });
+</script>
+<!-- [CMP]: pegar aquí el script de la CMP certificada por Google con TCF 2.2
+     (opción simple: AdSense › Privacy e messaggi; alternativas: Iubenda, Cookiebot) -->

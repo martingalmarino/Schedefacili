@@ -1,0 +1,11 @@
+---
+interface Props {
+  colonna?: boolean;
+}
+
+const { colonna = false } = Astro.props;
+---
+
+<div class:list={[colonna ? 'flex w-fit max-w-full flex-col items-start gap-2' : 'flex flex-wrap gap-2.5']}>
+  <slot />
+</div>

@@ -1,0 +1,33 @@
+---
+import { EMAIL, TITOLARE } from '../config/site';
+import { dataInItaliano } from '../lib/ricorrenze';
+import { webPage } from '../lib/schema';
+import { buildSeo } from '../lib/seo';
+import PaginaLegale from '../layouts/PaginaLegale.astro';
+
+const path = '/chi-siamo/';
+const h1 = 'Chi siamo';
+const description =
+  'Schede Facili pubblica schede gratuite per la scuola primaria e dell’infanzia: calendario, tabelline, crucipuzzle e cartine mute.';
+const aggiornato = dataInItaliano(new Date());
+const seo = buildSeo({
+  title: 'Chi siamo – Schede Facili',
+  description,
+  path,
+  h1,
+  keywords: ['schede facili', 'schede didattiche', 'scuola primaria'],
+  schema: [webPage({ path, name: h1, description, dateModified: new Date().toISOString() })],
+});
+---
+
+<PaginaLegale seo={seo} aggiornato={aggiornato}>
+  <p slot="breve">
+    Schede Facili pubblica schede didattiche gratuite per la scuola primaria e dell’infanzia. Si stampano in A4, senza
+    registrazione.
+  </p>
+  <p>
+    Nel sito ci sono il calendario scolastico per regione, le tabelline, i crucipuzzle e le cartine mute. Le date
+    regionali compaiono solo quando la pagina cita la delibera. Se la fonte manca, la pagina lo scrive.
+  </p>
+  <p>Il sito è curato da {TITOLARE}, persona fisica residente in Argentina. Per scrivere si usa l’indirizzo {EMAIL}.</p>
+</PaginaLegale>

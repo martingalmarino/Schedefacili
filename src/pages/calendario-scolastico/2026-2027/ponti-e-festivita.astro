@@ -1,0 +1,116 @@
+---
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import Faq from '../../../components/Faq.astro';
+import InBreve from '../../../components/InBreve.astro';
+import { ANNO, ANNO_SLUG } from '../../../config/site';
+import {
+  calendarioMisto,
+  dataEstesa,
+  FONTE_FESTIVITA,
+  giornoSettimana,
+  nomeGiorno,
+  SEO_PONTI,
+  urlNazionale,
+} from '../../../lib/calendario';
+import { dataInItaliano } from '../../../lib/ricorrenze';
+import { webPage } from '../../../lib/schema';
+import { buildSeo } from '../../../lib/seo';
+import Base from '../../../layouts/Base.astro';
+
+const voci = calendarioMisto();
+const ottobre = voci.find((voce) => voce.data === '2026-10-04');
+const aggiornato = dataInItaliano(new Date());
+const domande = [
+  {
+    domanda: 'Che cos’è un ponte scolastico?',
+    risposta:
+      'È un giorno senza lezione tra una festa e il fine settimana. Lo decide la Regione: qui non lo diamo per chiuso.',
+  },
+  {
+    domanda: 'Quando un ponte è possibile?',
+    risposta: 'Se la festa cade di martedì, il lunedì prima può essere ponte. Se cade di giovedì, può esserlo il venerdì dopo.',
+  },
+  {
+    domanda: 'Questi ponti sono già deliberati?',
+    risposta: 'No. Sono solo il calcolo sul calendario. La chiusura compare nella pagina della regione quando c’è la delibera.',
+  },
+  {
+    domanda: 'Il 4 ottobre 2026 crea un ponte?',
+    risposta:
+      ottobre && giornoSettimana(ottobre.data) === 0
+        ? 'No. Il 4 ottobre 2026 cade di domenica: è festa nazionale, ma non lascia un giorno da unire al fine settimana.'
+        : 'Dipende dal giorno della settimana. Il ponte è possibile solo se la festa cade di martedì o di giovedì.',
+  },
+];
+const seo = buildSeo({
+  title: SEO_PONTI.title,
+  description: SEO_PONTI.description,
+  path: `/calendario-scolastico/${ANNO_SLUG}/ponti-e-festivita/`,
+  h1: SEO_PONTI.h1,
+  keywords: ['ponti scolastici 2026 2027', 'festività nazionali scuola', '4 ottobre scuola', 'ponte dell’immacolata'],
+  image: '/og/calendario.png',
+  schema: [
+    webPage({
+      path: `/calendario-scolastico/${ANNO_SLUG}/ponti-e-festivita/`,
+      name: SEO_PONTI.h1,
+      description: SEO_PONTI.description,
+      dateModified: new Date().toISOString(),
+    }),
+  ],
+});
+---
+
+<Base seo={seo}>
+  <Breadcrumbs
+    items={[
+      { nome: 'Home', href: '/' },
+      { nome: 'Calendario scolastico', href: '/calendario-scolastico/' },
+      { nome: ANNO, href: urlNazionale() },
+      { nome: 'Ponti e festività', href: `/calendario-scolastico/${ANNO_SLUG}/ponti-e-festivita/` },
+    ]}
+  />
+  <main>
+    <div class="mx-auto max-w-[1120px] px-6 pb-8">
+      <h1 class="mt-2 mb-4 font-display text-[34px] leading-tight font-semibold min-[601px]:text-[40px]">{SEO_PONTI.h1}</h1>
+      <InBreve aggiornato={aggiornato}>
+        Le feste nazionali del 2026/27 valgono in tutta Italia. Un ponte è possibile quando la festa cade di martedì o
+        di giovedì, nel giorno accanto al fine settimana. Non è una chiusura decisa, finché la Regione non lo scrive in
+        delibera.
+      </InBreve>
+      <p class="mt-4 mb-3 text-muted">
+        La festa del santo patrono è locale e non ha una data unica: non la elenchiamo senza la delibera.
+      </p>
+      <div class="min-w-0">
+        <table class="tabella-mobile w-full border-collapse overflow-hidden rounded-[10px] bg-white">
+          <thead>
+            <tr>
+              <th class="bg-salvia px-3.5 py-2.5 text-left font-sans text-white">Data</th>
+              <th class="bg-salvia px-3.5 py-2.5 text-left font-sans text-white">Ricorrenza</th>
+              <th class="bg-salvia px-3.5 py-2.5 text-left font-sans text-white">Tipo</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              voci.map((voce) => (
+                <tr id={`festa-${voce.data}`} class="border-b border-solid border-[#eee]">
+                  <td class="px-3.5 py-2.5" data-label="Data">
+                    {dataEstesa(voce.data)}
+                    <span class="block text-[14px] font-normal text-muted">{nomeGiorno(voce.data)}</span>
+                  </td>
+                  <td class="px-3.5 py-2.5" data-label="Ricorrenza">{voce.nome}</td>
+                  <td class="px-3.5 py-2.5" data-label="Tipo">{voce.tipo}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+      <p class="mt-2 text-[14px] text-muted">
+        Fonte: <a href={FONTE_FESTIVITA.href}>{FONTE_FESTIVITA.etichetta}</a>. Pasqua e il lunedì dell’Angelo sono
+        calcolati con il computus gregoriano.
+      </p>
+      <h2 class="mt-8 mb-1 text-[28px]">Domande frequenti</h2>
+      <Faq domande={domande} />
+    </div>
+  </main>
+</Base>

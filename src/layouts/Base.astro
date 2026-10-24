@@ -1,0 +1,36 @@
+---
+import '../styles/global.css';
+import Anuncio from '../components/Anuncio.astro';
+import Consenso from '../components/Consenso.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import Seo from '../components/Seo.astro';
+import StrisciaProssimo from '../components/StrisciaProssimo';
+import type { SeoResult } from '../lib/seo';
+
+interface Props {
+  seo: SeoResult;
+  striscia?: boolean;
+}
+
+const { seo, striscia = false } = Astro.props;
+---
+
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <Consenso />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <Seo seo={seo} />
+  </head>
+  <body>
+    {striscia && <StrisciaProssimo client:only="preact" />}
+    <Header />
+    <slot />
+    <Anuncio />
+    <Footer />
+    <slot name="consenso" />
+  </body>
+</html>

@@ -1,0 +1,68 @@
+---
+import { ANNO_SLUG } from '../../../config/site';
+import calendarioJson from '../../../data/calendario/2026-2027.json';
+import { REGIONI } from '../../../data/regioni';
+import { schemaCalendario, type CalendarioVoce, type RegioneDato } from '../../../data/schemi';
+import SchedaRegione from '../../../components/calendario/SchedaRegione.astro';
+import {
+  descrizioneRegione,
+  faqRegione,
+  h1Regione,
+  inRegione,
+  titoloRegione,
+} from '../../../lib/calendario';
+import { dataInItaliano } from '../../../lib/ricorrenze';
+import { webPage } from '../../../lib/schema';
+import { buildSeo } from '../../../lib/seo';
+import Base from '../../../layouts/Base.astro';
+
+export function getStaticPaths() {
+  const calendario = schemaCalendario.parse(calendarioJson);
+  return REGIONI.map((regione) => ({
+    params: { regione: regione.slug },
+    props: { regione, voce: calendario.voci.find((voce) => voce.slug === regione.slug) },
+  }));
+}
+
+interface Props {
+  regione: RegioneDato;
+  voce: CalendarioVoce | undefined;
+}
+
+const { regione } = Astro.props;
+const voce = Astro.props.voce;
+if (!voce) {
+  throw new Error(`Manca il calendario di ${regione.slug}`);
+}
+
+const h1 = h1Regione(regione.slug, regione.nome);
+const description = descrizioneRegione(inRegione(regione.slug, regione.nome));
+const domande = faqRegione(regione, voce);
+const aggiornato = dataInItaliano(new Date());
+const seo = buildSeo({
+  title: titoloRegione(regione.nome),
+  description,
+  path: `/calendario-scolastico/${ANNO_SLUG}/${regione.slug}/`,
+  h1,
+  keywords: [
+    `calendario scolastico ${regione.nome.toLocaleLowerCase('it')} 2026 2027`,
+    `quando inizia la scuola ${inRegione(regione.slug, regione.nome)}`,
+    `vacanze di natale ${regione.nome.toLocaleLowerCase('it')} 2026`,
+    `ponti scolastici ${regione.nome.toLocaleLowerCase('it')}`,
+    `fine scuola ${regione.nome.toLocaleLowerCase('it')} 2027`,
+  ],
+  image: '/og/calendario.png',
+  schema: [
+    webPage({
+      path: `/calendario-scolastico/${ANNO_SLUG}/${regione.slug}/`,
+      name: h1,
+      description,
+      dateModified: voce.fonte?.consultato ?? new Date().toISOString(),
+    }),
+  ],
+});
+---
+
+<Base seo={seo}>
+  <SchedaRegione regione={regione} voce={voce} h1={h1} domande={domande} aggiornato={aggiornato} />
+</Base>

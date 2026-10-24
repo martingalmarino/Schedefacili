@@ -1,0 +1,32 @@
+---
+import { annunciAccesi } from '../lib/annunci';
+import { CMP_ATTIVA } from '../lib/cmp';
+
+const client = import.meta.env.PUBLIC_ADSENSE_CLIENT;
+const acceso = annunciAccesi({
+  enabled: import.meta.env.PUBLIC_ADSENSE_ENABLED,
+  client: typeof client === 'string' ? client : undefined,
+  cmpAttiva: CMP_ATTIVA,
+});
+---
+
+{
+  acceso && (
+    <aside
+      class="annuncio mx-auto my-8 min-h-[280px] w-full max-w-[1120px] px-6"
+      data-annuncio
+      aria-label="Spazio pubblicitario"
+    />
+  )
+}
+{
+  acceso && client && (
+    <script is:inline define:vars={{ client }}>
+      const script = document.createElement('script');
+      script.async = true;
+      script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${client}`;
+      script.crossOrigin = 'anonymous';
+      document.head.appendChild(script);
+    </script>
+  )
+}

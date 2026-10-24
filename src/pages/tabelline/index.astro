@@ -1,0 +1,78 @@
+---
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Faq from '../../components/Faq.astro';
+import InBreve from '../../components/InBreve.astro';
+import { dataInItaliano } from '../../lib/ricorrenze';
+import { webPage } from '../../lib/schema';
+import { buildSeo } from '../../lib/seo';
+import { h1Tabellina, NUMERI_TABELLINE, percorsoTabellina } from '../../lib/tabelline';
+import { SEO_HUB_TABELLINE } from '../../lib/testi-schede';
+import Base from '../../layouts/Base.astro';
+
+const path = '/tabelline/';
+const aggiornato = dataInItaliano(new Date());
+const domande = [
+  {
+    domanda: 'Quali tabelline posso stampare?',
+    risposta: 'Dall’1 al 10. Ogni tabellina ha la tabella intera, dieci esercizi a completamento e la versione DSA.',
+  },
+  {
+    domanda: 'Dov’è la tavola pitagorica?',
+    risposta: 'Nella pagina della tavola pitagorica, piena o vuota, con le tabelline dall’1 al 10 in un solo schema.',
+  },
+  {
+    domanda: 'Posso mescolare più tabelline sullo stesso foglio?',
+    risposta: 'Sì. Il generatore di tabelline ti fa scegliere i numeri, il tipo di buco e quante operazioni servono.',
+  },
+  {
+    domanda: 'La versione DSA cambia i risultati?',
+    risposta: 'No. Cambia il carattere, lo spazio tra le righe e toglie il corsivo. I prodotti restano gli stessi.',
+  },
+];
+const seo = buildSeo({
+  title: SEO_HUB_TABELLINE.title,
+  description: SEO_HUB_TABELLINE.description,
+  path,
+  h1: SEO_HUB_TABELLINE.h1,
+  keywords: ['tabelline da stampare', 'tabelline scuola primaria', 'esercizi tabelline'],
+  image: '/og/tabelline.png',
+  schema: [
+    webPage({
+      path,
+      name: SEO_HUB_TABELLINE.h1,
+      description: SEO_HUB_TABELLINE.description,
+      dateModified: new Date().toISOString(),
+    }),
+  ],
+});
+---
+
+<Base seo={seo}>
+  <div class="no-stampa">
+    <Breadcrumbs items={[{ nome: 'Home', href: '/' }, { nome: 'Tabelline', href: path }]} />
+  </div>
+  <main class="mx-auto max-w-[1120px] px-6 pb-16">
+    <h1 class="mt-2 mb-4 font-display text-[34px] leading-tight font-semibold min-[601px]:text-[40px]">{SEO_HUB_TABELLINE.h1}</h1>
+    <InBreve aggiornato={aggiornato}>
+      Dieci tabelline da stampare, dall’1 al 10, con la tabella intera e gli esercizi a completamento. C’è anche la tavola
+      pitagorica e un generatore per mescolare più numeri sullo stesso foglio.
+    </InBreve>
+    <ul class="mt-6 grid gap-3 min-[601px]:grid-cols-2">
+      {
+        NUMERI_TABELLINE.map((n) => (
+          <li>
+            <a href={percorsoTabellina(n)} class="block rounded-xl bg-white px-4 py-3 font-bold hover:text-terracotta">
+              {h1Tabellina(n)}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+    <p class="mt-6 flex flex-wrap gap-4 font-bold">
+      <a href="/tabelline/tavola-pitagorica/" class="hover:text-terracotta">Tavola pitagorica</a>
+      <a href="/generatori/tabelline/" class="hover:text-terracotta">Generatore di tabelline</a>
+    </p>
+    <h2 class="mt-10 text-[28px]">Domande</h2>
+    <Faq domande={domande} />
+  </main>
+</Base>

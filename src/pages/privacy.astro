@@ -1,0 +1,66 @@
+---
+import { EMAIL, TITOLARE } from '../config/site';
+import { dataInItaliano } from '../lib/ricorrenze';
+import { webPage } from '../lib/schema';
+import { buildSeo } from '../lib/seo';
+import PaginaLegale from '../layouts/PaginaLegale.astro';
+
+const path = '/privacy/';
+const h1 = 'Informativa privacy';
+const description =
+  'Chi tratta i dati di chi visita Schede Facili, su quale base giuridica, per quanto tempo e come si esercitano i diritti.';
+const aggiornato = dataInItaliano(new Date());
+const seo = buildSeo({
+  title: 'Informativa privacy – Schede Facili',
+  description,
+  path,
+  h1,
+  keywords: ['privacy schede facili', 'titolare del trattamento'],
+  schema: [webPage({ path, name: h1, description, dateModified: new Date().toISOString() })],
+});
+---
+
+<PaginaLegale seo={seo} aggiornato={aggiornato} bozza>
+  <p slot="breve">
+    Questa pagina indica chi tratta i dati di chi visita il sito, per quale motivo e quali diritti ha l’utente. Il testo
+    è una bozza.
+  </p>
+  <h2>Titolare del trattamento</h2>
+  <p>
+    Il titolare è {TITOLARE}, persona fisica con residenza in Argentina. Le richieste sui dati si inviano a {EMAIL}.
+  </p>
+  <h2>Dati trattati</h2>
+  <p>
+    Il sito non crea account e non ha un modulo. I dati di cui si parla sono i dati di navigazione e, se l’utente
+    acconsente, i cookie di terze parti pubblicitari tramite [CMP] e Google AdSense. Oggi la pubblicità è spenta.
+  </p>
+  <h2>Basi giuridiche</h2>
+  <p>
+    La pubblicità si basa sul consenso dell’utente (art. 6, par. 1, lett. a, del regolamento (UE) 2016/679). La
+    sicurezza del sito si basa sull’interesse legittimo del titolare (art. 6, par. 1, lett. f).
+  </p>
+  <h2>Trasferimento fuori dallo Spazio economico europeo</h2>
+  <p>
+    Il titolare risiede in Argentina. La Commissione europea ha adottato una decisione di adeguatezza per l’Argentina
+    (decisione 2003/490/CE). Google LLC può trattare dati negli Stati Uniti nell’ambito dell’EU-US Data Privacy
+    Framework. «da verificare con un legale»
+  </p>
+  <h2>Tempi di conservazione</h2>
+  <p>
+    Non si conservano account, messaggi o elenchi di utenti. I log tecnici di chi ospita il sito restano per il tempo
+    necessario alla sicurezza. I cookie pubblicitari, quando la pubblicità sarà attiva, durano per il tempo indicato da
+    [CMP] e da Google.
+  </p>
+  <h2>Diritti dell’utente</h2>
+  <p>
+    L’utente può chiedere accesso, rettifica, cancellazione, limitazione e portabilità, può opporsi al trattamento e
+    può revocare il consenso, secondo gli artt. 15–22 del regolamento. La richiesta si invia a {EMAIL}.
+  </p>
+  <h2>Reclamo</h2>
+  <p>
+    L’utente può proporre reclamo al Garante per la protezione dei dati personali,
+    <a href="https://www.garanteprivacy.it/">garanteprivacy.it</a>.
+  </p>
+  <h2>Aggiornamento</h2>
+  <p>Testo aggiornato il {aggiornato}.</p>
+</PaginaLegale>

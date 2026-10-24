@@ -1,0 +1,65 @@
+---
+import { ANNO_SLUG } from '../config/site';
+import { INFO, STRUMENTI } from '../data/nav';
+import { regioniPiuPopolose, urlCalendarioRegione } from '../data/regioni';
+import { dataInItaliano } from '../lib/ricorrenze';
+
+const aggiornato = dataInItaliano(new Date());
+const calendario = regioniPiuPopolose();
+---
+
+<footer class="mt-10 bg-inchiostro pt-9 pb-[22px] text-[14px] text-[#E9E4DA]">
+  <div class="mx-auto max-w-[1120px] px-6">
+    <div class="grid grid-cols-2 gap-6 min-[601px]:grid-cols-[2fr_1fr_1fr_1fr]">
+      <div>
+        <h4 class="m-0 mb-2 font-sans font-bold text-white">schede facili</h4>
+        <p class="m-0">Materiali semplici e curati per insegnanti e genitori.</p>
+      </div>
+      <div>
+        <h4 class="m-0 mb-2 font-sans font-bold text-white">Strumenti</h4>
+        {
+          STRUMENTI.map((voce) => (
+            <a href={voce.href} class="my-1 block hover:text-white">
+              {voce.label}
+            </a>
+          ))
+        }
+      </div>
+      <div>
+        <h4 class="m-0 mb-2 font-sans font-bold text-white">Calendario</h4>
+        {
+          calendario.map((regione) => (
+            <a href={urlCalendarioRegione(regione.slug)} class="my-1 block hover:text-white">
+              {regione.nome}
+            </a>
+          ))
+        }
+        <a href={`/calendario-scolastico/${ANNO_SLUG}/`} class="my-1 block hover:text-white">Tutte le regioni</a>
+      </div>
+      <div>
+        <h4 class="m-0 mb-2 font-sans font-bold text-white">Info</h4>
+        {
+          INFO.map((voce) => (
+            <a href={voce.href} class="my-1 block hover:text-white">
+              {voce.label}
+            </a>
+          ))
+        }
+        <button
+          id="gestisci-cookie"
+          type="button"
+          data-riapri-consenso
+          class="my-1 block cursor-pointer border-0 bg-transparent p-0 text-left font-inherit text-inherit hover:text-white"
+        >
+          Gestisci cookie
+        </button>
+        <p data-stato-consenso hidden class="my-1">
+          Il pannello dei cookie non è ancora attivo.
+        </p>
+      </div>
+    </div>
+    <p class="mt-[22px] border-t border-solid border-[#3A4562] pt-3 opacity-85">
+      Fonti: Ministero dell’Istruzione e del Merito, delibere regionali · Confini ISTAT, CC BY 4.0 · Aggiornato il {aggiornato}
+    </p>
+  </div>
+</footer>

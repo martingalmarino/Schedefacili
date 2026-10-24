@@ -1,0 +1,31 @@
+---
+import TastoStampa from '../calendario/TastoStampa.astro';
+import { FONTE_CONFINI } from '../../data/cartine';
+import { LICENZA_CARTE } from '../../lib/cartine-pagine';
+import ControlliCarta from './ControlliCarta';
+
+interface Props {
+  slug: string;
+  dettaglio: string;
+  h1: string;
+}
+
+const { slug, dettaglio, h1 } = Astro.props;
+const sorgenti = import.meta.glob('../../data/cartine/*.svg', { query: '?raw', import: 'default', eager: true });
+const trovato = Object.entries(sorgenti).find(([path]) => path.endsWith(`/${slug}.svg`));
+if (!trovato) throw new Error(`Manca la cartina ${slug}`);
+const svg = String(trovato[1]).replace(/aria-label="[^"]*"/, `aria-label="${h1}"`);
+---
+
+<figure class="m-0">
+  <div class="no-stampa mb-4 flex flex-wrap items-center gap-3">
+    <ControlliCarta client:load dettaglio={dettaglio} />
+    <div class="w-full max-w-xs">
+      <TastoStampa etichetta="Stampa (PDF A4)" />
+    </div>
+  </div>
+  <div class="mx-auto max-w-3xl rounded-xl bg-white p-3" set:html={svg} />
+  <figcaption class="mt-3 text-[15px]">
+    Elaborazione su dati <a href={FONTE_CONFINI} class="font-bold hover:text-terracotta">ISTAT</a>, licenza <a href={LICENZA_CARTE} class="font-bold hover:text-terracotta">CC BY 4.0</a>.
+  </figcaption>
+</figure>

@@ -1,0 +1,21 @@
+---
+import { faqPage, jsonLd, type VoceFaq } from '../lib/schema';
+
+interface Props {
+  domande: VoceFaq[];
+}
+
+const { domande } = Astro.props;
+---
+
+<section>
+  {
+    domande.map((voce) => (
+      <>
+        <h3 class="mt-4 mb-1 text-[19px]">{voce.domanda}</h3>
+        <p class="m-0">{voce.risposta}</p>
+      </>
+    ))
+  }
+</section>
+<script type="application/ld+json" set:html={jsonLd(faqPage(domande))} />

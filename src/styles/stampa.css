@@ -1,0 +1,35 @@
+@media print {
+  header,
+  footer,
+  .striscia,
+  .annuncio,
+  [data-annuncio],
+  .no-stampa {
+    display: none !important;
+  }
+
+  html,
+  body,
+  body * {
+    background: transparent !important;
+    color: #000 !important;
+    box-shadow: none !important;
+  }
+
+  .solo-stampa {
+    display: block !important;
+  }
+
+  .soluzioni {
+    break-before: page;
+  }
+}
+
+.solo-stampa {
+  display: none;
+}
+
+@page {
+  size: A4;
+  margin: 12mm;
+}

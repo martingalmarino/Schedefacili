@@ -1,0 +1,70 @@
+---
+import Faq from '../../components/Faq.astro';
+import InBreve from '../../components/InBreve.astro';
+import Pill from '../../components/Pill.astro';
+import Pills from '../../components/Pills.astro';
+import { REGIONI, urlCalendarioRegione } from '../../data/regioni';
+import { SEO_HUB, urlNazionale, urlPonti } from '../../lib/calendario';
+import { dataInItaliano } from '../../lib/ricorrenze';
+import { webPage } from '../../lib/schema';
+import { buildSeo } from '../../lib/seo';
+import Base from '../../layouts/Base.astro';
+
+const aggiornato = dataInItaliano(new Date());
+const domande = [
+  {
+    domanda: 'Il calendario scolastico è uguale in tutta Italia?',
+    risposta: 'No. Inizio, fine, vacanze e ponti li decide la Regione con una delibera.',
+  },
+  {
+    domanda: 'Le date 2026/27 sono già verificabili?',
+    risposta:
+      'Sì. Sono nel riepilogo del Ministero, con la fonte in ogni pagina. Se un intervallo manca, come il Natale in Basilicata, non viene inventato.',
+  },
+  {
+    domanda: 'Quali feste valgono già per tutte le scuole?',
+    risposta: 'Le feste nazionali, tra cui il 4 ottobre. I ponti possibili sono calcolati a parte, non sono chiusure decise.',
+  },
+  {
+    domanda: 'Come scelgo la mia regione?',
+    risposta: 'Apri la regione qui sotto, oppure la tabella con tutte le regioni.',
+  },
+];
+const seo = buildSeo({
+  title: SEO_HUB.title,
+  description: SEO_HUB.description,
+  path: '/calendario-scolastico/',
+  h1: SEO_HUB.h1,
+  keywords: ['calendario scolastico', 'calendario scolastico regioni', 'date scuola 2026 2027', 'ponti scolastici'],
+  image: '/og/calendario.png',
+  schema: [
+    webPage({
+      path: '/calendario-scolastico/',
+      name: SEO_HUB.h1,
+      description: SEO_HUB.description,
+      dateModified: new Date().toISOString(),
+    }),
+  ],
+});
+---
+
+<Base seo={seo}>
+  <main class="mx-auto max-w-[1120px] px-6 pt-8 pb-8">
+    <h1 class="mb-4 font-display text-[34px] leading-tight font-semibold min-[601px]:text-[40px]">{SEO_HUB.h1}</h1>
+    <InBreve aggiornato={aggiornato}>
+      Il calendario scolastico cambia da Regione a Regione. Per il 2026/27 inizio, fine, vacanze e ponti arrivano dal
+      riepilogo del Ministero. Se un dato non c’è, la pagina lo dice. Le feste nazionali valgono in tutta Italia.
+    </InBreve>
+    <p class="mt-4 mb-5">
+      <a href={urlNazionale()} class="font-bold hover:text-terracotta">Tutte le regioni a confronto</a>
+      <span aria-hidden="true"> · </span>
+      <a href={urlPonti()} class="font-bold hover:text-terracotta">Ponti e festività</a>
+    </p>
+    <h2 class="mb-3 text-[28px]">Scegli la regione</h2>
+    <Pills>
+      {REGIONI.map((regione) => <Pill href={urlCalendarioRegione(regione.slug)} etichetta={regione.nome} />)}
+    </Pills>
+    <h2 class="mt-8 mb-1 text-[28px]">Domande frequenti</h2>
+    <Faq domande={domande} />
+  </main>
+</Base>

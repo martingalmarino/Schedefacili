@@ -1,0 +1,82 @@
+---
+import AttivaDsa from '../../components/schede/AttivaDsa.astro';
+import GeneratoreTabelline from '../../components/schede/GeneratoreTabelline';
+import TestoClasse from '../../components/schede/TestoClasse.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Faq from '../../components/Faq.astro';
+import InBreve from '../../components/InBreve.astro';
+import { dataInItaliano } from '../../lib/ricorrenze';
+import { urlAssoluto, webApplication, webPage } from '../../lib/schema';
+import { buildSeo } from '../../lib/seo';
+import { SEO_GENERATORE_TABELLINE, testoClasseGeneratoreTabelline } from '../../lib/testi-schede';
+import Base from '../../layouts/Base.astro';
+
+const path = '/generatori/tabelline/';
+const aggiornato = dataInItaliano(new Date());
+const domande = [
+  {
+    domanda: 'Perché il foglio non cambia da solo?',
+    risposta: 'Perché dipende dal numero della scheda. Con gli stessi numeri e lo stesso tipo di buco ottieni sempre le stesse operazioni.',
+  },
+  {
+    domanda: 'Cosa vuol dire che manca un fattore?',
+    risposta: 'L’alunno deve trovare un numero della moltiplicazione, non il risultato. Per esempio, quale numero moltiplicato per 7 dà 42.',
+  },
+  {
+    domanda: 'Quante operazioni metto in un compito?',
+    risposta: 'Dieci operazioni e due tabelline bastano per un esercizio. Venti operazioni sono già una verifica breve.',
+  },
+  {
+    domanda: 'Le soluzioni finiscono sul banco?',
+    risposta: 'Solo se spunti «Stampa con le soluzioni». Senza quella spunta il foglio mostra solo i buchi.',
+  },
+];
+const seo = buildSeo({
+  title: SEO_GENERATORE_TABELLINE.title,
+  description: SEO_GENERATORE_TABELLINE.description,
+  path,
+  h1: SEO_GENERATORE_TABELLINE.h1,
+  keywords: ['generatore tabelline', 'tabelline da stampare', 'esercizi tabelline dsa'],
+  image: '/og/generatori.png',
+  schema: [
+    webPage({
+      path,
+      name: SEO_GENERATORE_TABELLINE.h1,
+      description: SEO_GENERATORE_TABELLINE.description,
+      dateModified: new Date().toISOString(),
+    }),
+    webApplication({
+      nome: SEO_GENERATORE_TABELLINE.h1,
+      descrizione: SEO_GENERATORE_TABELLINE.description,
+      url: urlAssoluto(path),
+    }),
+  ],
+});
+---
+
+<Base seo={seo}>
+  <div class="no-stampa">
+    <Breadcrumbs
+      items={[
+        { nome: 'Home', href: '/' },
+        { nome: 'Generatori', href: '/generatori/' },
+        { nome: 'Tabelline', href: path },
+      ]}
+    />
+  </div>
+  <main id="scheda" class="mx-auto max-w-[1120px] px-6 pb-16">
+    <AttivaDsa />
+    <h1 class="mt-2 mb-4 font-display text-[34px] leading-tight font-semibold min-[601px]:text-[40px]">{SEO_GENERATORE_TABELLINE.h1}</h1>
+    <div class="no-stampa">
+      <InBreve aggiornato={aggiornato}>
+        Segni le tabelline, il tipo di buco e quante operazioni ti servono. Lo stesso numero di scheda ricostruisce lo
+        stesso foglio. Puoi stamparlo con le soluzioni e in versione DSA.
+      </InBreve>
+    </div>
+    <GeneratoreTabelline client:load />
+    <TestoClasse testo={testoClasseGeneratoreTabelline()}>
+      <h2 class="mt-10 text-[28px]">Domande</h2>
+      <Faq domande={domande} />
+    </TestoClasse>
+  </main>
+</Base>

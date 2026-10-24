@@ -1,0 +1,2 @@
+# Placeholder. La riga reale si aggiunge dopo la checklist in docs/cmp.md.
+# google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0

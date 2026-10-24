@@ -1,0 +1,80 @@
+---
+import { dataInItaliano } from '../lib/ricorrenze';
+import { webPage } from '../lib/schema';
+import { buildSeo } from '../lib/seo';
+import PaginaLegale from '../layouts/PaginaLegale.astro';
+
+const path = '/cookie/';
+const h1 = 'Cookie';
+const description =
+  'Cookie tecnici, cookie della CMP e cookie pubblicitari di Google. Come si revoca il consenso e come funziona il Consent Mode v2.';
+const aggiornato = dataInItaliano(new Date());
+const seo = buildSeo({
+  title: 'Cookie e consenso – Schede Facili',
+  description,
+  path,
+  h1,
+  keywords: ['cookie', 'consenso', 'consent mode'],
+  schema: [webPage({ path, name: h1, description, dateModified: new Date().toISOString() })],
+});
+---
+
+<PaginaLegale seo={seo} aggiornato={aggiornato}>
+  <p slot="breve">
+    Schede Facili non imposta cookie propri di profilazione. I cookie pubblicitari restano spenti finché non c’è una CMP
+    e il consenso dell’utente.
+  </p>
+  <div class="overflow-x-auto">
+    <table>
+      <thead>
+        <tr>
+          <th>Categoria</th>
+          <th>Chi li imposta</th>
+          <th>Scopo</th>
+          <th>Durata</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Tecnici</td>
+          <td>Schede Facili</td>
+          <td>Nessun cookie proprio. La versione DSA e la stampa restano nella pagina aperta.</td>
+          <td>Nessuna</td>
+        </tr>
+        <tr>
+          <td>Consenso</td>
+          <td>[CMP]</td>
+          <td>Elenco che la CMP certificata TCF 2.2 pubblicherà quando lo script sarà inserito.</td>
+          <td>[CMP]</td>
+        </tr>
+        <tr>
+          <td>Pubblicità</td>
+          <td>Google AdSense</td>
+          <td>Annunci. Oggi sono spenti. Con il consenso possono usare cookie pubblicitari.</td>
+          <td>Indicata da Google</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <h2>Come si revoca il consenso</h2>
+  <p>
+    Il pulsante «Gestisci cookie» riapre il pannello della CMP. Finché al posto di [CMP] non c’è lo script, il pannello
+    non si apre.
+  </p>
+  <p>
+    <button
+      type="button"
+      data-riapri-consenso
+      class="cursor-pointer rounded-full border-[1.5px] border-solid border-pill bg-white px-4 py-2 font-bold"
+    >
+      Gestisci cookie
+    </button>
+  </p>
+  <p data-stato-consenso hidden>Il pannello dei cookie non è ancora attivo.</p>
+  <h2>Consent Mode v2</h2>
+  <p>
+    Prima di ogni script di Google il sito nega ad_storage, ad_user_data, ad_personalization e analytics_storage, con
+    wait_for_update di 500 millisecondi. La CMP, quando c’è, può aggiornare questi valori dopo la scelta dell’utente.
+    Non si caricano Google Analytics né font da Google.
+  </p>
+</PaginaLegale>

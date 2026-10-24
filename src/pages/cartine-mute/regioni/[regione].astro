@@ -1,0 +1,130 @@
+---
+import CartinaFigura from '../../../components/schede/CartinaFigura.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import Faq from '../../../components/Faq.astro';
+import InBreve from '../../../components/InBreve.astro';
+import { FONTE_CONFINI } from '../../../data/cartine';
+import {
+  articoloCartina,
+  calendariDellaCartina,
+  cartineConfinanti,
+  LICENZA_CARTE,
+  regioniCartina,
+  seoCartina,
+  urlCartinaRegione,
+} from '../../../lib/cartine-pagine';
+import { dataInItaliano } from '../../../lib/ricorrenze';
+import { imageObject, urlAssoluto, webPage } from '../../../lib/schema';
+import { buildSeo } from '../../../lib/seo';
+import Base from '../../../layouts/Base.astro';
+
+export function getStaticPaths() {
+  return regioniCartina().map((carta) => ({ params: { regione: carta.slug }, props: { slug: carta.slug, nome: carta.nome } }));
+}
+
+interface Props {
+  slug: string;
+  nome: string;
+}
+
+const { slug, nome } = Astro.props;
+const path = urlCartinaRegione(slug);
+const seoCarta = seoCartina(slug, nome);
+const articolo = articoloCartina(slug, nome);
+const aggiornato = dataInItaliano(new Date());
+const calendari = calendariDellaCartina(slug);
+const vicine = cartineConfinanti(slug);
+const domande = [
+  {
+    domanda: 'La cartina scrive i nomi delle province?',
+    risposta: 'No. Con le province vedi solo i confini. Con i capoluoghi compare un punto, e il nome lo scrive l’alunno.',
+  },
+  {
+    domanda: 'Qual è la fonte dei confini?',
+    risposta: 'I confini amministrativi ISTAT al 1° gennaio 2026, versione generalizzata, licenza CC BY 4.0.',
+  },
+  {
+    domanda: calendari.length > 1 ? 'Quali calendari scolastici riguardano questa cartina?' : 'Dov’è il calendario scolastico?',
+    risposta:
+      calendari.length > 1
+        ? 'Il Trentino-Alto Adige ha due calendari: Provincia autonoma di Trento e Provincia autonoma di Bolzano.'
+        : `Nella pagina del calendario scolastico ${articolo}.`,
+  },
+];
+const seo = buildSeo({
+  title: seoCarta.title,
+  description: seoCarta.description,
+  path,
+  h1: seoCarta.h1,
+  keywords: [`cartina muta ${nome.toLowerCase()}`, 'cartina muta da stampare', 'province da stampare'],
+  image: '/og/cartine.png',
+  schema: [
+    webPage({ path, name: seoCarta.h1, description: seoCarta.description, dateModified: new Date().toISOString() }),
+    imageObject({
+      url: urlAssoluto(`/cartine/${slug}.svg`),
+      license: LICENZA_CARTE,
+      creditText: 'ISTAT',
+      nome: seoCarta.h1,
+      acquireLicensePage: FONTE_CONFINI,
+    }),
+  ],
+});
+---
+
+<Base seo={seo}>
+  <div class="no-stampa">
+    <Breadcrumbs
+      items={[
+        { nome: 'Home', href: '/' },
+        { nome: 'Cartine mute', href: '/cartine-mute/' },
+        { nome, href: path },
+      ]}
+    />
+  </div>
+  <main class="mx-auto max-w-[1120px] px-6 pb-16">
+    <h1 class="mt-2 mb-4 font-display text-[34px] leading-tight font-semibold min-[601px]:text-[40px]">{seoCarta.h1}</h1>
+    <div class="no-stampa">
+      <InBreve aggiornato={aggiornato}>
+        {seoCarta.h1} mostra il contorno, senza nomi. Puoi accendere i confini provinciali e un punto per ogni
+        capoluogo. I dati sono ISTAT, al 1° gennaio 2026.
+      </InBreve>
+    </div>
+    <CartinaFigura slug={slug} dettaglio="Con le province" h1={seoCarta.h1} />
+    <div class="no-stampa mt-8 max-w-[720px]">
+      <p>
+        Parti dalla carta muta e fai disegnare il confine a memoria, poi confronta. Il pulsante delle province serve
+        quando l’alunno deve contarle o colorarne una. I capoluoghi restano punti: il nome si scrive a matita, non è già
+        stampato.
+      </p>
+      <p class="mt-4 flex flex-wrap gap-x-4 gap-y-2 font-bold">
+        {
+          calendari.map((voce) => (
+            <a href={voce.href} class="hover:text-terracotta">
+              Calendario {voce.nome}
+            </a>
+          ))
+        }
+        <a href="/cartine-mute/italia/" class="hover:text-terracotta">Cartina dell’Italia</a>
+        <a href="/cartine-mute/" class="hover:text-terracotta">Tutte le cartine</a>
+      </p>
+      {
+        vicine.length > 0 && (
+          <>
+            <h2 class="mt-8 text-[28px]">Regioni confinanti</h2>
+            <ul class="mt-3 flex flex-wrap gap-3 font-bold">
+              {vicine.map((voce) => (
+                <li>
+                  <a href={voce.href} class="hover:text-terracotta">
+                    {voce.nome}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </>
+        )
+      }
+      <h2 class="mt-10 text-[28px]">Domande</h2>
+      <Faq domande={domande} />
+    </div>
+  </main>
+</Base>
