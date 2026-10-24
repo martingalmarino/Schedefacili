@@ -1,0 +1,81 @@
+---
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Faq from '../../components/Faq.astro';
+import InBreve from '../../components/InBreve.astro';
+import AttivaDsa from '../../components/schede/AttivaDsa.astro';
+import VersioneDsa from '../../components/schede/VersioneDsa';
+import TastoStampa from '../../components/calendario/TastoStampa.astro';
+import { dataAggiornamentoIso, testoAggiornato } from '../../lib/aggiornamento';
+import { FRASE_STAMPA } from '../../lib/fogli';
+import { webPage } from '../../lib/schema';
+import { buildSeo } from '../../lib/seo';
+import { svgTabella100 } from '../../lib/tabelle-romane';
+import { FAQ_100, IN_BREVE_100, SEO_ROMANI_100 } from '../../lib/testi-romani';
+import Base from '../../layouts/Base.astro';
+
+const path = '/numeri-romani/da-1-a-100/';
+const aggiornato = testoAggiornato();
+const seo = buildSeo({
+  title: SEO_ROMANI_100.title,
+  description: SEO_ROMANI_100.description,
+  path,
+  h1: SEO_ROMANI_100.h1,
+  keywords: [...SEO_ROMANI_100.keywords],
+  image: '/og/home.png',
+  schema: [webPage({ path, name: SEO_ROMANI_100.h1, description: SEO_ROMANI_100.description, dateModified: dataAggiornamentoIso() })],
+});
+const collegamenti = [
+  { href: '/numeri-romani/', etichetta: 'Regole e schede' },
+  { href: '/numeri-romani/da-1-a-1000/', etichetta: 'Da 1 a 1000' },
+  { href: '/numeri-romani/convertitore/', etichetta: 'Convertitore' },
+  { href: '/orologio-da-stampare/', etichetta: 'Orologio da stampare' },
+  { href: '/tabelline/', etichetta: 'Tabelline' },
+];
+---
+
+<Base seo={seo} stampaFoglio stampaDoppia>
+  <div class="no-stampa">
+    <Breadcrumbs
+      items={[
+        { nome: 'Home', href: '/' },
+        { nome: 'Numeri romani', href: '/numeri-romani/' },
+        { nome: 'Da 1 a 100', href: path },
+      ]}
+    />
+  </div>
+  <main id="scheda" class="scheda-foglio mx-auto max-w-[1120px] px-6 pb-16">
+    <AttivaDsa id="scheda" />
+    <div class="no-stampa">
+      <h1 class="mt-2 mb-4 font-display text-[34px] leading-tight font-semibold min-[601px]:text-[40px]">{SEO_ROMANI_100.h1}</h1>
+      <InBreve aggiornato={aggiornato}>{IN_BREVE_100}</InBreve>
+      <div class="comandi-scheda my-4 flex max-w-xl flex-wrap items-center gap-3">
+        <VersioneDsa client:load targetId="scheda" />
+        <div class="min-w-[220px] flex-1">
+          <TastoStampa etichetta="Stampa (PDF A4)" />
+        </div>
+      </div>
+      <p class="m-0 max-w-[640px]">{FRASE_STAMPA}</p>
+      <p class="mt-4 mb-2 text-muted">Il primo foglio è la tabella intera. Il secondo ha le caselle vuote alterne.</p>
+    </div>
+    <div class="anteprima-foglio">
+      <Fragment set:html={svgTabella100(false)} />
+    </div>
+    <div class="anteprima-foglio interruzione-foglio mt-6">
+      <Fragment set:html={svgTabella100(true)} />
+    </div>
+    <div class="no-stampa">
+      <h2 class="mt-10 text-[28px]">Domande</h2>
+      <Faq domande={FAQ_100} path={path} />
+      <h2 class="mt-10 text-[28px]">Schede collegate</h2>
+      <nav class="mt-3 flex flex-wrap gap-x-4 font-bold" aria-label="Schede collegate">
+        {
+          collegamenti.map((voce) => (
+            <a href={voce.href} class="inline-flex min-h-11 items-center hover:text-terracotta">
+              {voce.etichetta}
+            </a>
+          ))
+        }
+      </nav>
+    </div>
+  </main>
+</Base>

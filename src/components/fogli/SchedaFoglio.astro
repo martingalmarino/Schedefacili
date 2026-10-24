@@ -1,0 +1,134 @@
+---
+import Breadcrumbs from '../Breadcrumbs.astro';
+import Faq from '../Faq.astro';
+import InBreve from '../InBreve.astro';
+import AttivaDsa from '../schede/AttivaDsa.astro';
+import VersioneDsa from '../schede/VersioneDsa';
+import TastoStampa from '../calendario/TastoStampa.astro';
+import { dataAggiornamentoIso, testoAggiornato } from '../../lib/aggiornamento';
+import { FRASE_STAMPA } from '../../lib/fogli';
+import type { OpzioniFoglio } from '../../lib/fogli';
+import { howTo, learningResource, urlAssoluta, webPage, type VoceFaq } from '../../lib/schema';
+import { buildSeo } from '../../lib/seo';
+import Base from '../../layouts/Base.astro';
+import FoglioA4 from './FoglioA4.astro';
+import FoglioOpzioni from './FoglioOpzioni';
+
+interface Collegamento {
+  href: string;
+  etichetta: string;
+}
+
+interface Props {
+  path: string;
+  title: string;
+  description: string;
+  h1: string;
+  keywords: string[];
+  inBreve: string;
+  domande: VoceFaq[];
+  opzioni: OpzioniFoglio;
+  nomeBreadcrumb: string;
+  educationalLevel: string;
+  collegamenti: Collegamento[];
+  passiStampa?: { nome: string; testo: string }[];
+  titoloStampa?: string;
+}
+
+const {
+  path,
+  title,
+  description,
+  h1,
+  keywords,
+  inBreve,
+  domande,
+  opzioni,
+  nomeBreadcrumb,
+  educationalLevel,
+  collegamenti,
+  passiStampa,
+  titoloStampa,
+} = Astro.props;
+const aggiornato = testoAggiornato();
+const schema = [
+  webPage({ path, name: h1, description, dateModified: dataAggiornamentoIso() }),
+  learningResource({
+    nome: h1,
+    descrizione: description,
+    url: urlAssoluta(path),
+    educationalLevel,
+  }),
+];
+if (passiStampa && titoloStampa) {
+  schema.push(howTo({ path, nome: titoloStampa, passi: passiStampa }));
+}
+const seo = buildSeo({
+  title,
+  description,
+  path,
+  h1,
+  keywords,
+  image: '/og/home.png',
+  schema,
+});
+---
+
+<Base seo={seo} stampaFoglio>
+  <div class="no-stampa">
+    <Breadcrumbs
+      items={[
+        { nome: 'Home', href: '/' },
+        { nome: 'Fogli da stampare', href: '/fogli-da-stampare/' },
+        { nome: nomeBreadcrumb, href: path },
+      ]}
+    />
+  </div>
+  <main id="scheda" class="scheda-foglio mx-auto max-w-[1120px] px-6 pb-16">
+    <AttivaDsa id="scheda" />
+    <div class="no-stampa">
+      <h1 class="mt-2 mb-4 font-display text-[34px] leading-tight font-semibold min-[601px]:text-[40px]">{h1}</h1>
+      <InBreve aggiornato={aggiornato}>{inBreve}</InBreve>
+      <div class="comandi-scheda my-4 flex max-w-xl flex-wrap items-center gap-3">
+        <VersioneDsa client:load targetId="scheda" />
+        <div class="min-w-[220px] flex-1">
+          <TastoStampa etichetta="Stampa (PDF A4)" />
+        </div>
+      </div>
+      <p class="m-0 max-w-[640px]">{FRASE_STAMPA}</p>
+      <FoglioOpzioni client:visible path={path} iniziale={opzioni} mostraSpessore={opzioni.tipo !== 'millimetrata'} />
+      <p class="mt-4 mb-2 text-muted">L’anteprima è in millimetri. Se non entra nello schermo, scorri il foglio.</p>
+    </div>
+    <div class="anteprima-foglio">
+      <FoglioA4 opzioni={opzioni} pieno />
+    </div>
+    <div class="no-stampa">
+      {
+        passiStampa && titoloStampa && (
+          <>
+            <h2 class="mt-10 text-[28px]">{titoloStampa}</h2>
+            <ol class="m-0 grid list-decimal gap-2 pl-6">
+              {passiStampa.map((passo) => (
+                <li>
+                  <b>{passo.nome}.</b> {passo.testo}
+                </li>
+              ))}
+            </ol>
+          </>
+        )
+      }
+      <h2 class="mt-10 text-[28px]">Domande</h2>
+      <Faq domande={domande} path={path} />
+      <h2 class="mt-10 text-[28px]">Schede collegate</h2>
+      <nav class="mt-3 flex flex-wrap gap-x-4 font-bold" aria-label="Schede collegate">
+        {
+          collegamenti.map((voce) => (
+            <a href={voce.href} class="inline-flex min-h-11 items-center hover:text-terracotta">
+              {voce.etichetta}
+            </a>
+          ))
+        }
+      </nav>
+    </div>
+  </main>
+</Base>

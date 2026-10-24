@@ -8,13 +8,28 @@ import MenuMobile from './MenuMobile';
     <a href="/" class="font-display text-[26px] leading-none font-extrabold" aria-label="Schede Facili">
       schede<span class="text-terracotta" aria-hidden="true">✎</span>facili
     </a>
-    <nav class="hidden items-center gap-[22px] text-[15px] font-bold min-[601px]:flex" aria-label="Sezioni">
+    <nav class="hidden items-center gap-4 text-[15px] font-bold min-[601px]:flex min-[1040px]:gap-[22px]" aria-label="Sezioni">
       {
-        NAV.map((voce) => (
-          <a href={voce.href} class="hover:text-terracotta">
-            {voce.label}
-          </a>
-        ))
+        NAV.map((voce) =>
+          voce.figli?.length ? (
+            <details class="relative">
+              <summary class="flex min-h-11 cursor-pointer list-none items-center gap-1 [&::-webkit-details-marker]:hidden">
+                {voce.label}
+              </summary>
+              <div class="absolute left-0 top-full z-30 min-w-56 border border-solid border-bordo bg-white py-1">
+                {voce.figli.map((figlio) => (
+                  <a href={figlio.href} class="flex min-h-11 items-center px-4 hover:text-terracotta">
+                    {figlio.label}
+                  </a>
+                ))}
+              </div>
+            </details>
+          ) : (
+            <a href={voce.href} class="inline-flex min-h-11 items-center hover:text-terracotta">
+              {voce.label}
+            </a>
+          ),
+        )
       }
     </nav>
     <MenuMobile client:load links={NAV} />

@@ -1,0 +1,126 @@
+---
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Faq from '../../components/Faq.astro';
+import InBreve from '../../components/InBreve.astro';
+import FoglioA4 from '../../components/fogli/FoglioA4.astro';
+import FoglioOpzioni from '../../components/fogli/FoglioOpzioni';
+import AttivaDsa from '../../components/schede/AttivaDsa.astro';
+import VersioneDsa from '../../components/schede/VersioneDsa';
+import TastoStampa from '../../components/calendario/TastoStampa.astro';
+import { dataAggiornamentoIso, testoAggiornato } from '../../lib/aggiornamento';
+import { FRASE_STAMPA, opzioniDaQuery } from '../../lib/fogli';
+import { itemList, webPage } from '../../lib/schema';
+import { buildSeo } from '../../lib/seo';
+import { FAQ_HUB, IN_BREVE_HUB, PAGINE_FOGLI, SEO_HUB_FOGLI } from '../../lib/testi-fogli';
+import Base from '../../layouts/Base.astro';
+
+const path = '/fogli-da-stampare/';
+const aggiornato = testoAggiornato();
+const opzioni = opzioniDaQuery('quadretti-1', Astro.url.searchParams);
+const righe = [
+  ['Quadretti da 1 cm', 'Numeri, segni e primi disegni', 'Classe prima'],
+  ['Quadretti da 0,5 cm', 'Matematica e calcoli in colonna', 'Di solito seconda o terza'],
+  ['Carta millimetrata', 'Misure e grafici', 'Quando misuri o fai un grafico'],
+];
+const seo = buildSeo({
+  title: SEO_HUB_FOGLI.title,
+  description: SEO_HUB_FOGLI.description,
+  path,
+  h1: SEO_HUB_FOGLI.h1,
+  keywords: [...SEO_HUB_FOGLI.keywords],
+  image: '/og/home.png',
+  schema: [
+    webPage({
+      path,
+      name: SEO_HUB_FOGLI.h1,
+      description: SEO_HUB_FOGLI.description,
+      dateModified: dataAggiornamentoIso(),
+    }),
+    itemList({
+      path,
+      nome: 'Fogli da stampare',
+      elementi: PAGINE_FOGLI.map((pagina) => ({ nome: pagina.h1, url: pagina.href })),
+    }),
+  ],
+});
+---
+
+<Base seo={seo} stampaFoglio>
+  <div class="no-stampa">
+    <Breadcrumbs items={[{ nome: 'Home', href: '/' }, { nome: 'Fogli da stampare', href: path }]} />
+  </div>
+  <main id="scheda" class="scheda-foglio mx-auto max-w-[1120px] px-6 pb-16">
+    <AttivaDsa id="scheda" />
+    <div class="no-stampa">
+      <h1 class="mt-2 mb-4 font-display text-[34px] leading-tight font-semibold min-[601px]:text-[40px]">{SEO_HUB_FOGLI.h1}</h1>
+      <InBreve aggiornato={aggiornato}>{IN_BREVE_HUB}</InBreve>
+      <ul class="mt-6 grid list-none gap-4 p-0 min-[601px]:grid-cols-3">
+        {
+          PAGINE_FOGLI.map((pagina) => (
+            <li>
+              <a href={pagina.href} class="block h-full rounded-xl bg-white p-3 hover:text-terracotta">
+                <FoglioA4
+                  opzioni={{
+                    tipo: pagina.href.includes('0-5') ? 'quadretti-05' : pagina.href.includes('millimetrata') ? 'millimetrata' : 'quadretti-1',
+                    margine: true,
+                    colore: 'grigio',
+                    spessore: 0.2,
+                    intestazione: true,
+                  }}
+                />
+                <span class="mt-3 block text-[18px] font-bold">{pagina.nome}</span>
+                <span class="mt-1 block font-normal text-inchiostro">{pagina.uso}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <h2 class="mt-10 text-[28px]">Quale foglio per quale uso</h2>
+      <table class="tabella-mobile mt-4 w-full border-collapse bg-white text-left">
+        <thead>
+          <tr class="border-b border-solid border-bordo">
+            <th class="px-3 py-3">Foglio</th>
+            <th class="px-3 py-3">Uso</th>
+            <th class="px-3 py-3">Classe indicativa</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            righe.map((riga) => (
+              <tr class="border-b border-solid border-bordo">
+                <td class="px-3 py-3 font-bold" data-label="Foglio">{riga[0]}</td>
+                <td class="px-3 py-3" data-label="Uso">{riga[1]}</td>
+                <td class="px-3 py-3" data-label="Classe indicativa">{riga[2]}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+      <div class="comandi-scheda my-4 flex max-w-xl flex-wrap items-center gap-3">
+        <VersioneDsa client:load targetId="scheda" />
+        <div class="min-w-[220px] flex-1">
+          <TastoStampa etichetta="Stampa (PDF A4)" />
+        </div>
+      </div>
+      <p class="m-0 max-w-[640px]">{FRASE_STAMPA}</p>
+      <p class="mt-3 mb-0">L’anteprima qui sotto è il foglio da 1 cm. Le altre due misure sono nelle schede.</p>
+      <FoglioOpzioni client:visible path={path} iniziale={opzioni} />
+      <p class="mt-4 mb-2 text-muted">L’anteprima è in millimetri. Se non entra nello schermo, scorri il foglio.</p>
+    </div>
+    <div class="anteprima-foglio">
+      <FoglioA4 opzioni={opzioni} pieno />
+    </div>
+    <div class="no-stampa">
+      <h2 class="mt-10 text-[28px]">Domande</h2>
+      <Faq domande={FAQ_HUB} path={path} />
+      <h2 class="mt-10 text-[28px]">Schede collegate</h2>
+      <nav class="mt-3 flex flex-wrap gap-x-4 font-bold" aria-label="Schede collegate">
+        <a href="/fogli-da-stampare/quadretti-1-cm/" class="inline-flex min-h-11 items-center hover:text-terracotta">Quadretti 1 cm</a>
+        <a href="/fogli-da-stampare/quadretti-0-5-cm/" class="inline-flex min-h-11 items-center hover:text-terracotta">Quadretti 0,5 cm</a>
+        <a href="/fogli-da-stampare/carta-millimetrata/" class="inline-flex min-h-11 items-center hover:text-terracotta">Carta millimetrata</a>
+        <a href="/tabelline/" class="inline-flex min-h-11 items-center hover:text-terracotta">Tabelline</a>
+        <a href="/generatori/tabelline/" class="inline-flex min-h-11 items-center hover:text-terracotta">Generatore di tabelline</a>
+      </nav>
+    </div>
+  </main>
+</Base>

@@ -1,0 +1,90 @@
+---
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Faq from '../../components/Faq.astro';
+import InBreve from '../../components/InBreve.astro';
+import Convertitore from '../../components/romani/Convertitore';
+import AttivaDsa from '../../components/schede/AttivaDsa.astro';
+import VersioneDsa from '../../components/schede/VersioneDsa';
+import { dataAggiornamentoIso, testoAggiornato } from '../../lib/aggiornamento';
+import { partiRomane, toRoman } from '../../lib/romani';
+import { urlAssoluto, webApplication, webPage } from '../../lib/schema';
+import { buildSeo } from '../../lib/seo';
+import { FAQ_CONVERTITORE, IN_BREVE_CONVERTITORE, SEO_CONVERTITORE } from '../../lib/testi-romani';
+import Base from '../../layouts/Base.astro';
+
+const path = '/numeri-romani/convertitore/';
+const aggiornato = testoAggiornato();
+const esempi = [
+  { da: 'IV', a: '4' },
+  { da: '1994', a: `${toRoman(1994)} = ${partiRomane(1994).join(' + ')}` },
+  { da: 'MMMCMXCIX', a: '3999' },
+];
+const seo = buildSeo({
+  title: SEO_CONVERTITORE.title,
+  description: SEO_CONVERTITORE.description,
+  path,
+  h1: SEO_CONVERTITORE.h1,
+  keywords: [...SEO_CONVERTITORE.keywords],
+  image: '/og/home.png',
+  schema: [
+    webPage({
+      path,
+      name: SEO_CONVERTITORE.h1,
+      description: SEO_CONVERTITORE.description,
+      dateModified: dataAggiornamentoIso(),
+    }),
+    webApplication({ nome: SEO_CONVERTITORE.h1, descrizione: SEO_CONVERTITORE.description, url: urlAssoluto(path) }),
+  ],
+});
+const collegamenti = [
+  { href: '/numeri-romani/', etichetta: 'Regole e schede' },
+  { href: '/numeri-romani/da-1-a-100/', etichetta: 'Da 1 a 100' },
+  { href: '/numeri-romani/da-1-a-1000/', etichetta: 'Da 1 a 1000' },
+  { href: '/orologio-da-stampare/', etichetta: 'Orologio da stampare' },
+  { href: '/tabelline/', etichetta: 'Tabelline' },
+];
+---
+
+<Base seo={seo}>
+  <Breadcrumbs
+    items={[
+      { nome: 'Home', href: '/' },
+      { nome: 'Numeri romani', href: '/numeri-romani/' },
+      { nome: 'Convertitore', href: path },
+    ]}
+  />
+  <main id="scheda" class="scheda-foglio mx-auto max-w-[1120px] px-6 pb-16">
+    <AttivaDsa id="scheda" />
+    <h1 class="mt-2 mb-4 font-display text-[34px] leading-tight font-semibold min-[601px]:text-[40px]">{SEO_CONVERTITORE.h1}</h1>
+    <InBreve aggiornato={aggiornato}>{IN_BREVE_CONVERTITORE}</InBreve>
+    <div class="comandi-scheda my-4 flex max-w-xl flex-wrap items-center gap-3">
+      <VersioneDsa client:load targetId="scheda" />
+    </div>
+    <Convertitore client:visible />
+    <h2 class="mt-10 text-[28px]">Esempi</h2>
+    <ul class="mt-3 grid list-none gap-2 p-0">
+      {
+        esempi.map((esempio) => (
+          <li class="rounded-xl bg-white px-4 py-3">
+            <span class="numeri-ora font-display text-[22px]">{esempio.da}</span>
+            <span aria-hidden="true"> → </span>
+            <span class="numeri-ora font-display text-[22px]">{esempio.a}</span>
+          </li>
+        ))
+      }
+    </ul>
+    <p class="mt-4 mb-0 max-w-[640px]">Il campo accetta da 1 a 3999. IIII, VX e IC non sono forme canoniche e il convertitore le rifiuta.</p>
+    <h2 class="mt-10 text-[28px]">Domande</h2>
+    <Faq domande={FAQ_CONVERTITORE} path={path} />
+    <h2 class="mt-10 text-[28px]">Schede collegate</h2>
+    <nav class="mt-3 flex flex-wrap gap-x-4 font-bold" aria-label="Schede collegate">
+      {
+        collegamenti.map((voce) => (
+          <a href={voce.href} class="inline-flex min-h-11 items-center hover:text-terracotta">
+            {voce.etichetta}
+          </a>
+        ))
+      }
+    </nav>
+  </main>
+</Base>

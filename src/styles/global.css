@@ -243,4 +243,87 @@ h3,
     font-size: 22px !important;
     margin-bottom: 8px !important;
   }
+
+  html.stampa-foglio,
+  html.stampa-foglio body,
+  html.stampa-foglio main,
+  html.stampa-foglio .anteprima-foglio {
+    margin: 0 !important;
+    padding: 0 !important;
+    max-width: none !important;
+    width: 210mm !important;
+    height: 297mm !important;
+    overflow: hidden !important;
+    border: 0 !important;
+    content-visibility: visible !important;
+  }
+
+  html.stampa-foglio .foglio-a4 {
+    width: 210mm !important;
+    height: 297mm !important;
+    max-width: none !important;
+  }
+
+  html.stampa-doppia,
+  html.stampa-doppia body,
+  html.stampa-doppia main,
+  html.stampa-doppia .anteprima-foglio {
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  html.stampa-doppia .pagina-soluzioni,
+  html.stampa-doppia .interruzione-foglio {
+    break-before: page;
+    margin-top: 0 !important;
+  }
+
+  html.stampa-solo .anteprima-soluzioni {
+    display: none !important;
+  }
+}
+
+.anteprima-foglio {
+  max-width: 100%;
+  max-height: 80vh;
+  overflow: auto;
+  border: 1px solid #eadfcd;
+  background: #fff;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 297mm;
+}
+
+.foglio-a4 {
+  display: block;
+  width: 210mm;
+  height: 297mm;
+  background: #fff;
+}
+
+.foglio-mini {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #fff;
+}
+
+.scheda-foglio.dsa {
+  line-height: 1.6;
+  font-style: normal;
+}
+
+.scheda-foglio.dsa .foglio-a4 text,
+.scheda-foglio.dsa .foglio-mini text,
+.scheda-foglio.dsa .riga-compila {
+  font-family: OpenDyslexic, sans-serif;
+  font-style: normal;
+  letter-spacing: 0.04em;
+}
+
+.scheda-foglio.dsa .numeri-ora {
+  font-family: Fraunces, serif;
+  font-variant-numeric: lining-nums;
+  font-variation-settings: "opsz" 18, "SOFT" 0, "WONK" 0;
+  letter-spacing: 0;
 }

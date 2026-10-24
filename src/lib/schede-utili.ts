@@ -1,0 +1,31 @@
+import { PAGINE_FOGLI } from './testi-fogli';
+import { PAGINE_ROMANI } from './testi-romani';
+import urlNuove from '../data/url-nuove.json';
+
+export const PAGINE_OROLOGIO = [
+  { href: '/orologio-da-stampare/', nome: 'Orologio da costruire' },
+  { href: '/generatori/schede-orologio/', nome: 'Schede sull’orologio' },
+] as const;
+
+export const URL_NUOVE: readonly string[] = urlNuove;
+
+export const CARD_SCHEDE_UTILI = [
+  {
+    href: '/fogli-da-stampare/',
+    nome: 'Fogli da stampare',
+    testo: 'Quadretti e carta millimetrata, in misura reale.',
+    conteggio: PAGINE_FOGLI.length,
+  },
+  {
+    href: '/orologio-da-stampare/',
+    nome: 'Orologio',
+    testo: 'Da costruire, più le schede con le soluzioni.',
+    conteggio: PAGINE_OROLOGIO.length,
+  },
+  {
+    href: '/numeri-romani/',
+    nome: 'Numeri romani',
+    testo: 'Tabelle, convertitore e schede da stampare.',
+    conteggio: PAGINE_ROMANI.length,
+  },
+] as const;

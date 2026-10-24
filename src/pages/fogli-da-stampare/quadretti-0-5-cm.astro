@@ -1,0 +1,27 @@
+---
+import SchedaFoglio from '../../components/fogli/SchedaFoglio.astro';
+import { opzioniDaQuery } from '../../lib/fogli';
+import { COLLEGAMENTI_MATEMATICA, FAQ_05, IN_BREVE_05, PAGINE_FOGLI } from '../../lib/testi-fogli';
+
+const pagina = PAGINE_FOGLI[1];
+const path = pagina.href;
+---
+
+<SchedaFoglio
+  path={path}
+  title={pagina.title}
+  description={pagina.description}
+  h1={pagina.h1}
+  keywords={['quadretti 0,5 cm', 'quadretti 5 mm da stampare']}
+  inBreve={IN_BREVE_05}
+  domande={FAQ_05}
+  opzioni={opzioniDaQuery('quadretti-05', Astro.url.searchParams)}
+  nomeBreadcrumb="Quadretti 0,5 cm"
+  educationalLevel="Scuola primaria"
+  collegamenti={[
+    { href: '/fogli-da-stampare/', etichetta: 'Tutti i fogli' },
+    { href: '/fogli-da-stampare/quadretti-1-cm/', etichetta: 'Quadretti 1 cm' },
+    { href: '/fogli-da-stampare/carta-millimetrata/', etichetta: 'Carta millimetrata' },
+    ...COLLEGAMENTI_MATEMATICA,
+  ]}
+/>

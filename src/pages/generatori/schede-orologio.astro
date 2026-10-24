@@ -1,0 +1,112 @@
+---
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Faq from '../../components/Faq.astro';
+import InBreve from '../../components/InBreve.astro';
+import SchedaOrologioOpzioni from '../../components/orologio/SchedaOrologioOpzioni';
+import AttivaDsa from '../../components/schede/AttivaDsa.astro';
+import VersioneDsa from '../../components/schede/VersioneDsa';
+import { dataAggiornamentoIso, testoAggiornato } from '../../lib/aggiornamento';
+import { FRASE_STAMPA } from '../../lib/fogli';
+import { svgSchedaOra } from '../../lib/orologio-svg';
+import { urlAssoluto, webApplication, webPage } from '../../lib/schema';
+import { generaEsercizi, opzioniSchedaDaQuery } from '../../lib/schede-orologio';
+import { buildSeo } from '../../lib/seo';
+import { FAQ_SCHEDE, IN_BREVE_SCHEDE, SEO_SCHEDE_OROLOGIO } from '../../lib/testi-orologio';
+import Base from '../../layouts/Base.astro';
+
+export const prerender = false;
+
+const path = '/generatori/schede-orologio/';
+const opzioni = opzioniSchedaDaQuery(Astro.url.searchParams);
+const esercizi = generaEsercizi(opzioni);
+const aggiornato = testoAggiornato();
+const seo = buildSeo({
+  title: SEO_SCHEDE_OROLOGIO.title,
+  description: SEO_SCHEDE_OROLOGIO.description,
+  path,
+  h1: SEO_SCHEDE_OROLOGIO.h1,
+  keywords: SEO_SCHEDE_OROLOGIO.keywords,
+  image: '/og/generatori.png',
+  schema: [
+    webPage({
+      path,
+      name: SEO_SCHEDE_OROLOGIO.h1,
+      description: SEO_SCHEDE_OROLOGIO.description,
+      dateModified: dataAggiornamentoIso(),
+    }),
+    webApplication({
+      nome: SEO_SCHEDE_OROLOGIO.h1,
+      descrizione: SEO_SCHEDE_OROLOGIO.description,
+      url: urlAssoluto(path),
+    }),
+  ],
+});
+const collegamenti = [
+  { href: '/orologio-da-stampare/', etichetta: 'Orologio da costruire' },
+  { href: '/numeri-romani/', etichetta: 'Numeri romani' },
+  { href: '/tabelline/', etichetta: 'Tabelline' },
+  { href: '/tabelline/tabellina-del-5/', etichetta: 'Tabellina del 5' },
+];
+---
+
+<Base seo={seo} stampaFoglio stampaDoppia>
+  <div class="no-stampa">
+    <Breadcrumbs
+      items={[
+        { nome: 'Home', href: '/' },
+        { nome: 'Generatori', href: '/generatori/' },
+        { nome: 'Orologio', href: path },
+      ]}
+    />
+  </div>
+  <main id="scheda" class="scheda-foglio mx-auto max-w-[1120px] px-6 pb-16">
+    <AttivaDsa id="scheda" />
+    <div class="no-stampa">
+      <h1 class="mt-2 mb-4 font-display text-[34px] leading-tight font-semibold min-[601px]:text-[40px]">{SEO_SCHEDE_OROLOGIO.h1}</h1>
+      <InBreve aggiornato={aggiornato}>{IN_BREVE_SCHEDE}</InBreve>
+      <div class="comandi-scheda my-4 flex max-w-xl flex-wrap items-center gap-3">
+        <VersioneDsa client:load targetId="scheda" />
+      </div>
+      <div class="flex max-w-xl flex-wrap gap-3">
+        <button type="button" class="stampa-orologio inline-flex min-h-11 items-center justify-center rounded-[10px] border-[1.5px] border-solid border-terracotta bg-white px-4 font-bold text-terracotta" data-soluzioni="0">
+          Solo scheda
+        </button>
+        <button type="button" class="stampa-orologio inline-flex min-h-11 items-center justify-center rounded-[10px] border-0 bg-terracotta px-4 font-bold text-white" data-soluzioni="1">
+          Scheda + soluzioni
+        </button>
+      </div>
+      <p class="mt-3 mb-0 max-w-[640px]">{FRASE_STAMPA}</p>
+      <SchedaOrologioOpzioni client:visible path={path} iniziale={opzioni} />
+      <p class="mt-4 mb-2 text-muted">L’anteprima è in millimetri. Se non entra nello schermo, scorri il foglio.</p>
+    </div>
+    <div class="anteprima-foglio">
+      <Fragment set:html={svgSchedaOra(opzioni, esercizi, false)} />
+    </div>
+    <div class="anteprima-foglio anteprima-soluzioni pagina-soluzioni mt-6">
+      <Fragment set:html={svgSchedaOra(opzioni, esercizi, true)} />
+    </div>
+    <div class="no-stampa">
+      <h2 class="mt-10 text-[28px]">Domande</h2>
+      <Faq domande={FAQ_SCHEDE} path={path} />
+      <h2 class="mt-10 text-[28px]">Schede collegate</h2>
+      <nav class="mt-3 flex flex-wrap gap-x-4 font-bold" aria-label="Schede collegate">
+        {
+          collegamenti.map((voce) => (
+            <a href={voce.href} class="inline-flex min-h-11 items-center hover:text-terracotta">
+              {voce.etichetta}
+            </a>
+          ))
+        }
+      </nav>
+    </div>
+  </main>
+  <script>
+    document.querySelectorAll('.stampa-orologio').forEach((bottone) => {
+      bottone.addEventListener('click', () => {
+        const conSoluzioni = bottone.getAttribute('data-soluzioni') === '1';
+        document.documentElement.classList.toggle('stampa-solo', !conSoluzioni);
+        window.print();
+      });
+    });
+  </script>
+</Base>

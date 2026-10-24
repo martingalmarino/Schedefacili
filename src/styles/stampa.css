@@ -35,3 +35,12 @@
   size: A4;
   margin: 10mm;
 }
+
+@page foglio-a4 {
+  size: A4;
+  margin: 0;
+}
+
+html.stampa-foglio {
+  page: foglio-a4;
+}

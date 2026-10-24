@@ -1,0 +1,108 @@
+---
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Faq from '../../components/Faq.astro';
+import InBreve from '../../components/InBreve.astro';
+import AttivaDsa from '../../components/schede/AttivaDsa.astro';
+import VersioneDsa from '../../components/schede/VersioneDsa';
+import TastoStampa from '../../components/calendario/TastoStampa.astro';
+import { dataAggiornamentoIso, testoAggiornato } from '../../lib/aggiornamento';
+import { FRASE_STAMPA } from '../../lib/fogli';
+import { toRoman } from '../../lib/romani';
+import { webPage } from '../../lib/schema';
+import { buildSeo } from '../../lib/seo';
+import { svgSchema1000 } from '../../lib/tabelle-romane';
+import { FAQ_1000, IN_BREVE_1000, SEO_ROMANI_1000 } from '../../lib/testi-romani';
+import Base from '../../layouts/Base.astro';
+
+const path = '/numeri-romani/da-1-a-1000/';
+const aggiornato = testoAggiornato();
+const gruppi = Array.from({ length: 10 }, (_, indice) => {
+  const inizio = indice * 100 + 1;
+  const fine = inizio + 99;
+  return {
+    inizio,
+    fine,
+    numeri: Array.from({ length: 100 }, (_, offset) => inizio + offset),
+  };
+});
+const seo = buildSeo({
+  title: SEO_ROMANI_1000.title,
+  description: SEO_ROMANI_1000.description,
+  path,
+  h1: SEO_ROMANI_1000.h1,
+  keywords: [...SEO_ROMANI_1000.keywords],
+  image: '/og/home.png',
+  schema: [webPage({ path, name: SEO_ROMANI_1000.h1, description: SEO_ROMANI_1000.description, dateModified: dataAggiornamentoIso() })],
+});
+const collegamenti = [
+  { href: '/numeri-romani/', etichetta: 'Regole e schede' },
+  { href: '/numeri-romani/da-1-a-100/', etichetta: 'Da 1 a 100' },
+  { href: '/numeri-romani/convertitore/', etichetta: 'Convertitore' },
+  { href: '/orologio-da-stampare/', etichetta: 'Orologio da stampare' },
+  { href: '/tabelline/', etichetta: 'Tabelline' },
+];
+---
+
+<Base seo={seo} stampaFoglio>
+  <div class="no-stampa">
+    <Breadcrumbs
+      items={[
+        { nome: 'Home', href: '/' },
+        { nome: 'Numeri romani', href: '/numeri-romani/' },
+        { nome: 'Da 1 a 1000', href: path },
+      ]}
+    />
+  </div>
+  <main id="scheda" class="scheda-foglio mx-auto max-w-[1120px] px-6 pb-16">
+    <AttivaDsa id="scheda" />
+    <div class="no-stampa">
+      <h1 class="mt-2 mb-4 font-display text-[34px] leading-tight font-semibold min-[601px]:text-[40px]">{SEO_ROMANI_1000.h1}</h1>
+      <InBreve aggiornato={aggiornato}>{IN_BREVE_1000}</InBreve>
+      <div class="comandi-scheda my-4 flex max-w-xl flex-wrap items-center gap-3">
+        <VersioneDsa client:load targetId="scheda" />
+        <div class="min-w-[220px] flex-1">
+          <TastoStampa etichetta="Stampa (PDF A4)" />
+        </div>
+      </div>
+      <p class="m-0 max-w-[640px]">{FRASE_STAMPA}</p>
+    </div>
+    <div class="anteprima-foglio">
+      <Fragment set:html={svgSchema1000()} />
+    </div>
+    <div class="no-stampa">
+      <p class="mt-3 mb-0 max-w-[640px]">In stampa esce solo lo schema compatto. I mille numeri restano qui, a gruppi di cento.</p>
+      <h2 class="mt-10 text-[28px]">Tabella completa</h2>
+      <div class="mt-4 grid gap-3">
+        {
+          gruppi.map((gruppo, indice) => (
+            <details class="rounded-xl bg-white px-4" open={indice === 0}>
+              <summary class="flex min-h-11 cursor-pointer items-center font-bold">
+                Da <span class="cifre mx-1">{gruppo.inizio}</span> a <span class="cifre mx-1">{gruppo.fine}</span>
+              </summary>
+              <ul class="grid list-none gap-1 p-0 pb-4 min-[601px]:grid-cols-2 min-[900px]:grid-cols-4">
+                {gruppo.numeri.map((numero) => (
+                  <li class="flex items-baseline justify-between gap-3 border-b border-solid border-bordo py-1">
+                    <span class="cifre">{numero}</span>
+                    <span class="numeri-ora font-display">{toRoman(numero)}</span>
+                  </li>
+                ))}
+              </ul>
+            </details>
+          ))
+        }
+      </div>
+      <h2 class="mt-10 text-[28px]">Domande</h2>
+      <Faq domande={FAQ_1000} path={path} />
+      <h2 class="mt-10 text-[28px]">Schede collegate</h2>
+      <nav class="mt-3 flex flex-wrap gap-x-4 font-bold" aria-label="Schede collegate">
+        {
+          collegamenti.map((voce) => (
+            <a href={voce.href} class="inline-flex min-h-11 items-center hover:text-terracotta">
+              {voce.etichetta}
+            </a>
+          ))
+        }
+      </nav>
+    </div>
+  </main>
+</Base>

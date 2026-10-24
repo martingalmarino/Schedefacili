@@ -1,6 +1,7 @@
 export interface VoceNav {
   href: string;
   label: string;
+  figli?: VoceNav[];
 }
 
 export const NAV: VoceNav[] = [
@@ -8,6 +9,15 @@ export const NAV: VoceNav[] = [
   { href: '/tabelline/', label: 'Tabelline' },
   { href: '/generatori/', label: 'Generatori' },
   { href: '/cartine-mute/', label: 'Cartine mute' },
+  {
+    href: '/fogli-da-stampare/',
+    label: 'Schede utili',
+    figli: [
+      { href: '/fogli-da-stampare/', label: 'Fogli da stampare' },
+      { href: '/orologio-da-stampare/', label: 'Orologio' },
+      { href: '/numeri-romani/', label: 'Numeri romani' },
+    ],
+  },
 ];
 
 export const STRUMENTI: VoceNav[] = [

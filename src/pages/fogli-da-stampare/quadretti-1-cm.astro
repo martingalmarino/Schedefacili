@@ -1,0 +1,29 @@
+---
+import SchedaFoglio from '../../components/fogli/SchedaFoglio.astro';
+import { opzioniDaQuery } from '../../lib/fogli';
+import { COME_STAMPARE, COLLEGAMENTI_MATEMATICA, FAQ_1, IN_BREVE_1, PAGINE_FOGLI } from '../../lib/testi-fogli';
+
+const pagina = PAGINE_FOGLI[0];
+const path = pagina.href;
+---
+
+<SchedaFoglio
+  path={path}
+  title={pagina.title}
+  description={pagina.description}
+  h1={pagina.h1}
+  keywords={['quadretti 1 cm da stampare', 'quadretti 1 cm con margine', 'quadretti 1 cm senza margine', 'quadretti 1 cm prima elementare']}
+  inBreve={IN_BREVE_1}
+  domande={FAQ_1}
+  opzioni={opzioniDaQuery('quadretti-1', Astro.url.searchParams)}
+  nomeBreadcrumb="Quadretti 1 cm"
+  educationalLevel="Scuola primaria, classe prima"
+  titoloStampa={COME_STAMPARE.nome}
+  passiStampa={COME_STAMPARE.passi}
+  collegamenti={[
+    { href: '/fogli-da-stampare/', etichetta: 'Tutti i fogli' },
+    { href: '/fogli-da-stampare/quadretti-0-5-cm/', etichetta: 'Quadretti 0,5 cm' },
+    { href: '/fogli-da-stampare/carta-millimetrata/', etichetta: 'Carta millimetrata' },
+    ...COLLEGAMENTI_MATEMATICA,
+  ]}
+/>

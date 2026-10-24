@@ -13,11 +13,15 @@ const calendario = regioniPiuPopolose();
   <div class="mx-auto max-w-[1120px] px-6">
     <div class="grid grid-cols-2 gap-6 min-[601px]:grid-cols-[2fr_1fr_1fr_1fr]">
       <div>
-        <h4 class="m-0 mb-2 font-sans font-bold text-white">schede facili</h4>
+        <p class="m-0 mb-2 font-sans font-bold text-white">schede facili</p>
         <p class="m-0">Materiali semplici e curati per insegnanti e genitori.</p>
+        <p class="mt-4 mb-1 font-bold text-white">Schede utili</p>
+        <a href="/fogli-da-stampare/" class="my-1 block hover:text-white">Fogli da stampare</a>
+        <a href="/orologio-da-stampare/" class="my-1 block hover:text-white">Orologio</a>
+        <a href="/numeri-romani/" class="my-1 block hover:text-white">Numeri romani</a>
       </div>
       <div>
-        <h4 class="m-0 mb-2 font-sans font-bold text-white">Strumenti</h4>
+        <p class="m-0 mb-2 font-sans font-bold text-white">Strumenti</p>
         {
           STRUMENTI.map((voce) => (
             <a href={voce.href} class="my-1 block hover:text-white">
@@ -27,7 +31,7 @@ const calendario = regioniPiuPopolose();
         }
       </div>
       <div>
-        <h4 class="m-0 mb-2 font-sans font-bold text-white">Calendario</h4>
+        <p class="m-0 mb-2 font-sans font-bold text-white">Calendario</p>
         {
           calendario.map((regione) => (
             <a href={urlCalendarioRegione(regione.slug)} class="my-1 block hover:text-white">
@@ -38,7 +42,7 @@ const calendario = regioniPiuPopolose();
         <a href={`/calendario-scolastico/${ANNO_SLUG}/`} class="my-1 block hover:text-white">Tutte le regioni</a>
       </div>
       <div>
-        <h4 class="m-0 mb-2 font-sans font-bold text-white">Info</h4>
+        <p class="m-0 mb-2 font-sans font-bold text-white">Info</p>
         {
           INFO.map((voce) => (
             <a href={voce.href} class="my-1 block hover:text-white">
@@ -50,7 +54,7 @@ const calendario = regioniPiuPopolose();
           id="gestisci-cookie"
           type="button"
           data-riapri-consenso
-          class="my-1 block cursor-pointer border-0 bg-transparent p-0 text-left font-inherit text-inherit hover:text-white"
+          class="my-1 inline-flex min-h-11 cursor-pointer items-center border-0 bg-transparent p-0 text-left font-inherit text-inherit hover:text-white"
         >
           Gestisci cookie
         </button>

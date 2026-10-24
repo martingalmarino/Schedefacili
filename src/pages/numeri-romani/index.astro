@@ -1,0 +1,148 @@
+---
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Faq from '../../components/Faq.astro';
+import InBreve from '../../components/InBreve.astro';
+import NuovaScheda from '../../components/romani/NuovaScheda';
+import AttivaDsa from '../../components/schede/AttivaDsa.astro';
+import VersioneDsa from '../../components/schede/VersioneDsa';
+import TastoStampa from '../../components/calendario/TastoStampa.astro';
+import { dataAggiornamentoIso, testoAggiornato } from '../../lib/aggiornamento';
+import { FRASE_STAMPA } from '../../lib/fogli';
+import { toRoman } from '../../lib/romani';
+import { learningResource, urlAssoluta, webPage } from '../../lib/schema';
+import { generaSchede, SEME_FISSO, svgSchedaRomana } from '../../lib/schede-romani';
+import { buildSeo } from '../../lib/seo';
+import { FAQ_ROMANI, IN_BREVE_ROMANI, PAGINE_ROMANI, SEO_ROMANI } from '../../lib/testi-romani';
+import Base from '../../layouts/Base.astro';
+
+const path = '/numeri-romani/';
+const aggiornato = testoAggiornato();
+const schede = generaSchede({ seed: SEME_FISSO, fino: 20 });
+const simboli = [
+  ['I', '1'],
+  ['V', '5'],
+  ['X', '10'],
+  ['L', '50'],
+  ['C', '100'],
+  ['D', '500'],
+  ['M', '1000'],
+];
+const fino20 = Array.from({ length: 20 }, (_, indice) => indice + 1);
+const seo = buildSeo({
+  title: SEO_ROMANI.title,
+  description: SEO_ROMANI.description,
+  path,
+  h1: SEO_ROMANI.h1,
+  keywords: [...SEO_ROMANI.keywords],
+  image: '/og/home.png',
+  schema: [
+    webPage({ path, name: SEO_ROMANI.h1, description: SEO_ROMANI.description, dateModified: dataAggiornamentoIso() }),
+    learningResource({
+      nome: SEO_ROMANI.h1,
+      descrizione: SEO_ROMANI.description,
+      url: urlAssoluta(path),
+      educationalLevel: 'Scuola primaria',
+    }),
+  ],
+});
+const collegamenti = [
+  ...PAGINE_ROMANI.map((pagina) => ({ href: pagina.href, etichetta: pagina.nome })),
+  { href: '/orologio-da-stampare/', etichetta: 'Orologio da stampare' },
+  { href: '/tabelline/', etichetta: 'Tabelline' },
+];
+---
+
+<Base seo={seo} stampaFoglio stampaDoppia>
+  <div class="no-stampa">
+    <Breadcrumbs items={[{ nome: 'Home', href: '/' }, { nome: 'Numeri romani', href: path }]} />
+  </div>
+  <main id="scheda" class="scheda-foglio mx-auto max-w-[1120px] px-6 pb-16">
+    <AttivaDsa id="scheda" />
+    <div class="no-stampa">
+      <h1 class="mt-2 mb-4 font-display text-[34px] leading-tight font-semibold min-[601px]:text-[40px]">{SEO_ROMANI.h1}</h1>
+      <InBreve aggiornato={aggiornato}>{IN_BREVE_ROMANI}</InBreve>
+      <div class="comandi-scheda my-4 flex max-w-xl flex-wrap items-center gap-3">
+        <VersioneDsa client:load targetId="scheda" />
+        <div class="min-w-[220px] flex-1">
+          <TastoStampa etichetta="Stampa (PDF A4)" />
+        </div>
+      </div>
+      <p class="m-0 max-w-[640px]">{FRASE_STAMPA}</p>
+
+      <h2 class="mt-10 text-[28px]">I sette simboli</h2>
+      <table class="tabella-mobile mt-4 w-full max-w-md border-collapse bg-white text-left">
+        <thead>
+          <tr class="border-b border-solid border-bordo">
+            <th class="px-3 py-3">Simbolo</th>
+            <th class="px-3 py-3">Vale</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            simboli.map(([simbolo, valore]) => (
+              <tr class="border-b border-solid border-bordo">
+                <td class="numeri-ora px-3 py-3 font-display text-[24px] font-semibold" data-label="Simbolo">{simbolo}</td>
+                <td class="cifre px-3 py-3" data-label="Vale">{valore}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+
+      <h2 class="mt-10 text-[28px]">Tre regole</h2>
+      <ol class="mt-3 grid list-decimal gap-3 pl-6">
+        <li>Si sommano. VI vale 6, perché 5 più 1. XII vale 12.</li>
+        <li>Si sottrae se il simbolo minore sta prima. IV vale 4, IX vale 9, XL vale 40.</li>
+        <li>Non più di tre simboli uguali di fila. Il 4 è IV, non IIII. Il 9 è IX, non VIIII.</li>
+      </ol>
+
+      <h2 class="mt-10 text-[28px]">Da 1 a 20</h2>
+      <ul class="mt-3 grid list-none gap-2 p-0 min-[601px]:grid-cols-4">
+        {
+          fino20.map((numero) => (
+            <li class="rounded-xl bg-white px-3 py-2">
+              <span class="cifre font-bold">{numero}</span>
+              <span class="numeri-ora ml-2 font-display text-[20px]">{toRoman(numero)}</span>
+            </li>
+          ))
+        }
+      </ul>
+
+      <h2 class="mt-10 text-[28px]">Dove li trovi</h2>
+      <ul class="mt-3 grid list-disc gap-2 pl-6">
+        <li>Sugli orologi, al posto delle ore. C’è anche un <a href="/orologio-da-stampare/" class="font-bold hover:text-terracotta">orologio da costruire</a>.</li>
+        <li>Nei secoli: il XXI secolo è quello in corso.</li>
+        <li>Nei capitoli dei libri: il capitolo IV è il quarto.</li>
+      </ul>
+
+      <h2 class="mt-10 text-[28px]">Schede da stampare</h2>
+      <p class="m-0 max-w-[640px]">Ogni scheda sta su un A4. Le soluzioni sono sul foglio dopo, con il titolo «Soluzioni».</p>
+      <NuovaScheda client:visible path={path} iniziale={{ seed: SEME_FISSO, fino: 20 }} />
+      <p class="mt-4 mb-2 text-muted">L’anteprima è in millimetri. Se non entra nello schermo, scorri il foglio.</p>
+    </div>
+    {
+      schede.flatMap((scheda, indice) => [
+        <div class:list={['anteprima-foglio', indice > 0 && 'interruzione-foglio']}>
+          <Fragment set:html={svgSchedaRomana(scheda, false)} />
+        </div>,
+        <div class="anteprima-foglio interruzione-foglio">
+          <Fragment set:html={svgSchedaRomana(scheda, true)} />
+        </div>,
+      ])
+    }
+    <div class="no-stampa">
+      <h2 class="mt-10 text-[28px]">Domande</h2>
+      <Faq domande={FAQ_ROMANI} path={path} />
+      <h2 class="mt-10 text-[28px]">Schede collegate</h2>
+      <nav class="mt-3 flex flex-wrap gap-x-4 font-bold" aria-label="Schede collegate">
+        {
+          collegamenti.map((voce) => (
+            <a href={voce.href} class="inline-flex min-h-11 items-center hover:text-terracotta">
+              {voce.etichetta}
+            </a>
+          ))
+        }
+      </nav>
+    </div>
+  </main>
+</Base>

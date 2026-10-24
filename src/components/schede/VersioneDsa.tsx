@@ -29,7 +29,7 @@ export default function VersioneDsa({ targetId = 'scheda' }: Props) {
     <button
       type="button"
       aria-pressed={attivo}
-      className={`cursor-pointer rounded-full border-[1.5px] border-solid px-4 py-2 text-[15px] font-bold ${attivo ? 'border-salvia bg-salvia text-white' : 'border-pill bg-white text-inchiostro'}`}
+      className={`inline-flex min-h-11 cursor-pointer items-center rounded-full border-[1.5px] border-solid px-4 text-[15px] font-bold ${attivo ? 'border-salvia bg-salvia text-white' : 'border-pill bg-white text-inchiostro'}`}
       onClick={() => {
         const prossimo = !attivo;
         setAttivo(prossimo);

@@ -11,6 +11,7 @@ import { dataAggiornamentoIso } from '../lib/aggiornamento';
 import { TEMI_CRUCIPUZZLE } from '../lib/crucipuzzle-temi';
 import { organization, webPage, website } from '../lib/schema';
 import { buildSeo } from '../lib/seo';
+import { CARD_SCHEDE_UTILI } from '../lib/schede-utili';
 import { NUMERI_TABELLINE } from '../lib/tabelline';
 import Base from '../layouts/Base.astro';
 
@@ -83,7 +84,7 @@ const seo = buildSeo({
         <a href="#calendario" class="mt-4 inline-block text-[19px] font-bold text-terracotta">
           Trova il calendario della tua regione
         </a>
-        <div class="mt-[30px] flex gap-[18px] min-[601px]:gap-10">
+        <div class="mt-[30px] flex flex-wrap gap-[18px] min-[601px]:gap-10">
           <div class="text-[15px]">
             <b class="block font-display text-[26px] font-semibold text-salvia min-[601px]:text-[34px]">{calendari}</b>
             calendari regionali
@@ -96,6 +97,14 @@ const seo = buildSeo({
             <b class="block font-display text-[26px] font-semibold text-salvia min-[601px]:text-[34px]">{tabelline}</b>
             tabelline + generatore
           </div>
+          {
+            CARD_SCHEDE_UTILI.map((card) => (
+              <div class="text-[15px]">
+                <b class="cifre block font-display text-[26px] font-semibold text-salvia min-[601px]:text-[34px]">{card.conteggio}</b>
+                {card.nome}
+              </div>
+            ))
+          }
         </div>
       </div>
     </section>
@@ -116,6 +125,7 @@ const seo = buildSeo({
           <div>
             <h3 class="mb-2.5 text-[19px] leading-snug"><span class="titolo-gruppo">Schede da stampare</span></h3>
             <Pills colonna>
+              <Pill href="/fogli-da-stampare/" etichetta="Fogli da stampare" />
               <Pill href="/tabelline/" etichetta="Tabelline" conteggio="1–10" />
               <Pill href="/tabelline/tavola-pitagorica/" etichetta="Tavola pitagorica" />
               <Pill href="/generatori/" etichetta="Crucipuzzle a tema" conteggio={String(temi)} />
@@ -144,6 +154,26 @@ const seo = buildSeo({
             </Pills>
           </div>
         </div>
+      </div>
+    </section>
+
+    <section id="schede-utili" class="py-[30px]">
+      <div class="mx-auto max-w-[1120px] px-6">
+        <h2 class="mb-1.5 text-[28px]">Schede utili</h2>
+        <p class="m-0 mb-4 text-muted">Fogli, orologio e numeri romani, pronti da stampare in A4.</p>
+        <ul class="grid list-none gap-3 p-0 min-[601px]:grid-cols-3">
+          {
+            CARD_SCHEDE_UTILI.map((card) => (
+              <li>
+                <a href={card.href} class="block h-full rounded-xl bg-white px-4 py-3 hover:text-terracotta">
+                  <b>{card.nome}</b>
+                  <span class="mt-1 block font-normal text-inchiostro">{card.testo}</span>
+                  <span class="cifre mt-2 block font-bold text-terracotta">{card.conteggio}</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
       </div>
     </section>
 

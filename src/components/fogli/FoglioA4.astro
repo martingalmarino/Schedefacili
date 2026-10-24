@@ -1,0 +1,12 @@
+---
+import { svgFoglio, type OpzioniFoglio } from '../../lib/fogli';
+
+interface Props {
+  opzioni: OpzioniFoglio;
+  pieno?: boolean;
+}
+
+const { opzioni, pieno = false } = Astro.props;
+---
+
+<Fragment set:html={svgFoglio(opzioni, pieno)} />

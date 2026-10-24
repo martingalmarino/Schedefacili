@@ -9,6 +9,9 @@ import {
   NUMERI_TABELLINE,
   percorsoTabellina,
 } from './tabelline';
+import { PAGINE_FOGLI, SEO_HUB_FOGLI } from './testi-fogli';
+import { SEO_OROLOGIO, SEO_SCHEDE_OROLOGIO } from './testi-orologio';
+import { SEO_CONVERTITORE, SEO_ROMANI, SEO_ROMANI_100, SEO_ROMANI_1000 } from './testi-romani';
 import {
   SEO_CRUCIPUZZLE,
   SEO_GENERATORE_TABELLINE,
@@ -73,11 +76,19 @@ export const INDICE: VoceIndice[] = [
       `calendario scolastico ${ANNO} ${regione.nome} ${regione.capoluogo} vacanze ponti`,
     ),
   ),
+  voce(SEO_HUB_FOGLI.h1, '/fogli-da-stampare/', `${SEO_HUB_FOGLI.h1} quadretti carta millimetrata`),
+  ...PAGINE_FOGLI.map((pagina) => voce(pagina.h1, pagina.href, `${pagina.h1} ${pagina.description}`)),
   voce(SEO_HUB_TABELLINE.h1, '/tabelline/', `${SEO_HUB_TABELLINE.h1} tabelline dall 1 al 10 DSA`),
   ...NUMERI_TABELLINE.map((n) =>
     voce(h1Tabellina(n), percorsoTabellina(n), `tabellina del ${n} tabelline DSA esercizi`),
   ),
   voce(SEO_TAVOLA.h1, '/tabelline/tavola-pitagorica/', `${SEO_TAVOLA.h1} tabelline DSA`),
+  voce(SEO_OROLOGIO.h1, '/orologio-da-stampare/', `${SEO_OROLOGIO.h1} lancette minuti`),
+  voce(SEO_ROMANI.h1, '/numeri-romani/', `${SEO_ROMANI.h1} tabella schede`),
+  voce(SEO_ROMANI_100.h1, '/numeri-romani/da-1-a-100/', `${SEO_ROMANI_100.h1} tabella`),
+  voce(SEO_ROMANI_1000.h1, '/numeri-romani/da-1-a-1000/', `${SEO_ROMANI_1000.h1} schema`),
+  voce(SEO_CONVERTITORE.h1, '/numeri-romani/convertitore/', `${SEO_CONVERTITORE.h1} arabi`),
+  voce(SEO_SCHEDE_OROLOGIO.h1, '/generatori/schede-orologio/', `${SEO_SCHEDE_OROLOGIO.h1} soluzioni`),
   voce(SEO_HUB_GENERATORI.h1, '/generatori/', `${SEO_HUB_GENERATORI.h1} tabelline crucipuzzle DSA`),
   voce(
     SEO_GENERATORE_TABELLINE.h1,

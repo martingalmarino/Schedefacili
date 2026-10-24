@@ -1,0 +1,99 @@
+---
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Faq from '../../components/Faq.astro';
+import InBreve from '../../components/InBreve.astro';
+import TastoStampa from '../../components/calendario/TastoStampa.astro';
+import OrologioOpzioni from '../../components/orologio/OrologioOpzioni';
+import AttivaDsa from '../../components/schede/AttivaDsa.astro';
+import VersioneDsa from '../../components/schede/VersioneDsa';
+import { dataAggiornamentoIso, testoAggiornato } from '../../lib/aggiornamento';
+import { FRASE_STAMPA } from '../../lib/fogli';
+import { opzioniOrologioDaQuery, svgOrologio } from '../../lib/orologio-svg';
+import { howTo, learningResource, urlAssoluta, webPage } from '../../lib/schema';
+import { buildSeo } from '../../lib/seo';
+import { COME_COSTRUIRE, FAQ_OROLOGIO, IN_BREVE_OROLOGIO, SEO_OROLOGIO } from '../../lib/testi-orologio';
+import Base from '../../layouts/Base.astro';
+
+export const prerender = false;
+
+const path = '/orologio-da-stampare/';
+const opzioni = opzioniOrologioDaQuery(Astro.url.searchParams);
+const aggiornato = testoAggiornato();
+const seo = buildSeo({
+  title: SEO_OROLOGIO.title,
+  description: SEO_OROLOGIO.description,
+  path,
+  h1: SEO_OROLOGIO.h1,
+  keywords: SEO_OROLOGIO.keywords,
+  image: '/og/home.png',
+  schema: [
+    webPage({ path, name: SEO_OROLOGIO.h1, description: SEO_OROLOGIO.description, dateModified: dataAggiornamentoIso() }),
+    learningResource({
+      nome: SEO_OROLOGIO.h1,
+      descrizione: SEO_OROLOGIO.description,
+      url: urlAssoluta(path),
+      educationalLevel: 'Scuola primaria',
+    }),
+    howTo({ path, nome: COME_COSTRUIRE.nome, passi: COME_COSTRUIRE.passi, materiali: COME_COSTRUIRE.materiali }),
+  ],
+});
+const collegamenti = [
+  { href: '/generatori/schede-orologio/', etichetta: 'Schede sull’orologio' },
+  { href: '/numeri-romani/', etichetta: 'Numeri romani' },
+  { href: '/tabelline/', etichetta: 'Tabelline' },
+  { href: '/tabelline/tabellina-del-5/', etichetta: 'Tabellina del 5' },
+];
+---
+
+<Base seo={seo} stampaFoglio>
+  <div class="no-stampa">
+    <Breadcrumbs items={[{ nome: 'Home', href: '/' }, { nome: 'Orologio', href: path }]} />
+  </div>
+  <main id="scheda" class="scheda-foglio mx-auto max-w-[1120px] px-6 pb-16">
+    <AttivaDsa id="scheda" />
+    <div class="no-stampa">
+      <h1 class="mt-2 mb-4 font-display text-[34px] leading-tight font-semibold min-[601px]:text-[40px]">{SEO_OROLOGIO.h1}</h1>
+      <InBreve aggiornato={aggiornato}>{IN_BREVE_OROLOGIO}</InBreve>
+      <div class="comandi-scheda my-4 flex max-w-xl flex-wrap items-center gap-3">
+        <VersioneDsa client:load targetId="scheda" />
+        <div class="min-w-[220px] flex-1">
+          <TastoStampa etichetta="Stampa (PDF A4)" />
+        </div>
+      </div>
+      <p class="m-0 max-w-[640px]">{FRASE_STAMPA}</p>
+      <OrologioOpzioni client:visible path={path} iniziale={opzioni} />
+      <p class="mt-4 mb-2 text-muted">L’anteprima è in millimetri. Se non entra nello schermo, scorri il foglio.</p>
+    </div>
+    <div class="anteprima-foglio">
+      <Fragment set:html={svgOrologio(opzioni)} />
+    </div>
+    <div class="no-stampa">
+      <h2 class="mt-10 text-[28px]">{COME_COSTRUIRE.nome}</h2>
+      <p class="m-0 mb-2">Ti servono:</p>
+      <ul class="m-0 grid list-disc gap-1 pl-6">
+        {COME_COSTRUIRE.materiali.map((nome) => <li>{nome}</li>)}
+      </ul>
+      <ol class="m-0 mt-3 grid list-decimal gap-2 pl-6">
+        {
+          COME_COSTRUIRE.passi.map((passo) => (
+            <li>
+              <b>{passo.nome}.</b> {passo.testo}
+            </li>
+          ))
+        }
+      </ol>
+      <h2 class="mt-10 text-[28px]">Domande</h2>
+      <Faq domande={FAQ_OROLOGIO} path={path} />
+      <h2 class="mt-10 text-[28px]">Schede collegate</h2>
+      <nav class="mt-3 flex flex-wrap gap-x-4 font-bold" aria-label="Schede collegate">
+        {
+          collegamenti.map((voce) => (
+            <a href={voce.href} class="inline-flex min-h-11 items-center hover:text-terracotta">
+              {voce.etichetta}
+            </a>
+          ))
+        }
+      </nav>
+    </div>
+  </main>
+</Base>

@@ -162,6 +162,45 @@ export function imageObject(input: {
   };
 }
 
+export function howTo(input: {
+  path: string;
+  nome: string;
+  passi: { nome: string; testo: string }[];
+  materiali?: string[];
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    '@id': `${urlAssoluta(input.path)}#come-stampare`,
+    name: input.nome,
+    inLanguage: 'it-IT',
+    ...(input.materiali?.length
+      ? { supply: input.materiali.map((nome) => ({ '@type': 'HowToSupply', name: nome })) }
+      : {}),
+    step: input.passi.map((passo, indice) => ({
+      '@type': 'HowToStep',
+      position: indice + 1,
+      name: passo.nome,
+      text: passo.testo,
+    })),
+  };
+}
+
+export function itemList(input: { path: string; nome: string; elementi: { nome: string; url: string }[] }) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    '@id': `${urlAssoluta(input.path)}#elenco`,
+    name: input.nome,
+    itemListElement: input.elementi.map((elemento, indice) => ({
+      '@type': 'ListItem',
+      position: indice + 1,
+      name: elemento.nome,
+      url: urlAssoluta(elemento.url),
+    })),
+  };
+}
+
 export function dataset(input: { nome: string; descrizione: string; url: string }) {
   return {
     '@context': 'https://schema.org',
