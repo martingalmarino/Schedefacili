@@ -26,6 +26,13 @@ export const NOMI_M: readonly Persona[] = [
   { nome: 'Matteo', genere: 'm' },
   { nome: 'Leonardo', genere: 'm' },
   { nome: 'Tommaso', genere: 'm' },
+  { nome: 'Andrea', genere: 'm' },
+  { nome: 'Lorenzo', genere: 'm' },
+  { nome: 'Francesco', genere: 'm' },
+  { nome: 'Alessandro', genere: 'm' },
+  { nome: 'Giovanni', genere: 'm' },
+  { nome: 'Riccardo', genere: 'm' },
+  { nome: 'Edoardo', genere: 'm' },
 ];
 
 export const NOMI_F: readonly Persona[] = [
@@ -34,6 +41,13 @@ export const NOMI_F: readonly Persona[] = [
   { nome: 'Aurora', genere: 'f' },
   { nome: 'Alice', genere: 'f' },
   { nome: 'Emma', genere: 'f' },
+  { nome: 'Chiara', genere: 'f' },
+  { nome: 'Beatrice', genere: 'f' },
+  { nome: 'Greta', genere: 'f' },
+  { nome: 'Anna', genere: 'f' },
+  { nome: 'Martina', genere: 'f' },
+  { nome: 'Giorgia', genere: 'f' },
+  { nome: 'Elisa', genere: 'f' },
 ];
 
 export const NOMI: readonly Persona[] = [...NOMI_M, ...NOMI_F];
@@ -125,8 +139,11 @@ export function eAndato(persona: Persona): string {
 }
 
 export function nomeCasuale(rng: Rng, genere?: Genere): Persona {
-  const elenco = genere === 'm' ? NOMI_M : genere === 'f' ? NOMI_F : NOMI;
-  return rng.scegli(elenco);
+  const base = genere === 'm' ? NOMI_M : genere === 'f' ? NOMI_F : NOMI;
+  const liberi = base.filter((persona) => !rng.nomiPresi.includes(persona.nome));
+  const persona = rng.scegli(liberi.length > 0 ? liberi : base);
+  if (!rng.nomiPresi.includes(persona.nome)) rng.nomiPresi.push(persona.nome);
+  return persona;
 }
 
 export function oggetto(id: string): Oggetto {

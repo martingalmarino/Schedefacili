@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { equazione, formattaEuro } from '../src/lib/problemi/formato';
 import { generaScheda, opzioniBase, opzioniDaQuery, quantiProblemi, queryProblemi } from '../src/lib/problemi/genera';
-import { art, CONTENITORI, eAndato, NOMI_F, NOMI_M, OGGETTI, plur, prezzo, pronome, quantita, trovaOggetto } from '../src/lib/problemi/lessico';
+import { art, CONTENITORI, eAndato, NOMI, NOMI_F, NOMI_M, OGGETTI, plur, prezzo, pronome, quantita, trovaOggetto } from '../src/lib/problemi/lessico';
 import { altezzaRiquadro, htmlScheda } from '../src/lib/problemi/render';
 import { creaRng } from '../src/lib/problemi/rng';
 import { TEMPLATES } from '../src/lib/problemi/template';
@@ -242,15 +242,14 @@ describe('plantillas por clase', () => {
         if (!istanza) continue;
         const testo = `${istanza.testo} ${istanza.risposta} ${istanza.operazioni.join(' ')}`;
         for (const regola of vietate) expect(testo, template.id).not.toMatch(regola);
-        const femminile = /\b(Giulia|Sofia|Aurora|Alice|Emma)\b/u.test(testo);
-        const maschile = /\b(Luca|Marco|Matteo|Leonardo|Tommaso)\b/u.test(testo);
+        const femminile = new RegExp(`\\b(?:${NOMI_F.map((persona) => persona.nome).join('|')})\\b`, 'u').test(testo);
+        const maschile = new RegExp(`\\b(?:${NOMI_M.map((persona) => persona.nome).join('|')})\\b`, 'u').test(testo);
         if (femminile) expect(testo, template.id).not.toMatch(/\bgli restano\b/u);
         if (maschile) expect(testo, template.id).not.toMatch(/\ble restano\b/u);
-        if (template.classe === 1 && istanza.aiutoVisivo) {
-          expect(istanza.aiutoVisivo.startsWith('<svg')).toBe(true);
-          const icone = istanza.aiutoVisivo.match(/<(?:circle|rect) /g) ?? [];
-          expect(icone.length).toBeLessThanOrEqual(20);
-          expect(icone.length).toBeGreaterThan(0);
+        if (template.classe === 1) {
+          expect(istanza.disegno, template.id).toBeTruthy();
+          expect(istanza.aiutoVisivo, template.id).toBeUndefined();
+          expect((istanza.disegno?.a ?? 0) <= 20 && (istanza.disegno?.b ?? 0) <= 20).toBe(true);
         }
       }
     }
@@ -433,4 +432,77 @@ describe('fuzz dei problemi', () => {
       }
     }
   }, 180000);
+});
+
+const PAROLE_OGGETTO = new Map([...OGGETTI, ...CONTENITORI].flatMap((ogg) => [[ogg.singolare, ogg], [ogg.plurale, ogg]] as const));
+
+function erroreNe(testo: string): string | null {
+  const regola = /\bne\s+\p{L}+(?:\s+\p{L}+){0,4}\s+\d+\s+(\p{L}+)/giu;
+  for (const match of testo.matchAll(regola)) {
+    const parola = (match[1] ?? '').toLocaleLowerCase('it');
+    const ogg = PAROLE_OGGETTO.get(parola);
+    if (!ogg) continue;
+    const prima = testo.slice(0, match.index ?? 0).toLocaleLowerCase('it');
+    if (prima.includes(ogg.singolare) || prima.includes(ogg.plurale)) return match[0];
+  }
+  return null;
+}
+
+function contaPunti(html: string, colore: string): number {
+  return html.match(new RegExp(`class="punto ${colore}(?: punto-tolto)?"`, 'g'))?.length ?? 0;
+}
+
+describe('puntini, ne e nomi', () => {
+  it('usa almeno 20 nomi e non li ripete nella stessa scheda', () => {
+    expect(NOMI.length).toBeGreaterThanOrEqual(20);
+    for (const classe of [1, 2, 3, 4, 5] as const) {
+      for (const seed of semiCasuali(classe)) {
+        const scheda = generaScheda({ ...opzioniBase(classe, seed), n: 8 });
+        const trovati = scheda.flatMap((problema) => NOMI.filter((persona) => new RegExp(`\\b${persona.nome}\\b`, 'u').test(problema.testo)).map((persona) => persona.nome));
+        expect(new Set(trovati).size, `${classe} ${seed} ${trovati.join(', ')}`).toBe(trovati.length);
+      }
+    }
+  });
+
+  it('non ripete il sostantivo dopo ne e un numero', () => {
+    for (const template of TEMPLATES) {
+      for (let seme = 1; seme <= 80; seme += 1) {
+        const istanza = template.genera(creaRng(seme + template.classe * 17));
+        if (!istanza) continue;
+        const errore = erroreNe(`${istanza.testo} ${istanza.risposta}`);
+        expect(errore, `${template.id}: ${istanza.testo}`).toBeNull();
+      }
+    }
+  });
+
+  it('la scheda di prima non disegna il risultato; l’aiuto mostra i dati', () => {
+    for (const seed of semiCasuali(1)) {
+      const opzioni = { ...opzioniBase(1, seed), n: 8 as const };
+      const scheda = generaScheda(opzioni);
+      const vuota = htmlScheda(scheda, opzioni, false);
+      if (vuota.includes('class="punto')) throw new Error(`${seed}: la scheda disegna già il risultato`);
+      const aiuto = htmlScheda(scheda, { ...opzioni, aiutoVisivo: true }, false).split('<li class="problema">').slice(1);
+      const soluzioni = htmlScheda(scheda, opzioni, true).split('<li class="problema">').slice(1);
+      scheda.forEach((problema, indice) => {
+        const disegno = problema.disegno;
+        const html = aiuto[indice] ?? '';
+        const sol = soluzioni[indice] ?? '';
+        const etichetta = `${seed} ${problema.id}`;
+        if (!disegno) throw new Error(`${etichetta}: manca il disegno`);
+        if (disegno.tipo === 'add') {
+          if (contaPunti(html, 'punto-ink') !== disegno.a || contaPunti(html, 'punto-terracotta') !== disegno.b) {
+            throw new Error(`${etichetta}: aiuto ${disegno.a}+${disegno.b}`);
+          }
+          if (!html.includes('segno-puntini') || html.includes('punto-tolto')) throw new Error(`${etichetta}: somma senza gruppi`);
+          if (contaPunti(sol, 'punto-ink') + contaPunti(sol, 'punto-terracotta') !== disegno.a + disegno.b) {
+            throw new Error(`${etichetta}: soluzioni senza risultato`);
+          }
+        } else if (contaPunti(html, 'punto-ink') !== disegno.a || (html.match(/punto-tolto/g) ?? []).length !== disegno.b) {
+          throw new Error(`${etichetta}: aiuto ${disegno.a} con ${disegno.b} tolti`);
+        } else if ((sol.match(/punto-tolto/g) ?? []).length !== disegno.b || contaPunti(sol, 'punto-ink') !== disegno.a) {
+          throw new Error(`${etichetta}: soluzioni senza il disegno completo`);
+        }
+      });
+    }
+  });
 });

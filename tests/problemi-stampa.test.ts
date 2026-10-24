@@ -3,6 +3,9 @@ import { existsSync, mkdirSync, readFileSync, statSync } from 'node:fs';
 import { join, normalize } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { chromium, type Page } from 'playwright';
+import { generaScheda, opzioniBase } from '../src/lib/problemi/genera';
+import { htmlScheda } from '../src/lib/problemi/render';
+import { creaRng } from '../src/lib/problemi/rng';
 import { PAGINE_PROBLEMI } from '../src/lib/testi-problemi';
 
 const DIST = join(process.cwd(), 'dist', 'client');
@@ -164,4 +167,57 @@ describe('stampa dei problemi', () => {
       await sito.close();
     }
   }, 120000);
+
+  it('con 1000 semi i puntini dell’aiuto visivo restano nel riquadro', async () => {
+    const rng = creaRng(7919);
+    const semi = new Set<number>();
+    while (semi.size < 1000) semi.add(1000 + Math.floor(rng.successivo() * 999_000));
+    const sito = await avvia();
+    const browser = await chromium.launch();
+    try {
+      const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+      await page.goto(`${sito.url}/problemi-matematica/classe-prima/?aiuto=1&n=4`, { waitUntil: 'load' });
+      await page.waitForFunction(() => document.querySelectorAll('#scheda-problemi .punto').length > 0);
+      const premuto = await page.locator('button', { hasText: 'Aiuto visivo' }).getAttribute('aria-pressed');
+      expect(premuto).toBe('true');
+      const lotti = [...semi];
+      for (let indice = 0; indice < lotti.length; indice += 25) {
+        const html = lotti
+          .slice(indice, indice + 25)
+          .map((seed) => {
+            const opzioni = { ...opzioniBase(1, seed), n: 8, aiutoVisivo: true };
+            return htmlScheda(generaScheda(opzioni), opzioni, false);
+          })
+          .join('');
+        const errori = await page.evaluate((corpo) => {
+          const radice = document.getElementById('scheda-problemi');
+          if (!radice) return ['manca la scheda'];
+          radice.innerHTML = corpo;
+          const problemi: string[] = [];
+          for (const box of radice.querySelectorAll('.riquadro')) {
+            const rect = box.getBoundingClientRect();
+            const punti = [...box.querySelectorAll('.punto')];
+            for (let a = 0; a < punti.length; a += 1) {
+              const ra = punti[a].getBoundingClientRect();
+              if (ra.width < 1 || ra.left < rect.left - 0.6 || ra.right > rect.right + 0.6 || ra.top < rect.top - 0.6 || ra.bottom > rect.bottom + 0.6) {
+                problemi.push('fuori');
+                break;
+              }
+              for (let b = a + 1; b < punti.length; b += 1) {
+                const rb = punti[b].getBoundingClientRect();
+                const ox = Math.min(ra.right, rb.right) - Math.max(ra.left, rb.left);
+                const oy = Math.min(ra.bottom, rb.bottom) - Math.max(ra.top, rb.top);
+                if (ox > 0.6 && oy > 0.6) problemi.push('sovrapposti');
+              }
+            }
+          }
+          return problemi.slice(0, 4);
+        }, html);
+        expect(errori, `lotto ${indice}`).toEqual([]);
+      }
+    } finally {
+      await browser.close();
+      await sito.close();
+    }
+  }, 180000);
 });

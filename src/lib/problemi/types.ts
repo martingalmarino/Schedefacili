@@ -25,6 +25,12 @@ export interface Dato {
   tipo?: 'quantita' | 'prezzo' | 'altro';
 }
 
+export interface DisegnoPrima {
+  tipo: 'add' | 'sub';
+  a: number;
+  b: number;
+}
+
 export interface Istanza {
   id: string;
   testo: string;
@@ -34,6 +40,7 @@ export interface Istanza {
   unita: string;
   risposta: string;
   aiutoVisivo?: string;
+  disegno?: DisegnoPrima;
   tags: Tag[];
   passi: 1 | 2 | 3;
   consentiUno?: boolean;
@@ -54,6 +61,7 @@ export interface OpzioniScheda {
   operazioni: Tag[];
   dueOperazioni: boolean;
   spazi: Spazi;
+  aiutoVisivo?: boolean;
 }
 
 export const OPERAZIONI_CLASSE: Record<Classe, Tag[]> = {

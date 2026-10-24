@@ -1,5 +1,5 @@
 import { formattaNumero, marcaNumeri } from './formato';
-import type { Dato, Istanza, OpzioniScheda } from './types';
+import type { Dato, DisegnoPrima, Istanza, OpzioniScheda } from './types';
 import { CLASSE_IN_LETTERE } from './types';
 
 const ALTEZZE: Record<number, number> = { 4: 32, 5: 27, 6: 23, 7: 18, 8: 15 };
@@ -22,13 +22,68 @@ function etichette(opzioni: OpzioniScheda): [string, string, string] {
   return ['Dati', 'Operazione', 'Risposta'];
 }
 
+function limita(n: number): number {
+  return Math.max(0, Math.min(20, Math.round(n)));
+}
+
+function htmlGruppo(classi: string[]): string {
+  const righe: string[][] = [];
+  let riga: string[] = [];
+  let cinquina: string[] = [];
+  const chiudiCinquina = () => {
+    if (cinquina.length === 0) return;
+    riga.push(`<span class="cinquina">${cinquina.join('')}</span>`);
+    cinquina = [];
+  };
+  const chiudiRiga = () => {
+    chiudiCinquina();
+    if (riga.length === 0) return;
+    righe.push(riga);
+    riga = [];
+  };
+  classi.forEach((classe, indice) => {
+    cinquina.push(`<span class="punto ${classe}"></span>`);
+    if (cinquina.length === 5) chiudiCinquina();
+    if ((indice + 1) % 10 === 0) chiudiRiga();
+  });
+  chiudiRiga();
+  return `<span class="gruppo">${righe.map((pezzi) => `<span class="riga">${pezzi.join('')}</span>`).join('')}</span>`;
+}
+
+function classiPunto(n: number, colore: string, tolti = 0): string[] {
+  const quanti = limita(n);
+  const daTogliere = Math.min(limita(tolti), quanti);
+  return Array.from({ length: quanti }, (_, indice) => (indice >= quanti - daTogliere ? `${colore} punto-tolto` : colore));
+}
+
+function htmlDisegno(disegno: DisegnoPrima, soluzioni: boolean): string {
+  const a = limita(disegno.a);
+  const b = limita(disegno.b);
+  if (disegno.tipo === 'sub') {
+    return `<div class="puntini" data-tipo="sub" aria-hidden="true">${htmlGruppo(classiPunto(a, 'punto-ink', b))}</div>`;
+  }
+  if (soluzioni) {
+    return `<div class="puntini" data-tipo="risultato" aria-hidden="true">${htmlGruppo([...classiPunto(a, 'punto-ink'), ...classiPunto(b, 'punto-terracotta')])}</div>`;
+  }
+  return `<div class="puntini" data-tipo="add" aria-hidden="true">${htmlGruppo(classiPunto(a, 'punto-ink'))}<span class="segno-puntini">+</span>${htmlGruppo(classiPunto(b, 'punto-terracotta'))}</div>`;
+}
+
+function figuraDi(istanza: Istanza, opzioni: OpzioniScheda, soluzioni: boolean): string {
+  if (istanza.disegno && opzioni.classe === 1 && opzioni.spazi === 'dati') {
+    if (soluzioni || opzioni.aiutoVisivo) return htmlDisegno(istanza.disegno, soluzioni);
+    return '';
+  }
+  if (soluzioni) return '';
+  return istanza.aiutoVisivo?.trim().startsWith('<svg') ? istanza.aiutoVisivo : '';
+}
+
 function problema(istanza: Istanza, indice: number, opzioni: OpzioniScheda, soluzioni: boolean, alto: number): string {
   const [dati, operazione, risposta] = etichette(opzioni);
-  const disegno = istanza.aiutoVisivo?.trim().startsWith('<svg') ? istanza.aiutoVisivo : '';
+  const figura = figuraDi(istanza, opzioni, soluzioni);
   const testoDati = istanza.dati.map((dato) => marcaNumeri(`${dato.etichetta}: ${valoreDato(dato)}`)).join(' / ');
   const testoOperazione = istanza.operazioni.map((riga) => marcaNumeri(riga.trim())).join('<br>');
   const solo = opzioni.spazi === 'risposta';
-  const corpoDati = soluzioni ? testoDati : disegno;
+  const corpoDati = soluzioni ? [figura, testoDati].filter(Boolean).join('<br>') : figura;
   const caselle = solo
     ? riquadro('Risposta', soluzioni ? marcaNumeri(istanza.risposta) : '', alto)
     : [

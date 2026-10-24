@@ -5,11 +5,13 @@ export interface Rng {
   intero(min: number, max: number): number;
   scegli<T>(voci: readonly T[]): T;
   mescola<T>(voci: readonly T[]): T[];
+  nomiPresi: string[];
 }
 
 export function creaRng(seme: number): Rng {
   const casuale = mulberry32(seme >>> 0);
   return {
+    nomiPresi: [],
     successivo: casuale,
     intero(min, max) {
       const basso = Math.ceil(min);

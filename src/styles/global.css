@@ -647,6 +647,72 @@ h3,
   line-height: 1.25;
 }
 
+.puntini,
+.gruppo,
+.riga,
+.cinquina {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 100%;
+}
+
+.puntini {
+  align-items: center;
+  gap: 1mm 1.4mm;
+}
+
+.gruppo {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.6mm;
+}
+
+.riga {
+  gap: 1.2mm;
+}
+
+.cinquina {
+  gap: 0.45mm;
+}
+
+.punto {
+  box-sizing: border-box;
+  display: block;
+  width: 2.2mm;
+  height: 2.2mm;
+  flex: 0 0 2.2mm;
+  border: 0.2mm solid #1f2a44;
+  border-radius: 50%;
+  background: #1f2a44;
+  print-color-adjust: exact;
+}
+
+.punto-terracotta {
+  border-color: #c2522d;
+  background: #c2522d;
+}
+
+.punto-tolto {
+  position: relative;
+}
+
+.punto-tolto::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 0.15mm;
+  left: 0.15mm;
+  height: 0.35mm;
+  margin-top: -0.17mm;
+  background: #c2522d;
+}
+
+.segno-puntini {
+  color: #1f2a44;
+  font-weight: 600;
+  line-height: 1;
+}
+
 .pie-problemi {
   margin: 3mm 0 0;
   font-size: 8pt;

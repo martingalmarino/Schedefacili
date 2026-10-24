@@ -45,7 +45,7 @@ export const CLASSE_QUARTA: Template[] = [
       const n = rng.intero(2, d - 1);
       const rest = d - n;
       return scheda({
-        testo: `Una torta è divisa in ${plur(d, fetta)}. ${nomeCasuale(rng).nome} ne mangia ${plur(n, fetta)}. Che frazione della torta ha mangiato? ${quanti(fetta)} restano?`,
+        testo: `Una torta è divisa in ${plur(d, fetta)}. ${nomeCasuale(rng).nome} ne mangia ${n}. Che frazione della torta ha mangiato? ${quanti(fetta)} restano?`,
         dati: [qta(fetta, d), qta(fetta, n)],
         operazioni: [passo(d, '−', n)],
         risultato: rest,
@@ -199,7 +199,7 @@ export const CLASSE_QUARTA: Template[] = [
       const persona = nomeCasuale(rng);
       const { a, b, resto } = coppiaResto(rng, 200, 40);
       return scheda({
-        testo: `${persona.nome} ha ${plur(a, figurina)} nell’album e ${ne()} stacca ${plur(b, figurina)}. ${quanti(figurina)} ${pronome(persona.genere)} restano?`,
+        testo: `${persona.nome} ha ${plur(a, figurina)} nell’album e ${ne()} stacca ${b}. ${quanti(figurina)} ${pronome(persona.genere)} restano?`,
         dati: [qta(figurina, a), qta(figurina, b)],
         operazioni: [passo(a, '−', b)],
         risultato: resto,
@@ -432,7 +432,7 @@ export const CLASSE_QUARTA: Template[] = [
       const colti = rng.intero(2, tot - 1);
       const restano = tot - colti;
       return scheda({
-        testo: `Nell’orto ci sono ${n} file. Ogni fila ha ${plur(k, fiore)}. Se ne colgono ${plur(colti, fiore)}. ${quanti(fiore)} restano?`,
+        testo: `Nell’orto ci sono ${n} file. Ogni fila ha ${plur(k, fiore)}. Se ne colgono ${colti}. ${quanti(fiore)} restano?`,
         dati: [altro('file', n), qta(fiore, k), qta(fiore, colti)],
         operazioni: [passo(n, '×', k), passo(tot, '−', colti)],
         risultato: restano,

@@ -1,7 +1,7 @@
 import { equazione, formattaEuro, formattaNumero } from '../formato';
 import { altri, ne, nomeCasuale, oggetto, plur, pronome, quanti, type Oggetto, type Persona } from '../lessico';
 import type { Rng } from '../rng';
-import type { Dato, Istanza, Segno, Tag } from '../types';
+import type { Dato, DisegnoPrima, Istanza, Segno, Tag } from '../types';
 
 export const mela = oggetto('mela');
 export const matita = oggetto('matita');
@@ -118,40 +118,10 @@ export function scheda(input: {
   tags: Tag[];
   passi: 1 | 2 | 3;
   aiutoVisivo?: string;
+  disegno?: DisegnoPrima;
   consentiUno?: boolean;
 }): Istanza {
   return { id: '', ...input };
-}
-
-export function filaIcone(n: number, id: string): string {
-  const tinta: Record<string, string> = {
-    mela: '#C2522D',
-    matita: '#E0A526',
-    libro: '#1F2A44',
-    fiore: '#E0A526',
-    biglia: '#3F6B4E',
-    figurina: '#C2522D',
-    adesivo: '#3F6B4E',
-    pallone: '#1F2A44',
-    quaderno: '#3F6B4E',
-    caramella: '#C2522D',
-    pastello: '#E0A526',
-    bambino: '#1F2A44',
-    fiore2: '#C2522D',
-  };
-  const colore = tinta[id] ?? '#3F6B4E';
-  const rettangolo = id === 'libro' || id === 'quaderno' || id === 'adesivo' || id === 'figurina' || id === 'matita' || id === 'pastello';
-  const parti: string[] = [];
-  let x = 0.8;
-  const num = (valore: number) => String(Math.round(valore * 10) / 10);
-  for (let indice = 0; indice < n; indice += 1) {
-    if (indice > 0 && indice % 5 === 0) x += 2.2;
-    if (rettangolo) parti.push(`<rect x="${num(x)}" y="1.4" width="2.2" height="3.2" rx="0.3" fill="${colore}"/>`);
-    else parti.push(`<circle cx="${num(x + 1.2)}" cy="3" r="1.4" fill="${colore}"/>`);
-    x += 3.6;
-  }
-  const larghezza = Math.round((x + 0.6) * 10) / 10;
-  return `<svg width="${num(larghezza)}mm" height="6mm" viewBox="0 0 ${num(larghezza)} 6" aria-hidden="true">${parti.join('')}</svg>`;
 }
 
 export function frazioneSvg(numeratore: number, denominatore: number): string {

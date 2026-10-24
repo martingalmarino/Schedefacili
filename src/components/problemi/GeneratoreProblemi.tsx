@@ -121,7 +121,15 @@ export default function GeneratoreProblemi({ path, iniziale, cambiaClasse = fals
                 type="button"
                 className={classeBottone(stato.classe === classe)}
                 aria-pressed={stato.classe === classe}
-                onClick={() => aggiorna({ ...stato, classe, operazioni: [...OPERAZIONI_CLASSE[classe]], dueOperazioni: classe >= 3 ? stato.dueOperazioni : false })}
+                onClick={() =>
+                  aggiorna({
+                    ...stato,
+                    classe,
+                    operazioni: [...OPERAZIONI_CLASSE[classe]],
+                    dueOperazioni: classe >= 3 ? stato.dueOperazioni : false,
+                    aiutoVisivo: classe === 1 ? stato.aiutoVisivo : false,
+                  })
+                }
               >
                 <span className="n">{classe}</span>ª
               </button>
@@ -162,6 +170,13 @@ export default function GeneratoreProblemi({ path, iniziale, cambiaClasse = fals
           Solo risposta
         </button>
       </div>
+      {stato.classe === 1 && (
+        <div className="mt-3">
+          <button type="button" className={classeBottone(Boolean(stato.aiutoVisivo))} aria-pressed={Boolean(stato.aiutoVisivo)} onClick={() => aggiorna({ ...stato, aiutoVisivo: !stato.aiutoVisivo })}>
+            Aiuto visivo
+          </button>
+        </div>
+      )}
       <button type="button" className="mt-4 inline-flex min-h-11 items-center justify-center rounded-[10px] border-[1.5px] border-solid border-terracotta bg-white px-4 font-bold text-terracotta" onClick={nuova}>
         ↻ Nuova scheda
       </button>

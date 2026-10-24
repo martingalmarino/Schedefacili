@@ -42,7 +42,7 @@ export const CLASSE_TERZA: Template[] = [
       const persona = nomeCasuale(rng);
       const { a, b, resto } = coppiaResto(rng, 180, 30);
       return scheda({
-        testo: `${persona.nome} ha ${plur(a, figurina)}. Ne regala ${plur(b, figurina)} a suo fratello. ${quanti(figurina)} ${pronome(persona.genere)} restano?`,
+        testo: `${persona.nome} ha ${plur(a, figurina)}. Ne regala ${b} a suo fratello. ${quanti(figurina)} ${pronome(persona.genere)} restano?`,
         dati: [qta(figurina, a), qta(figurina, b)],
         operazioni: [passo(a, '−', b)],
         risultato: resto,
@@ -123,7 +123,7 @@ export const CLASSE_TERZA: Template[] = [
       const persona = nomeCasuale(rng);
       const { a, b, resto } = coppiaResto(rng, fiore.max, 8);
       return scheda({
-        testo: `Nell’orto ${persona.nome} conta ${plur(a, fiore)}. Ne coglie ${plur(b, fiore)} per la maestra. ${quanti(fiore)} restano nell’orto?`,
+        testo: `Nell’orto ${persona.nome} conta ${plur(a, fiore)}. Ne coglie ${b} per la maestra. ${quanti(fiore)} restano nell’orto?`,
         dati: [qta(fiore, a), qta(fiore, b)],
         operazioni: [passo(a, '−', b)],
         risultato: resto,
@@ -205,7 +205,7 @@ export const CLASSE_TERZA: Template[] = [
     genera(rng) {
       const { a, b, resto } = coppiaResto(rng, pallone.max, 6);
       return scheda({
-        testo: `Nel deposito ci sono ${plur(a, pallone)}. La squadra ne porta in palestra ${plur(b, pallone)}. ${quanti(pallone)} restano nel deposito?`,
+        testo: `Nel deposito ci sono ${plur(a, pallone)}. La squadra ne porta in palestra ${b}. ${quanti(pallone)} restano nel deposito?`,
         dati: [qta(pallone, a), qta(pallone, b)],
         operazioni: [passo(a, '−', b)],
         risultato: resto,
@@ -327,7 +327,7 @@ export const CLASSE_TERZA: Template[] = [
       const portate = rng.intero(2, tot - 1);
       const restano = tot - portate;
       return scheda({
-        testo: `Nell’orto ci sono ${plur(n, cesto)}. Ogni cesto contiene ${plur(k, mela)}. La classe ne porta a scuola ${plur(portate, mela)}. ${quanti(mela)} restano nell’orto?`,
+        testo: `Nell’orto ci sono ${plur(n, cesto)}. Ogni cesto contiene ${plur(k, mela)}. La classe ne porta a scuola ${portate}. ${quanti(mela)} restano nell’orto?`,
         dati: [qta(cesto, n), qta(mela, k), qta(mela, portate)],
         operazioni: [passo(n, '×', k), passo(tot, '−', portate)],
         risultato: restano,
@@ -351,7 +351,7 @@ export const CLASSE_TERZA: Template[] = [
       const prestati = rng.intero(2, Math.min(libro.max, tot - 1));
       const restano = tot - prestati;
       return scheda({
-        testo: `In biblioteca ci sono ${plur(n, scaffale)}. Su ogni scaffale ci sono ${plur(k, libro)}. I bambini ne prendono in prestito ${plur(prestati, libro)}. ${quanti(libro)} restano?`,
+        testo: `In biblioteca ci sono ${plur(n, scaffale)}. Su ogni scaffale ci sono ${plur(k, libro)}. I bambini ne prendono in prestito ${prestati}. ${quanti(libro)} restano?`,
         dati: [qta(scaffale, n), qta(libro, k), qta(libro, prestati)],
         operazioni: [passo(n, '×', k), passo(tot, '−', prestati)],
         risultato: restano,
@@ -374,7 +374,7 @@ export const CLASSE_TERZA: Template[] = [
       const usati = rng.intero(2, tot - 1);
       const restano = tot - usati;
       return scheda({
-        testo: `Alla partita giocano ${n} squadre. Ogni squadra usa ${plur(k, pallone)}. Dopo il gioco ne ripongono ${plur(usati, pallone)}. ${quanti(pallone)} restano in palestra?`,
+        testo: `Alla partita giocano ${n} squadre. Ogni squadra usa ${plur(k, pallone)}. Dopo il gioco ne ripongono ${usati}. ${quanti(pallone)} restano in palestra?`,
         dati: [altro('squadre', n), qta(pallone, k), qta(pallone, usati)],
         operazioni: [passo(n, '×', k), passo(tot, '−', usati)],
         risultato: restano,
@@ -398,7 +398,7 @@ export const CLASSE_TERZA: Template[] = [
       const c = rng.intero(4, somma - 2);
       const resto = somma - c;
       return scheda({
-        testo: `${persona.nome} ha ${plur(a, figurina)}. Ne compra altre ${plur(b, figurina)} e poi ${ne()} regala ${plur(c, figurina)}. ${quanti(figurina)} ${pronome(persona.genere)} restano?`,
+        testo: `${persona.nome} ha ${plur(a, figurina)}. Ne compra altre ${b} e poi ${ne()} regala ${c}. ${quanti(figurina)} ${pronome(persona.genere)} restano?`,
         dati: [qta(figurina, a), qta(figurina, b), qta(figurina, c)],
         operazioni: [passo(a, '+', b), passo(somma, '−', c)],
         risultato: resto,

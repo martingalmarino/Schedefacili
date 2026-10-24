@@ -14,6 +14,7 @@ export function opzioniBase(classe: Classe, seed: number): OpzioniScheda {
     operazioni: [...OPERAZIONI_CLASSE[classe]],
     dueOperazioni: false,
     spazi: 'dati',
+    aiutoVisivo: false,
   };
 }
 
@@ -39,6 +40,8 @@ export function opzioniDaQuery(parametri: URLSearchParams, base: OpzioniScheda):
   if (parametri.get('due') === '0') prossima.dueOperazioni = false;
   if (parametri.get('spazi') === 'risposta') prossima.spazi = 'risposta';
   if (parametri.get('spazi') === 'dati') prossima.spazi = 'dati';
+  if (parametri.get('aiuto') === '1' && prossima.classe === 1) prossima.aiutoVisivo = true;
+  if (parametri.get('aiuto') === '0') prossima.aiutoVisivo = false;
   if (prossima.operazioni.length === 0) prossima.operazioni = [...OPERAZIONI_CLASSE[prossima.classe]];
   return prossima;
 }
@@ -51,6 +54,7 @@ export function queryProblemi(opzioni: OpzioniScheda, base: OpzioniScheda): stri
   if (opzioni.operazioni.join(',') !== base.operazioni.join(',')) query.set('op', opzioni.operazioni.join(','));
   if (opzioni.dueOperazioni !== base.dueOperazioni) query.set('due', opzioni.dueOperazioni ? '1' : '0');
   if (opzioni.spazi !== base.spazi) query.set('spazi', opzioni.spazi);
+  if (Boolean(opzioni.aiutoVisivo) !== Boolean(base.aiutoVisivo)) query.set('aiuto', opzioni.aiutoVisivo ? '1' : '0');
   const testo = query.toString();
   return testo ? `?${testo}` : '';
 }
