@@ -2,7 +2,7 @@
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import Faq from '../../components/Faq.astro';
 import InBreve from '../../components/InBreve.astro';
-import { dataInItaliano } from '../../lib/ricorrenze';
+import { dataAggiornamentoIso, testoAggiornato } from '../../lib/aggiornamento';
 import { webPage } from '../../lib/schema';
 import { buildSeo } from '../../lib/seo';
 import { h1Tabellina, NUMERI_TABELLINE, percorsoTabellina } from '../../lib/tabelline';
@@ -10,7 +10,7 @@ import { SEO_HUB_TABELLINE } from '../../lib/testi-schede';
 import Base from '../../layouts/Base.astro';
 
 const path = '/tabelline/';
-const aggiornato = dataInItaliano(new Date());
+const aggiornato = testoAggiornato();
 const domande = [
   {
     domanda: 'Quali tabelline posso stampare?',
@@ -41,7 +41,7 @@ const seo = buildSeo({
       path,
       name: SEO_HUB_TABELLINE.h1,
       description: SEO_HUB_TABELLINE.description,
-      dateModified: new Date().toISOString(),
+      dateModified: dataAggiornamentoIso(),
     }),
   ],
 });
@@ -73,6 +73,6 @@ const seo = buildSeo({
       <a href="/generatori/tabelline/" class="hover:text-terracotta">Generatore di tabelline</a>
     </p>
     <h2 class="mt-10 text-[28px]">Domande</h2>
-    <Faq domande={domande} />
+    <Faq domande={domande} path={path} />
   </main>
 </Base>

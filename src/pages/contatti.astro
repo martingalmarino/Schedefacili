@@ -1,6 +1,6 @@
 ---
 import { EMAIL } from '../config/site';
-import { dataInItaliano } from '../lib/ricorrenze';
+import { dataAggiornamentoIso, testoAggiornato } from '../lib/aggiornamento';
 import { webPage } from '../lib/schema';
 import { buildSeo } from '../lib/seo';
 import PaginaLegale from '../layouts/PaginaLegale.astro';
@@ -8,14 +8,14 @@ import PaginaLegale from '../layouts/PaginaLegale.astro';
 const path = '/contatti/';
 const h1 = 'Contatti';
 const description = 'Per scrivere a Schede Facili si usa un indirizzo email. Non c’è un modulo di contatto.';
-const aggiornato = dataInItaliano(new Date());
+const aggiornato = testoAggiornato();
 const seo = buildSeo({
   title: 'Contatti – Schede Facili',
   description,
   path,
   h1,
   keywords: ['contatti schede facili'],
-  schema: [webPage({ path, name: h1, description, dateModified: new Date().toISOString() })],
+  schema: [webPage({ path, name: h1, description, dateModified: dataAggiornamentoIso() })],
 });
 ---
 

@@ -3,9 +3,9 @@ import { ANNO_SLUG } from '../config/site';
 import { INFO, STRUMENTI } from '../data/nav';
 import { regioniPiuPopolose, urlCalendarioRegione } from '../data/regioni';
 import { marcaAnni } from '../lib/cifre';
-import { dataInItaliano } from '../lib/ricorrenze';
+import { testoAggiornato } from '../lib/aggiornamento';
 
-const aggiornato = dataInItaliano(new Date());
+const aggiornato = testoAggiornato();
 const calendario = regioniPiuPopolose();
 ---
 

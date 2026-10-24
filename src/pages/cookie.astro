@@ -1,5 +1,5 @@
 ---
-import { dataInItaliano } from '../lib/ricorrenze';
+import { dataAggiornamentoIso, testoAggiornato } from '../lib/aggiornamento';
 import { webPage } from '../lib/schema';
 import { buildSeo } from '../lib/seo';
 import PaginaLegale from '../layouts/PaginaLegale.astro';
@@ -8,14 +8,14 @@ const path = '/cookie/';
 const h1 = 'Cookie';
 const description =
   'Cookie tecnici, cookie della CMP e cookie pubblicitari di Google. Come si revoca il consenso e come funziona il Consent Mode v2.';
-const aggiornato = dataInItaliano(new Date());
+const aggiornato = testoAggiornato();
 const seo = buildSeo({
   title: 'Cookie e consenso – Schede Facili',
   description,
   path,
   h1,
   keywords: ['cookie', 'consenso', 'consent mode'],
-  schema: [webPage({ path, name: h1, description, dateModified: new Date().toISOString() })],
+  schema: [webPage({ path, name: h1, description, dateModified: dataAggiornamentoIso() })],
 });
 ---
 

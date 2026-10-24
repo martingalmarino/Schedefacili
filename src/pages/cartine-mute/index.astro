@@ -3,14 +3,14 @@ import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import Faq from '../../components/Faq.astro';
 import InBreve from '../../components/InBreve.astro';
 import { marcaAnni } from '../../lib/cifre';
-import { dataInItaliano } from '../../lib/ricorrenze';
+import { dataAggiornamentoIso, testoAggiornato } from '../../lib/aggiornamento';
 import { webPage } from '../../lib/schema';
 import { buildSeo } from '../../lib/seo';
 import { regioniCartina, SEO_HUB_CARTINE, urlCartinaRegione } from '../../lib/cartine-pagine';
 import Base from '../../layouts/Base.astro';
 
 const path = '/cartine-mute/';
-const aggiornato = dataInItaliano(new Date());
+const aggiornato = testoAggiornato();
 const regioni = regioniCartina();
 const domande = [
   {
@@ -42,7 +42,7 @@ const seo = buildSeo({
       path,
       name: SEO_HUB_CARTINE.h1,
       description: SEO_HUB_CARTINE.description,
-      dateModified: new Date().toISOString(),
+      dateModified: dataAggiornamentoIso(),
     }),
   ],
 });
@@ -72,6 +72,6 @@ const seo = buildSeo({
       }
     </ul>
     <h2 class="mt-10 text-[28px]">Domande</h2>
-    <Faq domande={domande} />
+    <Faq domande={domande} path={path} />
   </main>
 </Base>

@@ -4,7 +4,9 @@
   .striscia,
   .annuncio,
   [data-annuncio],
-  .no-stampa {
+  .no-stampa,
+  aside,
+  button {
     display: none !important;
   }
 
@@ -31,5 +33,5 @@
 
 @page {
   size: A4;
-  margin: 12mm;
+  margin: 10mm;
 }

@@ -2,7 +2,7 @@
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import Faq from '../../components/Faq.astro';
 import InBreve from '../../components/InBreve.astro';
-import { dataInItaliano } from '../../lib/ricorrenze';
+import { dataAggiornamentoIso, testoAggiornato } from '../../lib/aggiornamento';
 import { webPage } from '../../lib/schema';
 import { buildSeo } from '../../lib/seo';
 import { h1Crucipuzzle, percorsoCrucipuzzle, TEMI_CRUCIPUZZLE } from '../../lib/crucipuzzle-temi';
@@ -10,7 +10,7 @@ import { SEO_HUB_GENERATORI } from '../../lib/testi-schede';
 import Base from '../../layouts/Base.astro';
 
 const path = '/generatori/';
-const aggiornato = dataInItaliano(new Date());
+const aggiornato = testoAggiornato();
 const domande = [
   {
     domanda: 'Quali generatori ci sono?',
@@ -41,7 +41,7 @@ const seo = buildSeo({
       path,
       name: SEO_HUB_GENERATORI.h1,
       description: SEO_HUB_GENERATORI.description,
-      dateModified: new Date().toISOString(),
+      dateModified: dataAggiornamentoIso(),
     }),
   ],
 });
@@ -84,6 +84,6 @@ const seo = buildSeo({
       }
     </ul>
     <h2 class="mt-10 text-[28px]">Domande</h2>
-    <Faq domande={domande} />
+    <Faq domande={domande} path={path} />
   </main>
 </Base>

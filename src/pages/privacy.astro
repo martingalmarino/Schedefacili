@@ -1,6 +1,6 @@
 ---
 import { EMAIL, TITOLARE } from '../config/site';
-import { dataInItaliano } from '../lib/ricorrenze';
+import { dataAggiornamentoIso, testoAggiornato } from '../lib/aggiornamento';
 import { webPage } from '../lib/schema';
 import { buildSeo } from '../lib/seo';
 import PaginaLegale from '../layouts/PaginaLegale.astro';
@@ -9,14 +9,14 @@ const path = '/privacy/';
 const h1 = 'Informativa privacy';
 const description =
   'Chi tratta i dati di chi visita Schede Facili, su quale base giuridica, per quanto tempo e come si esercitano i diritti.';
-const aggiornato = dataInItaliano(new Date());
+const aggiornato = testoAggiornato();
 const seo = buildSeo({
   title: 'Informativa privacy – Schede Facili',
   description,
   path,
   h1,
   keywords: ['privacy schede facili', 'titolare del trattamento'],
-  schema: [webPage({ path, name: h1, description, dateModified: new Date().toISOString() })],
+  schema: [webPage({ path, name: h1, description, dateModified: dataAggiornamentoIso() })],
 });
 ---
 

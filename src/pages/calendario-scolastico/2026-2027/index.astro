@@ -9,13 +9,13 @@ import calendarioJson from '../../../data/calendario/2026-2027.json';
 import { REGIONI, urlCalendarioRegione } from '../../../data/regioni';
 import { schemaCalendario } from '../../../data/schemi';
 import { calendarioCompleto, dataBreve, intervallo, SEO_NAZIONALE, urlPonti } from '../../../lib/calendario';
-import { dataInItaliano } from '../../../lib/ricorrenze';
+import { dataAggiornamentoIso, testoAggiornato } from '../../../lib/aggiornamento';
 import { dataset, webPage } from '../../../lib/schema';
 import { buildSeo } from '../../../lib/seo';
 import Base from '../../../layouts/Base.astro';
 
 const calendario = schemaCalendario.parse(calendarioJson);
-const aggiornato = dataInItaliano(new Date());
+const aggiornato = testoAggiornato();
 const ufficiali = calendario.voci.filter((voce) => voce.stato === 'ufficiale').length;
 const righe = REGIONI.map((regione) => {
   const voce = calendario.voci.find((altra) => altra.slug === regione.slug);
@@ -53,7 +53,7 @@ const schema = [
     path: `/calendario-scolastico/${ANNO_SLUG}/`,
     name: SEO_NAZIONALE.h1,
     description: SEO_NAZIONALE.description,
-    dateModified: new Date().toISOString(),
+    dateModified: dataAggiornamentoIso(),
   }),
 ];
 if (ufficiali >= 1) {
@@ -129,7 +129,7 @@ const seo = buildSeo({
           </table>
         </div>
         <h2 class="mt-8 mb-1 text-[28px]">Domande frequenti</h2>
-        <Faq domande={domande} />
+        <Faq domande={domande} path={`/calendario-scolastico/${ANNO_SLUG}/`} />
       </div>
     </main>
   </div>

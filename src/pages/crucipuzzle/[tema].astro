@@ -5,7 +5,7 @@ import TastoStampa from '../../components/calendario/TastoStampa.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import Faq from '../../components/Faq.astro';
 import InBreve from '../../components/InBreve.astro';
-import { dataInItaliano } from '../../lib/ricorrenze';
+import { dataAggiornamentoIso, testoAggiornato } from '../../lib/aggiornamento';
 import { learningResource, urlAssoluto, webPage } from '../../lib/schema';
 import { buildSeo } from '../../lib/seo';
 import {
@@ -38,7 +38,7 @@ const titolo = titoloCrucipuzzle(tema);
 const griglia = grigliaTema(tema);
 const maschera = mascheraSoluzione(griglia);
 const parole = griglia.parole.map((voce) => voce.parola);
-const aggiornato = dataInItaliano(new Date());
+const aggiornato = testoAggiornato();
 const domande = [
   {
     domanda: 'Le parole sono sempre nello stesso posto?',
@@ -65,7 +65,7 @@ const seo = buildSeo({
   keywords: [`crucipuzzle ${tema.etichetta.toLowerCase()}`, 'crucipuzzle da stampare', 'crucipuzzle scuola primaria'],
   image: '/og/generatori.png',
   schema: [
-    webPage({ path, name: h1, description: descrizione, dateModified: new Date().toISOString() }),
+    webPage({ path, name: h1, description: descrizione, dateModified: dataAggiornamentoIso() }),
     learningResource({
       nome: h1,
       descrizione,
@@ -174,7 +174,7 @@ const seo = buildSeo({
         }
       </nav>
       <h2 class="mt-10 text-[28px]">Domande</h2>
-      <Faq domande={domande} />
+      <Faq domande={domande} path={path} />
     </div>
   </main>
 </Base>

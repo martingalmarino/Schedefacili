@@ -17,7 +17,7 @@ describe('buildSeo', () => {
     const seo = buildSeo({ ...base, path: '/calendario-scolastico/?q=veneto' });
     expect(seo.canonical).toBe(`${SITE_URL.replace(/\/$/, '')}/calendario-scolastico/`);
     expect(seo.canonical.includes('?')).toBe(false);
-    expect(seo.robots).toBe('index, follow');
+    expect(seo.robots).toBe('noindex, nofollow');
     expect(seo.keywords).toEqual([]);
   });
 
@@ -39,11 +39,10 @@ describe('buildSeo', () => {
 });
 
 describe('robots e sitemap', () => {
-  it('blocca localhost e vercel.app e apre il dominio di lavoro', () => {
+  it('blocca localhost, vercel.app e l’apex fuori da www in produzione', () => {
     expect(corpoRobots('http://localhost:4321')).toContain('Disallow: /');
     expect(corpoRobots('https://schedefacili.vercel.app')).toContain('Disallow: /');
-    expect(corpoRobots('https://schedefacili.com')).toContain('Allow: /');
-    expect(corpoRobots('https://schedefacili.com')).toContain('Sitemap: https://schedefacili.com/sitemap-index.xml');
+    expect(corpoRobots('https://schedefacili.com')).toContain('Disallow: /');
   });
 
   it('esclude dalla sitemap i path noindex', () => {

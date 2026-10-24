@@ -14,7 +14,7 @@ import {
   urlCartinaRegione,
 } from '../../../lib/cartine-pagine';
 import { marcaAnni } from '../../../lib/cifre';
-import { dataInItaliano } from '../../../lib/ricorrenze';
+import { dataAggiornamentoIso, testoAggiornato } from '../../../lib/aggiornamento';
 import { imageObject, urlAssoluto, webPage } from '../../../lib/schema';
 import { buildSeo } from '../../../lib/seo';
 import Base from '../../../layouts/Base.astro';
@@ -32,7 +32,7 @@ const { slug, nome } = Astro.props;
 const path = urlCartinaRegione(slug);
 const seoCarta = seoCartina(slug, nome);
 const articolo = articoloCartina(slug, nome);
-const aggiornato = dataInItaliano(new Date());
+const aggiornato = testoAggiornato();
 const calendari = calendariDellaCartina(slug);
 const vicine = cartineConfinanti(slug);
 const domande = [
@@ -60,7 +60,7 @@ const seo = buildSeo({
   keywords: [`cartina muta ${nome.toLowerCase()}`, 'cartina muta da stampare', 'province da stampare'],
   image: '/og/cartine.png',
   schema: [
-    webPage({ path, name: seoCarta.h1, description: seoCarta.description, dateModified: new Date().toISOString() }),
+    webPage({ path, name: seoCarta.h1, description: seoCarta.description, dateModified: dataAggiornamentoIso() }),
     imageObject({
       url: urlAssoluto(`/cartine/${slug}.svg`),
       license: LICENZA_CARTE,
@@ -124,7 +124,7 @@ const seo = buildSeo({
         )
       }
       <h2 class="mt-10 text-[28px]">Domande</h2>
-      <Faq domande={domande} />
+      <Faq domande={domande} path={path} />
     </div>
   </main>
 </Base>

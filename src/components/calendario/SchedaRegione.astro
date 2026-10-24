@@ -17,12 +17,13 @@ import {
 } from '../../lib/calendario';
 import { marcaAnni } from '../../lib/cifre';
 import { prossimaRicorrenza, type Festivita } from '../../lib/ricorrenze';
+import AttivaDsa from '../schede/AttivaDsa.astro';
+import VersioneDsa from '../schede/VersioneDsa';
 import Breadcrumbs from '../Breadcrumbs.astro';
 import Faq from '../Faq.astro';
 import InBreve from '../InBreve.astro';
 import Pill from '../Pill.astro';
 import Pills from '../Pills.astro';
-import CalendarioAnnuale from './CalendarioAnnuale.astro';
 import TastoStampa from './TastoStampa.astro';
 
 interface Props {
@@ -59,17 +60,23 @@ const chiavi = [
 ];
 ---
 
-<div class="no-stampa">
-  <Breadcrumbs
-    items={[
-      { nome: 'Home', href: '/' },
-      { nome: 'Calendario scolastico', href: '/calendario-scolastico/' },
-      { nome: ANNO, href: urlNazionale() },
-      { nome: regione.nome, href: urlCalendarioRegione(regione.slug) },
-    ]}
-  />
+<div id="scheda">
+  <AttivaDsa id="scheda" />
+  <div class="no-stampa">
+    <Breadcrumbs
+      items={[
+        { nome: 'Home', href: '/' },
+        { nome: 'Calendario scolastico', href: '/calendario-scolastico/' },
+        { nome: ANNO, href: urlNazionale() },
+        { nome: regione.nome, href: urlCalendarioRegione(regione.slug) },
+      ]}
+    />
+  </div>
   <main>
     <div class="mx-auto max-w-[1120px] px-6 pb-8">
+      <div class="no-stampa mb-4 max-w-xl">
+        <VersioneDsa client:load targetId="scheda" />
+      </div>
       <h1 class="mt-2 mb-4 font-display text-[34px] leading-tight font-semibold min-[601px]:text-[40px]">{h1}</h1>
       <InBreve
         aggiornato={aggiornato}
@@ -77,7 +84,7 @@ const chiavi = [
       >
         <span set:html={marcaAnni(testoInBreve(regione, voce))} />
       </InBreve>
-      <div class="my-5 grid grid-cols-2 gap-4 min-[601px]:grid-cols-4">
+      <div class="date-regione my-5 grid grid-cols-2 gap-4 min-[601px]:grid-cols-4">
         {
           chiavi.map(([etichetta, valore]) => (
             <div class="rounded-xl border-t-[5px] border-solid border-salvia bg-white px-4 py-4">
@@ -90,7 +97,7 @@ const chiavi = [
       <div class="grid items-start gap-7 min-[601px]:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
         <div class="min-w-0">
           <h2 class="mb-1 text-[28px]">Festività e ponti</h2>
-          <p class="m-0 mb-3 text-muted">Feste nazionali. I giorni decisi dalla Regione compariranno con la delibera.</p>
+          <p class="m-0 mb-3 text-muted">Feste nazionali e giorni di sospensione decisi dalla Regione.</p>
           <div class="min-w-0">
             <table class="tabella-mobile w-full border-collapse overflow-hidden rounded-[10px] bg-white">
               <thead>
@@ -116,10 +123,12 @@ const chiavi = [
           <p class="mt-2 text-[14px] text-muted">
             Fonte: <a href={FONTE_FESTIVITA.href} set:html={marcaAnni(FONTE_FESTIVITA.etichetta)} />
           </p>
-          <h2 class="mt-6 mb-1 text-[28px]">Domande frequenti</h2>
-          <Faq domande={domande} />
+          <div class="no-stampa">
+            <h2 class="mt-6 mb-1 text-[28px]">Domande frequenti</h2>
+            <Faq domande={domande} path={urlCalendarioRegione(regione.slug)} />
+          </div>
         </div>
-        <aside class="rounded-xl bg-white p-[18px]">
+        <aside class="no-stampa rounded-xl bg-white p-[18px]">
           <TastoStampa />
           <h3 class="mb-2.5 font-display text-[18px]">Altre regioni</h3>
           {
@@ -156,4 +165,3 @@ const chiavi = [
     </div>
   </main>
 </div>
-<CalendarioAnnuale />

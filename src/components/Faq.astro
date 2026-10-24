@@ -4,9 +4,10 @@ import { faqPage, jsonLd, type VoceFaq } from '../lib/schema';
 
 interface Props {
   domande: VoceFaq[];
+  path?: string;
 }
 
-const { domande } = Astro.props;
+const { domande, path } = Astro.props;
 ---
 
 <section>
@@ -19,4 +20,4 @@ const { domande } = Astro.props;
     ))
   }
 </section>
-<script type="application/ld+json" set:html={jsonLd(faqPage(domande))} />
+<script type="application/ld+json" set:html={jsonLd(faqPage(domande, path))} />

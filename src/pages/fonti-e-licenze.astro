@@ -1,7 +1,7 @@
 ---
 import { FONTE_CONFINI } from '../data/cartine';
 import { LICENZA_CARTE } from '../lib/cartine-pagine';
-import { dataInItaliano } from '../lib/ricorrenze';
+import { dataAggiornamentoIso, testoAggiornato } from '../lib/aggiornamento';
 import { webPage } from '../lib/schema';
 import { buildSeo } from '../lib/seo';
 import PaginaLegale from '../layouts/PaginaLegale.astro';
@@ -10,14 +10,14 @@ const path = '/fonti-e-licenze/';
 const h1 = 'Fonti e licenze';
 const description =
   'Fonti del calendario scolastico, confini ISTAT in CC BY 4.0 e licenze SIL OFL di OpenDyslexic, Fraunces e Atkinson Hyperlegible.';
-const aggiornato = dataInItaliano(new Date());
+const aggiornato = testoAggiornato();
 const seo = buildSeo({
   title: 'Fonti e licenze – Schede Facili',
   description,
   path,
   h1,
   keywords: ['fonti', 'licenze', 'ISTAT', 'OpenDyslexic'],
-  schema: [webPage({ path, name: h1, description, dateModified: new Date().toISOString() })],
+  schema: [webPage({ path, name: h1, description, dateModified: dataAggiornamentoIso() })],
 });
 ---
 

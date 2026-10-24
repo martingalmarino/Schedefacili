@@ -1,7 +1,6 @@
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { SITE_URL } from '../src/config/site';
 
 function fileHtml(dir: string): string[] {
   return readdirSync(dir).flatMap((nome) => {
@@ -42,7 +41,8 @@ describe('HTML generato', () => {
       expect(description.length, description).toBeGreaterThan(0);
       expect(description.length, description).toBeLessThanOrEqual(155);
       expect(h1, file).toHaveLength(1);
-      expect(canonical.startsWith(SITE_URL), canonical).toBe(true);
+      expect(canonical.startsWith('https://www.schedefacili.com/'), canonical).toBe(true);
+      expect(canonical.endsWith('/'), canonical).toBe(true);
       expect(canonical.includes('?'), canonical).toBe(false);
       expect(html).toContain('lang="it"');
       expect(html).toContain('In breve.');

@@ -13,14 +13,14 @@ import {
   urlNazionale,
 } from '../../../lib/calendario';
 import { marcaAnni } from '../../../lib/cifre';
-import { dataInItaliano } from '../../../lib/ricorrenze';
+import { dataAggiornamentoIso, testoAggiornato } from '../../../lib/aggiornamento';
 import { webPage } from '../../../lib/schema';
 import { buildSeo } from '../../../lib/seo';
 import Base from '../../../layouts/Base.astro';
 
 const voci = calendarioMisto();
 const ottobre = voci.find((voce) => voce.data === '2026-10-04');
-const aggiornato = dataInItaliano(new Date());
+const aggiornato = testoAggiornato();
 const domande = [
   {
     domanda: 'Che cos’è un ponte scolastico?',
@@ -55,7 +55,7 @@ const seo = buildSeo({
       path: `/calendario-scolastico/${ANNO_SLUG}/ponti-e-festivita/`,
       name: SEO_PONTI.h1,
       description: SEO_PONTI.description,
-      dateModified: new Date().toISOString(),
+      dateModified: dataAggiornamentoIso(),
     }),
   ],
 });
@@ -109,7 +109,7 @@ const seo = buildSeo({
         calcolati con il computus gregoriano.
       </p>
       <h2 class="mt-8 mb-1 text-[28px]">Domande frequenti</h2>
-      <Faq domande={domande} />
+      <Faq domande={domande} path={`/calendario-scolastico/${ANNO_SLUG}/ponti-e-festivita/`} />
     </div>
   </main>
 </Base>

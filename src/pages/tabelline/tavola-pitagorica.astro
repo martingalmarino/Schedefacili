@@ -7,14 +7,14 @@ import TastoStampa from '../../components/calendario/TastoStampa.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import Faq from '../../components/Faq.astro';
 import InBreve from '../../components/InBreve.astro';
-import { dataInItaliano } from '../../lib/ricorrenze';
+import { dataAggiornamentoIso, testoAggiornato } from '../../lib/aggiornamento';
 import { learningResource, urlAssoluto, webPage } from '../../lib/schema';
 import { buildSeo } from '../../lib/seo';
 import { SEO_TAVOLA, testoClasseTavola } from '../../lib/testi-schede';
 import Base from '../../layouts/Base.astro';
 
 const path = '/tabelline/tavola-pitagorica/';
-const aggiornato = dataInItaliano(new Date());
+const aggiornato = testoAggiornato();
 const domande = [
   {
     domanda: 'Cosa c’è in una casella?',
@@ -45,7 +45,7 @@ const seo = buildSeo({
       path,
       name: SEO_TAVOLA.h1,
       description: SEO_TAVOLA.description,
-      dateModified: new Date().toISOString(),
+      dateModified: dataAggiornamentoIso(),
     }),
     learningResource({
       nome: SEO_TAVOLA.h1,
@@ -90,7 +90,7 @@ const seo = buildSeo({
     </p>
     <TestoClasse testo={testoClasseTavola()}>
       <h2 class="mt-10 text-[28px]">Domande</h2>
-      <Faq domande={domande} />
+      <Faq domande={domande} path={path} />
     </TestoClasse>
   </main>
 </Base>

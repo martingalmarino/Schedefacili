@@ -14,8 +14,19 @@ function baseUrl(): string {
   return SITE_URL.endsWith('/') ? SITE_URL : `${SITE_URL}/`;
 }
 
+export function urlAssoluta(path: string): string {
+  const senzaQuery = path.split('?')[0]?.split('#')[0] ?? path;
+  const assoluto = senzaQuery.startsWith('/') ? senzaQuery : `/${senzaQuery}`;
+  const eFile = /\.[a-z0-9]+$/i.test(assoluto);
+  const pagina = eFile || assoluto.endsWith('/') ? assoluto : `${assoluto}/`;
+  const url = new URL(pagina, baseUrl());
+  url.search = '';
+  url.hash = '';
+  return url.href;
+}
+
 export function urlAssoluto(path: string): string {
-  return new URL(path, baseUrl()).href;
+  return urlAssoluta(path);
 }
 
 export function jsonLd(dato: unknown): string {
@@ -30,8 +41,9 @@ export function website(conRicerca = false) {
   const dato: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
+    '@id': `${urlAssoluta('/')}#website`,
     name: SITE_NAME,
-    url: urlAssoluto('/'),
+    url: urlAssoluta('/'),
     inLanguage: 'it-IT',
   };
   if (conRicerca) {
@@ -48,8 +60,9 @@ export function organization() {
   return {
     '@context': 'https://schema.org',
     '@type': 'Organization',
+    '@id': `${urlAssoluta('/')}#organization`,
     name: SITE_NAME,
-    url: urlAssoluto('/'),
+    url: urlAssoluta('/'),
   };
 }
 
@@ -57,19 +70,21 @@ export function breadcrumb(voci: VoceBreadcrumb[]) {
   return {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
+    '@id': `${urlAssoluta(voci.at(-1)?.href ?? '/')}#breadcrumb`,
     itemListElement: voci.map((voce, indice) => ({
       '@type': 'ListItem',
       position: indice + 1,
       name: voce.nome,
-      item: urlAssoluto(voce.href),
+      item: urlAssoluta(voce.href),
     })),
   };
 }
 
-export function faqPage(domande: VoceFaq[]) {
+export function faqPage(domande: VoceFaq[], path?: string) {
   return {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
+    ...(path ? { '@id': `${urlAssoluta(path)}#faq` } : {}),
     mainEntity: domande.map((voce) => ({
       '@type': 'Question',
       name: voce.domanda,
@@ -85,9 +100,10 @@ export function webPage(input: { path: string; name: string; description?: strin
   return {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
+    '@id': urlAssoluta(input.path),
     name: input.name,
     description: input.description,
-    url: urlAssoluto(input.path),
+    url: urlAssoluta(input.path),
     inLanguage: 'it-IT',
     dateModified: input.dateModified,
   };

@@ -6,12 +6,12 @@ import Pills from '../../components/Pills.astro';
 import { REGIONI, urlCalendarioRegione } from '../../data/regioni';
 import { SEO_HUB, urlNazionale, urlPonti } from '../../lib/calendario';
 import { marcaAnni } from '../../lib/cifre';
-import { dataInItaliano } from '../../lib/ricorrenze';
+import { dataAggiornamentoIso, testoAggiornato } from '../../lib/aggiornamento';
 import { webPage } from '../../lib/schema';
 import { buildSeo } from '../../lib/seo';
 import Base from '../../layouts/Base.astro';
 
-const aggiornato = dataInItaliano(new Date());
+const aggiornato = testoAggiornato();
 const domande = [
   {
     domanda: 'Il calendario scolastico è uguale in tutta Italia?',
@@ -43,7 +43,7 @@ const seo = buildSeo({
       path: '/calendario-scolastico/',
       name: SEO_HUB.h1,
       description: SEO_HUB.description,
-      dateModified: new Date().toISOString(),
+      dateModified: dataAggiornamentoIso(),
     }),
   ],
 });
@@ -65,6 +65,6 @@ const seo = buildSeo({
       {REGIONI.map((regione) => <Pill href={urlCalendarioRegione(regione.slug)} etichetta={regione.nome} />)}
     </Pills>
     <h2 class="mt-8 mb-1 text-[28px]">Domande frequenti</h2>
-    <Faq domande={domande} />
+    <Faq domande={domande} path="/calendario-scolastico/" />
   </main>
 </Base>

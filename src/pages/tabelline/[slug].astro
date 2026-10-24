@@ -6,7 +6,7 @@ import TastoStampa from '../../components/calendario/TastoStampa.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import Faq from '../../components/Faq.astro';
 import InBreve from '../../components/InBreve.astro';
-import { dataInItaliano } from '../../lib/ricorrenze';
+import { dataAggiornamentoIso, testoAggiornato } from '../../lib/aggiornamento';
 import { learningResource, urlAssoluto, webPage } from '../../lib/schema';
 import { buildSeo } from '../../lib/seo';
 import {
@@ -40,7 +40,7 @@ const righe = tabella(n);
 const foglio = eserciziTabellina(n);
 const precedente = n > 1 ? n - 1 : null;
 const successiva = n < 10 ? n + 1 : null;
-const aggiornato = dataInItaliano(new Date());
+const aggiornato = testoAggiornato();
 const prima = righe[0];
 const ultima = righe[9];
 const domande = [
@@ -73,7 +73,7 @@ const seo = buildSeo({
   keywords: [`tabellina ${n === 1 || n === 8 ? 'dell' : 'del'} ${n}`, 'tabelline da stampare', 'esercizi tabelline'],
   image: '/og/tabelline.png',
   schema: [
-    webPage({ path, name: h1, description: descrizione, dateModified: new Date().toISOString() }),
+    webPage({ path, name: h1, description: descrizione, dateModified: dataAggiornamentoIso() }),
     learningResource({
       nome: h1,
       descrizione,
@@ -167,7 +167,7 @@ const seo = buildSeo({
     </nav>
     <TestoClasse testo={testoClasseTabellina(n)}>
       <h2 class="mt-10 text-[28px]">Domande</h2>
-      <Faq domande={domande} />
+      <Faq domande={domande} path={path} />
     </TestoClasse>
   </main>
 </Base>

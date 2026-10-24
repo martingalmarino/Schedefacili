@@ -1,4 +1,5 @@
 import { SITE_URL } from '../config/site';
+import { indicizzabile } from './robots';
 
 export interface SeoInput {
   title: string;
@@ -75,6 +76,6 @@ export function buildSeo(input: SeoInput): SeoResult {
     noindex: Boolean(input.noindex),
     image: imageUrl.href,
     schema,
-    robots: input.noindex ? 'noindex, nofollow' : 'index, follow',
+    robots: input.noindex || !indicizzabile() ? 'noindex, nofollow' : 'index, follow, max-image-preview:large',
   };
 }

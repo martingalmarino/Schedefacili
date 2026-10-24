@@ -1,6 +1,6 @@
 ---
 import { EMAIL, TITOLARE } from '../config/site';
-import { dataInItaliano } from '../lib/ricorrenze';
+import { dataAggiornamentoIso, testoAggiornato } from '../lib/aggiornamento';
 import { webPage } from '../lib/schema';
 import { buildSeo } from '../lib/seo';
 import PaginaLegale from '../layouts/PaginaLegale.astro';
@@ -9,14 +9,14 @@ const path = '/chi-siamo/';
 const h1 = 'Chi siamo';
 const description =
   'Schede Facili pubblica schede gratuite per la scuola primaria e dell’infanzia: calendario, tabelline, crucipuzzle e cartine mute.';
-const aggiornato = dataInItaliano(new Date());
+const aggiornato = testoAggiornato();
 const seo = buildSeo({
   title: 'Chi siamo – Schede Facili',
   description,
   path,
   h1,
   keywords: ['schede facili', 'schede didattiche', 'scuola primaria'],
-  schema: [webPage({ path, name: h1, description, dateModified: new Date().toISOString() })],
+  schema: [webPage({ path, name: h1, description, dateModified: dataAggiornamentoIso() })],
 });
 ---
 

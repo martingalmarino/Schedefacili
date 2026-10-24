@@ -36,7 +36,7 @@ export default function VersioneDsa({ targetId = 'scheda' }: Props) {
         applicaDsa(prossimo, targetId);
       }}
     >
-      Versione DSA
+      Versione DSA (carattere ad alta leggibilità)
     </button>
   );
 }

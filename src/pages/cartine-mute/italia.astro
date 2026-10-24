@@ -5,14 +5,14 @@ import Faq from '../../components/Faq.astro';
 import InBreve from '../../components/InBreve.astro';
 import { FONTE_CONFINI } from '../../data/cartine';
 import { LICENZA_CARTE, regioniCartina, seoCartina, urlCartinaRegione } from '../../lib/cartine-pagine';
-import { dataInItaliano } from '../../lib/ricorrenze';
+import { dataAggiornamentoIso, testoAggiornato } from '../../lib/aggiornamento';
 import { imageObject, urlAssoluto, webPage } from '../../lib/schema';
 import { buildSeo } from '../../lib/seo';
 import Base from '../../layouts/Base.astro';
 
 const path = '/cartine-mute/italia/';
 const seoCarta = seoCartina('italia', 'Italia');
-const aggiornato = dataInItaliano(new Date());
+const aggiornato = testoAggiornato();
 const domande = [
   {
     domanda: 'Cosa cambia tra muta, regioni e capoluoghi?',
@@ -35,7 +35,7 @@ const seo = buildSeo({
   keywords: ['cartina muta italia', 'cartina muta da stampare', 'regioni italiane'],
   image: '/og/cartine.png',
   schema: [
-    webPage({ path, name: seoCarta.h1, description: seoCarta.description, dateModified: new Date().toISOString() }),
+    webPage({ path, name: seoCarta.h1, description: seoCarta.description, dateModified: dataAggiornamentoIso() }),
     imageObject({
       url: urlAssoluto('/cartine/italia.svg'),
       license: LICENZA_CARTE,
@@ -85,7 +85,7 @@ const seo = buildSeo({
         }
       </ul>
       <h2 class="mt-10 text-[28px]">Domande</h2>
-      <Faq domande={domande} />
+      <Faq domande={domande} path={path} />
     </div>
   </main>
 </Base>

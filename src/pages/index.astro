@@ -7,6 +7,7 @@ import CercaSito from '../components/CercaSito';
 import { ANNO, ANNO_SLUG } from '../config/site';
 import { REGIONI, urlCalendarioRegione } from '../data/regioni';
 import { conteggioPagineCartine, regioniCartina } from '../lib/cartine-pagine';
+import { dataAggiornamentoIso } from '../lib/aggiornamento';
 import { TEMI_CRUCIPUZZLE } from '../lib/crucipuzzle-temi';
 import { organization, webPage, website } from '../lib/schema';
 import { buildSeo } from '../lib/seo';
@@ -61,7 +62,7 @@ const seo = buildSeo({
       path: '/',
       name: h1,
       description,
-      dateModified: new Date().toISOString(),
+      dateModified: dataAggiornamentoIso(),
     }),
   ],
 });
@@ -111,7 +112,7 @@ const seo = buildSeo({
 
     <section class="py-[30px]">
       <div class="mx-auto max-w-[1120px] px-6">
-        <div class="grid grid-cols-1 gap-x-[22px] gap-y-7 min-[540px]:grid-cols-2 min-[1040px]:grid-cols-4">
+        <div class="grid grid-cols-2 gap-x-[22px] gap-y-7 min-[1040px]:grid-cols-4">
           <div>
             <h3 class="mb-2.5 text-[19px] leading-snug"><span class="titolo-gruppo">Schede da stampare</span></h3>
             <Pills colonna>
@@ -159,7 +160,7 @@ const seo = buildSeo({
     <section class="py-[30px]">
       <div class="mx-auto max-w-[1120px] px-6">
         <h2 class="mb-1.5 text-[28px]">Domande frequenti</h2>
-        <Faq domande={domande} />
+        <Faq domande={domande} path="/" />
       </div>
     </section>
   </main>

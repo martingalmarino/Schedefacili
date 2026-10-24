@@ -11,7 +11,7 @@ import {
   inRegione,
   titoloRegione,
 } from '../../../lib/calendario';
-import { dataInItaliano } from '../../../lib/ricorrenze';
+import { dataAggiornamentoIso, testoAggiornato } from '../../../lib/aggiornamento';
 import { webPage } from '../../../lib/schema';
 import { buildSeo } from '../../../lib/seo';
 import Base from '../../../layouts/Base.astro';
@@ -38,7 +38,7 @@ if (!voce) {
 const h1 = h1Regione(regione.slug, regione.nome);
 const description = descrizioneRegione(inRegione(regione.slug, regione.nome));
 const domande = faqRegione(regione, voce);
-const aggiornato = dataInItaliano(new Date());
+const aggiornato = testoAggiornato();
 const seo = buildSeo({
   title: titoloRegione(regione.nome),
   description,
@@ -57,7 +57,7 @@ const seo = buildSeo({
       path: `/calendario-scolastico/${ANNO_SLUG}/${regione.slug}/`,
       name: h1,
       description,
-      dateModified: voce.fonte?.consultato ?? new Date().toISOString(),
+      dateModified: dataAggiornamentoIso(),
     }),
   ],
 });

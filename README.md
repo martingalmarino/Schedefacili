@@ -1,10 +1,16 @@
-# Astro Starter Kit: Minimal
+# Schede Facili
+
+Sito statico per la scuola primaria. Il dominio canonico è `https://www.schedefacili.com`.
+
+In produzione (Vercel → Environment Variables) imposta:
 
 ```sh
-npm create astro@latest -- --template minimal
+SITE_URL=https://www.schedefacili.com
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Senza questa variabile, il build di produzione usa comunque quel dominio. In `astro dev` le URL restano su `http://localhost:4321`. Un `SITE_URL` con localhost, senza `https://` o senza host valido fa fallire il build di produzione.
+
+Vedi `.env.example` per `GOOGLE_SITE_VERIFICATION`, `BING_SITE_VERIFICATION`, `INDEXNOW_KEY` e `ADSENSE_PUB_ID`. IndexNow non parte dal build: `npm run indexnow`.
 
 ## 🚀 Project Structure
 

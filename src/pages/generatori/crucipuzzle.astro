@@ -13,7 +13,7 @@ import mestieri from '../../data/parole/mestieri.json';
 import natale from '../../data/parole/natale.json';
 import scuola from '../../data/parole/scuola.json';
 import stagioni from '../../data/parole/stagioni.json';
-import { dataInItaliano } from '../../lib/ricorrenze';
+import { dataAggiornamentoIso, testoAggiornato } from '../../lib/aggiornamento';
 import { urlAssoluto, webApplication, webPage } from '../../lib/schema';
 import { buildSeo } from '../../lib/seo';
 import { SEO_CRUCIPUZZLE, testoClasseCrucipuzzle } from '../../lib/testi-schede';
@@ -35,7 +35,7 @@ const temi = [animali, stagioni, natale, corpo, frutta, scuola, colori, mestieri
   parole: tema.parole,
 }));
 const path = '/generatori/crucipuzzle/';
-const aggiornato = dataInItaliano(new Date());
+const aggiornato = testoAggiornato();
 const domande = [
   {
     domanda: 'Perché una parola non entra?',
@@ -66,7 +66,7 @@ const seo = buildSeo({
       path,
       name: SEO_CRUCIPUZZLE.h1,
       description: SEO_CRUCIPUZZLE.description,
-      dateModified: new Date().toISOString(),
+      dateModified: dataAggiornamentoIso(),
     }),
     webApplication({
       nome: SEO_CRUCIPUZZLE.h1,
@@ -99,7 +99,7 @@ const seo = buildSeo({
     <GeneratoreCrucipuzzle client:load temi={temi} />
     <TestoClasse testo={testoClasseCrucipuzzle()}>
       <h2 class="mt-10 text-[28px]">Domande</h2>
-      <Faq domande={domande} />
+      <Faq domande={domande} path={path} />
     </TestoClasse>
   </main>
 </Base>
