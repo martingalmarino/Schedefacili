@@ -1,3 +1,4 @@
+import { PAROLE } from '../data/doppie/parole';
 import { TEMPLATES } from './problemi/template';
 import { HUB_PROBLEMI, PAGINE_PROBLEMI } from './testi-problemi';
 import { PAGINE_LINEA } from './testi-linea';
@@ -43,6 +44,13 @@ export const CARD_SCHEDE_UTILI = [
     testo: 'Schede con soluzioni, dalla prima alla quinta.',
     conteggio: TEMPLATES.length,
     unita: 'problemi tipo',
+  },
+  {
+    href: '/doppie/',
+    nome: 'Le doppie',
+    testo: 'Completa la parola, scegli semplice o doppia e stampa con le soluzioni.',
+    conteggio: PAROLE.filter((voce) => voce.doppia !== null).length,
+    unita: 'parole con le doppie',
   },
 ] as const;
 

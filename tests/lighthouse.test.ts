@@ -8,6 +8,7 @@ import { chromium } from 'playwright';
 import lighthouse from 'lighthouse';
 import * as chromeLauncher from 'chrome-launcher';
 import { URL_LINEA } from '../src/lib/schede-utili';
+import { HUB_DOPPIE, PAGINE_DOPPIE } from '../src/lib/testi-doppie';
 import { HUB_PROBLEMI, PAGINE_PROBLEMI } from '../src/lib/testi-problemi';
 
 process.env.NODE_ENV = 'production';
@@ -22,6 +23,8 @@ const HUB = [
   ...URL_LINEA,
   HUB_PROBLEMI,
   PAGINE_PROBLEMI.find((pagina) => pagina.classe === 3)?.href ?? '/problemi-matematica/classe-terza/',
+  HUB_DOPPIE,
+  PAGINE_DOPPIE.find((pagina) => pagina.classe === 2)?.href ?? '/doppie/classe-seconda/',
 ];
 
 function tipoContenuto(file: string): string {

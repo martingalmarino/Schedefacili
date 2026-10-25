@@ -63,3 +63,13 @@ html.stampa-problemi,
 .foglio-problemi {
   page: problemi;
 }
+
+@page doppie {
+  size: A4 portrait;
+  margin: 10mm;
+}
+
+html.stampa-doppie,
+.foglio-doppie {
+  page: doppie;
+}

@@ -1,0 +1,160 @@
+---
+import Breadcrumbs from '../Breadcrumbs.astro';
+import Faq from '../Faq.astro';
+import InBreve from '../InBreve.astro';
+import AttivaDsa from '../schede/AttivaDsa.astro';
+import VersioneDsa from '../schede/VersioneDsa';
+import GeneratoreDoppie from './GeneratoreDoppie';
+import Scheda from './Scheda.astro';
+import { testoAggiornato } from '../../lib/aggiornamento';
+import { generaScheda, opzioniBase } from '../../lib/doppie/genera';
+import type { ClasseDoppie } from '../../lib/doppie/types';
+import { lastmodPagina } from '../../lib/lastmod';
+import { learningResource, urlAssoluta, webApplication, webPage } from '../../lib/schema';
+import { buildSeo } from '../../lib/seo';
+import {
+  collegamentiDoppie,
+  ESEMPI_DOPPIE,
+  FAQ_HUB_DOPPIE,
+  HUB_DOPPIE,
+  PAGINE_DOPPIE,
+  RICONOSCERE_DOPPIA,
+  SEO_HUB_DOPPIE,
+  livelloDoppie,
+  paginaDoppie,
+} from '../../lib/testi-doppie';
+import Base from '../../layouts/Base.astro';
+
+interface Props {
+  classe?: ClasseDoppie;
+}
+
+const { classe } = Astro.props;
+const pagina = classe ? paginaDoppie(classe) : undefined;
+const path = pagina?.href ?? HUB_DOPPIE;
+const titolo = pagina?.title ?? SEO_HUB_DOPPIE.title;
+const descrizione = pagina?.description ?? SEO_HUB_DOPPIE.description;
+const h1 = pagina?.h1 ?? SEO_HUB_DOPPIE.h1;
+const inBreve = pagina?.inBreve ?? SEO_HUB_DOPPIE.inBreve;
+const domande = pagina?.domande ?? FAQ_HUB_DOPPIE;
+const keywords = pagina?.keywords ?? SEO_HUB_DOPPIE.keywords;
+const seme = pagina?.seed ?? 2406;
+const opzioni = opzioniBase(pagina?.classe ?? 2, seme);
+const scheda = generaScheda(opzioni.classe, opzioni, seme);
+const aggiornato = testoAggiornato();
+const briciole = pagina
+  ? [
+      { nome: 'Home', href: '/' },
+      { nome: 'Doppie', href: HUB_DOPPIE },
+      { nome: pagina.nome, href: path },
+    ]
+  : [
+      { nome: 'Home', href: '/' },
+      { nome: 'Doppie', href: path },
+    ];
+const seo = buildSeo({
+  title: titolo,
+  description: descrizione,
+  path,
+  h1,
+  keywords: [...keywords],
+  image: '/og/generatori.png',
+  schema: [
+    webPage({ path, name: h1, description: descrizione, dateModified: lastmodPagina(path) }),
+    learningResource({
+      nome: h1,
+      descrizione,
+      url: urlAssoluta(path),
+      educationalLevel: livelloDoppie(classe),
+      learningResourceType: 'Scheda didattica',
+      teaches: 'Le consonanti doppie',
+      inLanguage: 'it',
+    }),
+    webApplication({ nome: h1, descrizione, url: urlAssoluta(path) }),
+  ],
+});
+const collegamenti = collegamentiDoppie(classe);
+const chip = 'inline-flex min-h-11 min-w-11 items-center justify-center rounded-full border-[1.5px] border-solid px-4 text-[15px] font-bold';
+---
+
+<Base seo={seo} stampaDoppie>
+  <div class="no-stampa">
+    <Breadcrumbs items={briciole} />
+  </div>
+  <main id="scheda" class="mx-auto max-w-[1120px] px-6 pb-16">
+    <AttivaDsa id="scheda" />
+    <div class="griglia-doppie mt-2 grid items-start gap-6 min-[1100px]:grid-cols-[minmax(0,1fr)_minmax(0,190mm)]">
+      <div class="no-stampa">
+        <h1 class="mt-2 mb-4 font-display text-[34px] leading-tight font-semibold min-[601px]:text-[40px]">{h1}</h1>
+        <InBreve aggiornato={aggiornato}>{inBreve}</InBreve>
+        <div class="comandi-scheda my-4 flex max-w-xl flex-wrap items-center gap-3">
+          <VersioneDsa client:load targetId="scheda" />
+        </div>
+        {
+          !pagina && (
+            <ul class="mt-6 grid gap-3 min-[601px]:grid-cols-2">
+              {PAGINE_DOPPIE.map((voce) => (
+                <li>
+                  <a href={voce.href} class="block h-full rounded-xl bg-white px-4 py-3 hover:text-terracotta">
+                    <span class="block font-bold">{voce.nome}</span>
+                    <span class="mt-1 block text-inchiostro">{voce.scheda}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )
+        }
+        {
+          pagina && (
+            <nav class="mb-4 flex flex-wrap gap-2" aria-label="Classe">
+              {PAGINE_DOPPIE.map((voce) => (
+                <a
+                  href={voce.href}
+                  aria-current={voce.classe === pagina.classe ? 'page' : undefined}
+                  class:list={[chip, voce.classe === pagina.classe ? 'border-inchiostro bg-inchiostro text-white' : 'border-pill bg-white text-inchiostro']}
+                >
+                  {voce.nome}
+                </a>
+              ))}
+            </nav>
+          )
+        }
+        <GeneratoreDoppie client:load path={path} iniziale={opzioni} />
+      </div>
+      <div class="min-w-0 overflow-x-auto">
+        <Scheda scheda={scheda} />
+      </div>
+    </div>
+    <div class="no-stampa">
+      {
+        !pagina && (
+          <>
+            <h2 class="mt-10 text-[28px]">Come si riconosce una doppia</h2>
+            <p class="mt-3 mb-0 max-w-[720px]">{RICONOSCERE_DOPPIA}</p>
+            <h2 class="mt-10 text-[28px]">Esempi di consonanti doppie</h2>
+            <ul class="mt-3 grid gap-2 min-[601px]:grid-cols-2">
+              {ESEMPI_DOPPIE.map((voce) => (
+                <li class="rounded-xl bg-white px-4 py-3">
+                  <b>{voce.lettere}</b>
+                  <span class="mt-1 block">{voce.parole}</span>
+                </li>
+              ))}
+            </ul>
+          </>
+        )
+      }
+      <h2 class="mt-10 text-[28px]">Domande frequenti</h2>
+      <Faq domande={domande} path={path} />
+      <h2 class="mt-10 text-[28px]">Altre schede</h2>
+      <nav class="mt-3 flex flex-col font-bold" aria-label="Altre schede">
+        {
+          collegamenti.map((voce) => (
+            <a href={voce.href} class="inline-flex min-h-11 items-center hover:text-terracotta">
+              {voce.etichetta}
+            </a>
+          ))
+        }
+      </nav>
+    </div>
+  </main>
+</Base>

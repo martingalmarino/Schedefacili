@@ -128,13 +128,13 @@ describe('dist di produzione', () => {
     const corpo = xml.map((file) => readFileSync(file, 'utf8')).join('\n');
     const loc = [...corpo.matchAll(/<loc>([^<]+)<\/loc>/g)].map((trovato) => trovato[1]);
     const schede = loc.filter((url) => !url.endsWith('.xml'));
-    expect(schede).toHaveLength(95);
+    expect(schede).toHaveLength(100);
     for (const url of schede) {
       expect(url.startsWith('https://www.schedefacili.com/')).toBe(true);
       expect(url.endsWith('/')).toBe(true);
     }
     const conData = [...corpo.matchAll(/<url>[\s\S]*?<lastmod>([^<]+)<\/lastmod>[\s\S]*?<\/url>/g)];
-    expect(conData).toHaveLength(95);
+    expect(conData).toHaveLength(100);
     for (const url of schede) expect(url.includes('?'), url).toBe(false);
     for (const percorso of URL_NUOVE) {
       expect(schede, percorso).toContain(`https://www.schedefacili.com${percorso}`);

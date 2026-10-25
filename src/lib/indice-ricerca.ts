@@ -15,6 +15,7 @@ import { SEO_CONVERTITORE, SEO_ROMANI, SEO_ROMANI_100, SEO_ROMANI_1000 } from '.
 import { SEO_CRISTO } from './testi-cristo';
 import { SEO_HUB_LINEA, SEO_PREISTORIA } from './testi-linea';
 import { HUB_PROBLEMI, PAGINE_PROBLEMI, SEO_HUB_PROBLEMI } from './testi-problemi';
+import { HUB_DOPPIE, PAGINE_DOPPIE, SEO_HUB_DOPPIE } from './testi-doppie';
 import {
   SEO_CRUCIPUZZLE,
   SEO_GENERATORE_TABELLINE,
@@ -84,6 +85,8 @@ export const INDICE: VoceIndice[] = [
   voce(SEO_CRISTO.h1, '/linea-del-tempo/avanti-e-dopo-cristo/', `${SEO_CRISTO.h1} a.C. d.C.`),
   voce(SEO_HUB_PROBLEMI.h1, HUB_PROBLEMI, `${SEO_HUB_PROBLEMI.h1} ${SEO_HUB_PROBLEMI.description}`),
   ...PAGINE_PROBLEMI.map((pagina) => voce(pagina.h1, pagina.href, `${pagina.h1} ${pagina.description}`)),
+  voce(SEO_HUB_DOPPIE.h1, HUB_DOPPIE, `${SEO_HUB_DOPPIE.h1} ${SEO_HUB_DOPPIE.description}`),
+  ...PAGINE_DOPPIE.map((pagina) => voce(pagina.h1, pagina.href, `${pagina.h1} ${pagina.description}`)),
   voce(SEO_HUB_FOGLI.h1, '/fogli-da-stampare/', `${SEO_HUB_FOGLI.h1} quadretti carta millimetrata`),
   ...PAGINE_FOGLI.map((pagina) => voce(pagina.h1, pagina.href, `${pagina.h1} ${pagina.description}`)),
   voce(SEO_HUB_TABELLINE.h1, '/tabelline/', `${SEO_HUB_TABELLINE.h1} tabelline dall 1 al 10 DSA`),

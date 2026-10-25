@@ -24,10 +24,10 @@ describe('HTML generato', () => {
   const dist = join(process.cwd(), 'dist', 'client');
   const pagine = fileHtml(dist);
 
-  it('genera 93 pagine HTML statiche; orologio e schede orologio sono on demand', () => {
+  it('genera 98 pagine HTML statiche; orologio e schede orologio sono on demand', () => {
     const indice = pagine.filter((file) => file.endsWith('/index.html') || file.endsWith('\\index.html'));
-    expect(indice).toHaveLength(93);
-    expect(pagine).toHaveLength(93);
+    expect(indice).toHaveLength(98);
+    expect(pagine).toHaveLength(98);
   });
 
   it('rispetta title, description, H1, canonical, lingua e In breve', () => {

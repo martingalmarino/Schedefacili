@@ -453,6 +453,38 @@ h3,
   html.stampa-problemi #scheda.dsa .foglio-problemi:not(.soluzioni-foglio) .consegna-problemi {
     margin-bottom: 2mm !important;
   }
+
+  html.stampa-doppie main {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: none !important;
+  }
+
+  html.stampa-doppie .griglia-doppie {
+    display: block !important;
+    margin: 0 !important;
+  }
+
+  html.stampa-doppie .anteprima-doppie {
+    margin: 0 !important;
+    overflow: visible !important;
+  }
+
+  .foglio-doppie {
+    width: 190mm !important;
+    max-width: none !important;
+    height: 277mm !important;
+    min-height: 277mm !important;
+    margin: 0 !important;
+  }
+
+  .foglio-doppie .n,
+  .foglio-doppie .ovale,
+  .foglio-doppie .soluzione,
+  .foglio-doppie .buco.compilato,
+  .foglio-doppie .rigo.compilato {
+    color: #c2522d !important;
+  }
 }
 
 .anteprima-foglio {
@@ -736,4 +768,264 @@ h3,
 
 #scheda.dsa .foglio-problemi:not(.soluzioni-foglio) .riquadro {
   min-height: calc(var(--alto) + 6mm) !important;
+}
+
+.foglio-doppie {
+  --testo: 12pt;
+  --riga: 1.4;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 190mm;
+  margin: 0;
+  background: #fff;
+  color: #1f2a44;
+  font-family: "Atkinson Hyperlegible", sans-serif;
+  font-size: var(--testo);
+  line-height: var(--riga);
+}
+
+.foglio-doppie[data-esercizi='4'] {
+  --testo: 14pt;
+  --riga: 1.4;
+}
+
+.foglio-doppie[data-esercizi='3'],
+.foglio-doppie[data-esercizi='2'],
+.foglio-doppie[data-esercizi='1'] {
+  --testo: 14pt;
+  --riga: 1.65;
+}
+
+.foglio-doppie[data-esercizi='5'] {
+  --testo: 11pt;
+  --riga: 1.35;
+}
+
+.testata-doppie {
+  display: flex;
+  justify-content: space-between;
+  gap: 8mm;
+  margin: 0 0 3mm;
+  font-size: 11pt;
+}
+
+.testata-doppie p {
+  display: flex;
+  flex: 1;
+  align-items: flex-end;
+  gap: 2mm;
+  margin: 0;
+}
+
+.testata-doppie p:last-child {
+  justify-content: flex-end;
+}
+
+.titolo-doppie {
+  margin: 0 0 1mm;
+  color: #1f2a44;
+  font-size: 16pt;
+  line-height: 1.15;
+}
+
+.consegna-doppie {
+  margin: 0 0 2.5mm;
+  font-size: 10pt;
+}
+
+.elenco-doppie {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2mm;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.esercizio-doppie {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  margin: 0;
+  padding: 1.5mm 2mm;
+  border: 0.3mm solid #eadfcd;
+  border-radius: 2mm;
+  break-inside: avoid;
+}
+
+.consegna-esercizio {
+  margin: 0 0 1.2mm;
+  font-weight: 700;
+}
+
+.foglio-doppie .numero {
+  margin-right: 1.5mm;
+  color: #c2522d;
+  font-size: 1.15em;
+  font-weight: 600;
+}
+
+.foglio-doppie .n {
+  color: #c2522d;
+  font-weight: 600;
+}
+
+.voci-doppie {
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  align-content: space-evenly;
+  gap: 1.2mm 5mm;
+  min-height: 0;
+}
+
+.voce-completa,
+.voce-coppia,
+.voce-sillaba,
+.coppia-scegli,
+.riga-intruso {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 1.2mm;
+}
+
+.voce-completa {
+  gap: 0;
+}
+
+.voce-completa .opzioni {
+  margin-left: 1.6mm;
+}
+
+.griglia-sillabe .voce-sillaba {
+  display: flex;
+  width: 100%;
+}
+
+.griglia-sillabe .voce-sillaba .rigo {
+  flex: 1;
+}
+
+.griglia-sillabe,
+.griglia-intruso {
+  display: grid;
+  align-content: space-evenly;
+  gap: 1.4mm 6mm;
+}
+
+.griglia-sillabe {
+  grid-template-columns: 1fr 1fr;
+}
+
+.buco {
+  display: inline-block;
+  width: 12mm;
+  min-width: 12mm;
+  max-width: 12mm;
+  border-bottom: 0.3mm solid #1f2a44;
+  text-align: center;
+  line-height: 1;
+}
+
+.buco.compilato,
+.rigo.compilato,
+.soluzione,
+.ovale {
+  color: #c2522d;
+  font-weight: 700;
+}
+
+.rigo {
+  display: inline-block;
+  min-width: 22mm;
+  border-bottom: 0.3mm solid #1f2a44;
+  text-align: center;
+}
+
+.rigo.compilato {
+  min-width: 16mm;
+}
+
+.opzioni {
+  color: #1f2a44;
+  font-weight: 400;
+}
+
+.pillola {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 6mm;
+  padding: 0.2mm 2mm;
+  border: 0.3mm solid #eadfcd;
+  border-radius: 999px;
+}
+
+.parola-intruso {
+  display: inline-flex;
+  align-items: center;
+  min-height: 6mm;
+  padding: 0 1mm;
+}
+
+.voce-coppia {
+  flex: 1 1 100%;
+  line-height: 1.3;
+}
+
+.foglio-doppie[data-esercizi='4'] .elenco-doppie {
+  gap: 1.4mm;
+}
+
+.foglio-doppie[data-esercizi='4'] .esercizio-doppie {
+  padding: 1.2mm 2mm;
+}
+
+.ovale {
+  border: 0.45mm solid #c2522d;
+  border-radius: 999px;
+  padding: 0 1.6mm;
+}
+
+.pie-doppie {
+  margin: 2mm 0 0;
+  font-size: 8pt;
+  text-align: right;
+}
+
+#scheda.dsa .foglio-doppie,
+#scheda.dsa .foglio-doppie .consegna-doppie,
+#scheda.dsa .foglio-doppie .consegna-esercizio,
+#scheda.dsa .foglio-doppie .voce-completa,
+#scheda.dsa .foglio-doppie .voce-coppia,
+#scheda.dsa .foglio-doppie .voce-sillaba,
+#scheda.dsa .foglio-doppie .parola-intruso,
+#scheda.dsa .foglio-doppie .pillola {
+  font-family: OpenDyslexic, sans-serif;
+  font-size: 14pt;
+  line-height: 1.6;
+  letter-spacing: 0.04em;
+}
+
+#scheda.dsa .foglio-doppie .rigo,
+#scheda.dsa .foglio-doppie .buco,
+#scheda.dsa .foglio-doppie .voce-coppia,
+#scheda.dsa .foglio-doppie .voce-sillaba,
+#scheda.dsa .foglio-doppie .riga-intruso {
+  min-height: 8mm;
+  line-height: 1.6;
+}
+
+#scheda.dsa .foglio-doppie .n,
+#scheda.dsa .foglio-doppie .numero {
+  font-family: Fraunces, serif;
+  font-variant-numeric: lining-nums;
+  font-variation-settings: "opsz" 18, "SOFT" 0, "WONK" 0;
+  letter-spacing: 0;
 }

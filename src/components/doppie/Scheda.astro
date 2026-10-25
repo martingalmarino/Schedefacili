@@ -1,0 +1,13 @@
+---
+import { htmlScheda } from '../../lib/doppie/render';
+import type { SchedaDoppie } from '../../lib/doppie/types';
+
+interface Props {
+  scheda: SchedaDoppie;
+}
+
+const { scheda } = Astro.props;
+---
+
+<div id="scheda-doppie" class="anteprima-doppie" set:html={htmlScheda(scheda, false)} />
+<div id="soluzioni-doppie" class="anteprima-doppie soluzioni anteprima-soluzioni mt-6" set:html={htmlScheda(scheda, true)} />

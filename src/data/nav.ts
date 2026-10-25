@@ -18,6 +18,7 @@ export const NAV: VoceNav[] = [
       { href: '/numeri-romani/', label: 'Numeri romani' },
       { href: '/linea-del-tempo/', label: 'Linea del tempo' },
       { href: '/problemi-matematica/', label: 'Problemi di matematica' },
+      { href: '/doppie/', label: 'Le doppie' },
     ],
   },
 ];

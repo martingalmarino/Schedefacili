@@ -1,0 +1,20 @@
+---
+import PaginaDoppie from '../../components/doppie/PaginaDoppie.astro';
+import type { ClasseDoppie } from '../../lib/doppie/types';
+import { PAGINE_DOPPIE } from '../../lib/testi-doppie';
+
+export function getStaticPaths() {
+  return PAGINE_DOPPIE.map((pagina) => ({
+    params: { classe: pagina.slug },
+    props: { numero: pagina.classe },
+  }));
+}
+
+interface Props {
+  numero: ClasseDoppie;
+}
+
+const { numero } = Astro.props;
+---
+
+<PaginaDoppie classe={numero} />

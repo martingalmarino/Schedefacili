@@ -7,11 +7,19 @@ const mappa = dateSalvate as Record<string, string>;
 const cache = new Map<string, string | undefined>();
 let gitCompleto: boolean | undefined;
 
+const FONTI_DOPPIE = [
+  'src/data/doppie/parole.ts',
+  'src/lib/doppie/genera.ts',
+  'src/lib/doppie/render.ts',
+  'src/lib/testi-doppie.ts',
+];
+
 const FONTI: { prefisso: string; file: string[] }[] = [
   { prefisso: '/fogli-da-stampare/', file: ['src/lib/fogli.ts', 'src/lib/testi-fogli.ts'] },
   { prefisso: '/orologio-da-stampare/', file: ['src/lib/orologio-svg.ts', 'src/lib/ora.ts', 'src/lib/testi-orologio.ts'] },
   { prefisso: '/generatori/schede-orologio/', file: ['src/lib/orologio-svg.ts', 'src/lib/schede-orologio.ts', 'src/lib/ora.ts'] },
   { prefisso: '/numeri-romani/', file: ['src/lib/romani.ts', 'src/lib/schede-romani.ts', 'src/lib/tabelle-romane.ts', 'src/lib/testi-romani.ts'] },
+  { prefisso: '/doppie/', file: FONTI_DOPPIE },
   {
     prefisso: '/linea-del-tempo/',
     file: [

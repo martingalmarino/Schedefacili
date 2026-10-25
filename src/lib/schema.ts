@@ -113,8 +113,10 @@ export function learningResource(input: {
   nome: string;
   descrizione: string;
   url: string;
-  educationalLevel?: string;
+  educationalLevel?: string | readonly string[];
   learningResourceType?: string;
+  teaches?: string;
+  inLanguage?: string;
 }) {
   return {
     '@context': 'https://schema.org',
@@ -123,9 +125,10 @@ export function learningResource(input: {
     description: input.descrizione,
     url: input.url,
     educationalLevel: input.educationalLevel,
-    inLanguage: 'it-IT',
+    inLanguage: input.inLanguage ?? 'it-IT',
     isAccessibleForFree: true,
     ...(input.learningResourceType ? { learningResourceType: input.learningResourceType } : {}),
+    ...(input.teaches ? { teaches: input.teaches } : {}),
   };
 }
 
